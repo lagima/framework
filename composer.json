@@ -1,0 +1,14 @@
+{
+    "require": {
+        "altorouter/altorouter": "1.1.0",
+        "tideways/profiler": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mercury\\": "",
+            "Mercury\\Controller\\": "controllers",
+            "Mercury\\View\\": "views",
+            "Mercury\\Model\\": "models"
+        }
+    }
+}
