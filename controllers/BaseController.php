@@ -1,15 +1,13 @@
 <?
 namespace Mercury\Controller;
 
-use Mercury\View;
+use Mercury\Helper\Controller;
 
-class BaseController {
+class BaseController extends Controller{
 
-	public function indexAction() {
-		echo 'product list';
+	public function __construct() {
+
+		// Try to set the view from
 	}
 
-	public function itemAction($id) {
-		return "product $id";
-	}
 }
