@@ -5,7 +5,7 @@ class IndexController extends BaseController {
 
 	public function indexAction() {
 
-		$this->viewdata = ['test' => 'test value'];
+		$this->response = ['test' => 'test value'];
 	}
 
 	public function userAction($pi_id) {

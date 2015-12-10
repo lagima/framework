@@ -28,9 +28,9 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 \t\t<!-- Bootstrap 3.3.5 -->
 \t\t<link rel=\"stylesheet\" href=\"/mercury/assets/bootstrap/css/bootstrap.min.css\">
 \t\t<!-- Font Awesome -->
-\t\t<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/mercury/assets/css/font-awesome.min.css\">
+\t\t<link rel=\"stylesheet\" href=\"http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css\">
 \t\t<!-- Ionicons -->
-\t\t<link rel=\"stylesheet\" href=\"https://code.ionicframework.com/ionicons/2.0.1/mercury/assets/css/ionicons.min.css\">
+\t\t<link rel=\"stylesheet\" href=\"http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css\">
 \t\t<!-- Theme style -->
 \t\t<link rel=\"stylesheet\" href=\"/mercury/assets/css/AdminLTE.min.css\">
 \t\t<!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -52,8 +52,8 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 \t\t<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 \t\t<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 \t\t<!--[if lt IE 9]>
-\t\t\t\t<script src=\"https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js\"></script>
-\t\t\t\t<script src=\"https://oss.maxcdn.com/respond/1.4.2/respond.min.js\"></script>
+\t\t\t\t<script src=\"http://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js\"></script>
+\t\t\t\t<script src=\"http://oss.maxcdn.com/respond/1.4.2/respond.min.js\"></script>
 \t\t<![endif]-->
 \t</head>
 \t<body class=\"hold-transition skin-blue sidebar-mini\">
@@ -656,7 +656,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 \t\t<!-- jQuery 2.1.4 -->
 \t\t<script src=\"/mercury/assets/plugins/jQuery/jQuery-2.1.4.min.js\"></script>
 \t\t<!-- jQuery UI 1.11.4 -->
-\t\t<script src=\"https://code.jquery.com/ui/1.11.4/jquery-ui.min.js\"></script>
+\t\t<script src=\"http://code.jquery.com/ui/1.11.4/jquery-ui.min.js\"></script>
 \t\t<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 \t\t<script>
 \t\t\t\$.widget.bridge('uibutton', \$.ui.button);
@@ -664,7 +664,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 \t\t<!-- Bootstrap 3.3.5 -->
 \t\t<script src=\"/mercury/assets/bootstrap/js/bootstrap.min.js\"></script>
 \t\t<!-- Morris.js charts -->
-\t\t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js\"></script>
+\t\t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js\"></script>
 \t\t<script src=\"/mercury/assets/plugins/morris/morris.min.js\"></script>
 \t\t<!-- Sparkline -->
 \t\t<script src=\"/mercury/assets/plugins/sparkline/jquery.sparkline.min.js\"></script>
@@ -674,7 +674,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 \t\t<!-- jQuery Knob Chart -->
 \t\t<script src=\"/mercury/assets/plugins/knob/jquery.knob.js\"></script>
 \t\t<!-- daterangepicker -->
-\t\t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js\"></script>
+\t\t<script src=\"http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js\"></script>
 \t\t<script src=\"/mercury/assets/plugins/daterangepicker/daterangepicker.js\"></script>
 \t\t<!-- datepicker -->
 \t\t<script src=\"/mercury/assets/plugins/datepicker/bootstrap-datepicker.js\"></script>
@@ -689,7 +689,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 \t\t<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 \t\t<script src=\"/mercury/assets/js/pages/dashboard.js\"></script>
 \t\t<!-- AdminLTE for demo purposes -->
-\t\t<script src=\"/asstes/js/demo.js\"></script>
+\t\t<script src=\"/mercury/assets/js/demo.js\"></script>
 \t</body>
 </html>
 ";
@@ -721,9 +721,9 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 /* 		<!-- Bootstrap 3.3.5 -->*/
 /* 		<link rel="stylesheet" href="/mercury/assets/bootstrap/css/bootstrap.min.css">*/
 /* 		<!-- Font Awesome -->*/
-/* 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/mercury/assets/css/font-awesome.min.css">*/
+/* 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">*/
 /* 		<!-- Ionicons -->*/
-/* 		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/mercury/assets/css/ionicons.min.css">*/
+/* 		<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">*/
 /* 		<!-- Theme style -->*/
 /* 		<link rel="stylesheet" href="/mercury/assets/css/AdminLTE.min.css">*/
 /* 		<!-- AdminLTE Skins. Choose a skin from the css/skins*/
@@ -745,8 +745,8 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 /* 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->*/
 /* 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->*/
 /* 		<!--[if lt IE 9]>*/
-/* 				<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>*/
-/* 				<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>*/
+/* 				<script src="http://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>*/
+/* 				<script src="http://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>*/
 /* 		<![endif]-->*/
 /* 	</head>*/
 /* 	<body class="hold-transition skin-blue sidebar-mini">*/
@@ -1346,7 +1346,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 /* 		<!-- jQuery 2.1.4 -->*/
 /* 		<script src="/mercury/assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>*/
 /* 		<!-- jQuery UI 1.11.4 -->*/
-/* 		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>*/
+/* 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>*/
 /* 		<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->*/
 /* 		<script>*/
 /* 			$.widget.bridge('uibutton', $.ui.button);*/
@@ -1354,7 +1354,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 /* 		<!-- Bootstrap 3.3.5 -->*/
 /* 		<script src="/mercury/assets/bootstrap/js/bootstrap.min.js"></script>*/
 /* 		<!-- Morris.js charts -->*/
-/* 		<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>*/
+/* 		<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>*/
 /* 		<script src="/mercury/assets/plugins/morris/morris.min.js"></script>*/
 /* 		<!-- Sparkline -->*/
 /* 		<script src="/mercury/assets/plugins/sparkline/jquery.sparkline.min.js"></script>*/
@@ -1364,7 +1364,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 /* 		<!-- jQuery Knob Chart -->*/
 /* 		<script src="/mercury/assets/plugins/knob/jquery.knob.js"></script>*/
 /* 		<!-- daterangepicker -->*/
-/* 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>*/
+/* 		<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>*/
 /* 		<script src="/mercury/assets/plugins/daterangepicker/daterangepicker.js"></script>*/
 /* 		<!-- datepicker -->*/
 /* 		<script src="/mercury/assets/plugins/datepicker/bootstrap-datepicker.js"></script>*/
@@ -1379,7 +1379,7 @@ class __TwigTemplate_abafac1e08e641e50fe3565496a6ae5acca8a55d3c08249b19c826d19f7
 /* 		<!-- AdminLTE dashboard demo (This is only for demo purposes) -->*/
 /* 		<script src="/mercury/assets/js/pages/dashboard.js"></script>*/
 /* 		<!-- AdminLTE for demo purposes -->*/
-/* 		<script src="/asstes/js/demo.js"></script>*/
+/* 		<script src="/mercury/assets/js/demo.js"></script>*/
 /* 	</body>*/
 /* </html>*/
 /* */

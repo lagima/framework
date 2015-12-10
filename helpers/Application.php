@@ -2,7 +2,9 @@
 namespace Mercury\Helper;
 
 use \Pimple\Container;
+use Mercury\Helper\Database;
 use Mercury\Helper\View;
+use Mercury\Helper\Router;
 
 /**
 *
@@ -16,8 +18,12 @@ class Application {
 		// Initialize the DI container
 		$this->di = new Container();
 
-		$this->initconfig();
+		// Set the enpty config container
+		$this->di['config'] = function () {
+			return [];
+		};
 
+		$this->initdb();
 		$this->initroute();
 		$this->initview();
 
@@ -25,33 +31,7 @@ class Application {
 
 
 	public function getdocumentroot() {
-
 		return $_SERVER['DOCUMENT_ROOT'];
-
-	}
-
-	protected function initdb() {
-
-
-	}
-
-
-	protected function initconfig() {
-
-		$this->di['config'] = function () {
-			return [];
-		};
-
-
-		$lo_config = new \stdClass;
-		$lo_config->path = $this->getdocumentroot() . '/mercury/views';
-		$this->setconfig('view', $lo_config);
-
-		$lo_config = new \stdClass;
-		$lo_config->path = $this->getdocumentroot() . '/mercury/views';
-		$this->setconfig('application', $lo_config);
-
-		return true;
 	}
 
 
@@ -69,17 +49,25 @@ class Application {
 	}
 
 
+	protected function initdb() {
+
+		$this->di['database'] = function($di) {
+
+			$lo_database = new Database($di);
+
+			return $lo_database;
+		};
+
+		return true;
+
+	}
+
+
 	protected function initroute() {
 
-		$this->di['router'] = function() {
+		$this->di['router'] = function($di) {
 
-			$lo_router = new \AltoRouter();
-
-			// map homepage
-			$lo_router->map('GET', '/', 'Index#index');
-
-			// map users details page
-			$lo_router->map('GET|POST', '/users/[i:id]', 'Index#user');
+			$lo_router = new Router($di);
 
 			return $lo_router;
 		};
@@ -106,11 +94,11 @@ class Application {
 		// Get the route object from DI container
 		$router = isset($di['router']) ? $di['router'] : null;
 
-		if(!$router instanceof Altorouter)
+		if(!$router instanceof Router)
 			trigger_error("Router not defined");
 
 		// Execute the route
-		$pa_match = $router->match();
+		$pa_match = $router->executeroute();
 
 
 		if ($pa_match === false) {
@@ -130,8 +118,9 @@ class Application {
 
 				call_user_func_array(array($lo_controller, $ps_action), $pa_match['params']);
 
-				// Render the page
-				$this->render($lo_controller->view);
+				$pa_viewdata = $lo_controller->getviewdata();
+
+				$this->servepage($pa_viewdata);
 
 			} else {
 
@@ -141,19 +130,25 @@ class Application {
 		}
 	}
 
+
 	public function runadmin() {
+
+		// Set the admin view folder
+		$lo_config = new \stdClass;
+		$lo_config->path = $this->getdocumentroot() . '/mercury/views';
+		$this->setconfig('view', $lo_config);
+
 
 		// Get the route object from DI container
 		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
 
-
-		if(!$lo_router instanceof \AltoRouter)
-			trigger_error("Router not defined", E_USER_ERROR);
+		// Set the admin routes
+		$lo_router->setadminroutes();
 
 		// Execute the route
-		$pa_match = $lo_router->match();
+		$la_params = $lo_router->executeroute();
 
-		if ($pa_match === false) {
+		if ($la_params === false) {
 
 			// here you can handle 404
 			echo "Here you can handle 404";
@@ -161,7 +156,8 @@ class Application {
 			return false;
 		}
 
-		list($ps_controller, $ps_action) = explode('#', $pa_match['target']);
+		$ps_controller = $lo_router->getcontroller();
+		$ps_action = $lo_router->getaction();
 
 		$ps_class = "Mercury\\Controller\\{$ps_controller}Controller";
 		$ps_method = "{$ps_action}Action";
@@ -170,25 +166,12 @@ class Application {
 
 			$lo_controller = new $ps_class();
 
-			call_user_func_array(array($lo_controller, $ps_method), $pa_match['params']);
+			call_user_func_array(array($lo_controller, $ps_method), $la_params);
 
-			// Get view object from DI
-			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
+			$po_page = $lo_router->getpage();
+			$pa_responsedata = $lo_controller->getresponsedata();
 
-			// Render the page
-			if($lo_view instanceof View){
-
-				$pa_viewdata = $lo_controller->getviewdata();
-
-				$lo_page = new \stdClass;
-				$lo_page->controller = $ps_controller;
-				$lo_page->action = $ps_action;
-				$lo_page->template = 'admin-template';
-				$lo_page->type = 'webpage';
-
-				$lo_view->renderview($pa_viewdata, $lo_page);
-
-			}
+			$this->servepage($po_page, $pa_responsedata);
 
 		} else {
 
@@ -199,10 +182,31 @@ class Application {
 	}
 
 
-	public function renderpage() {
+	public function servepage($po_page, $pa_response) {
 
+		// Get view object from DI
+		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
+		// Render the page
+		$lo_view->renderview($po_page, $pa_response);
 
+	}
+
+	public function debug($pm_value) {
+
+		echo '<pre>';
+		print_r($pm_value);
+		echo '</pre>';
+
+	}
+
+	public function debugx($pm_value) {
+
+		echo '<pre>';
+		print_r($pm_value);
+		echo '</pre>';
+
+		exit;
 	}
 
 }

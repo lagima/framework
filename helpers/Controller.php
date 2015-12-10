@@ -6,7 +6,7 @@ class Controller {
 
 	private $view;
 
-	public $viewdata;
+	public $response;
 
 
 	public function __construct() {
@@ -19,8 +19,8 @@ class Controller {
 		$this->view = $ps_view;
 	}
 
-	public function getviewdata() {
-		return $this->viewdata;
+	public function getresponsedata() {
+		return $this->response;
 	}
 
 }

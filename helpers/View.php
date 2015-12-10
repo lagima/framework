@@ -15,7 +15,7 @@ class View {
 
 	}
 
-	public function renderview($pa_viewdata, $po_page) {
+	public function renderview($po_page, $pa_viewdata) {
 
 		$ls_viewfile = $this->getviewfile($po_page->controller, $po_page->action);
 
@@ -25,7 +25,7 @@ class View {
 
 			$twig = new \Twig_Environment($loader, array(
 				'cache' => $this->config->path,
-				'auto_reload' => true
+				// 'auto_reload' => true
 			));
 
 			echo $twig->render($ls_viewfile, $pa_viewdata);
