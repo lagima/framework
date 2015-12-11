@@ -135,7 +135,8 @@ class Application {
 
 		// Set the admin view folder
 		$lo_config = new \stdClass;
-		$lo_config->path = $this->getdocumentroot() . '/mercury/views';
+		$lo_config->viewpath = $this->getdocumentroot() . '/mercury/views';
+		$lo_config->templatepath = $this->getdocumentroot() . '/mercury/views/templates';
 		$this->setconfig('view', $lo_config);
 
 

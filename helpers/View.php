@@ -17,18 +17,21 @@ class View {
 
 	public function renderview($po_page, $pa_viewdata) {
 
-		$ls_viewfile = $this->getviewfile($po_page->controller, $po_page->action);
+		$ls_viewfolder = $this->getviewfolder($po_page->controller);
 
 		if($po_page->type == 'webpage'){
 
-			$loader = new \Twig_Loader_Filesystem($this->config->path);
+			// Prepare data
+			$ps_controller = strtolower($po_page->controller);
+			$ps_action = strtolower($po_page->action);
 
-			$twig = new \Twig_Environment($loader, array(
-				'cache' => $this->config->path,
-				// 'auto_reload' => true
-			));
+			// Create new Plates instance
+			$templates = new \League\Plates\Engine($ls_viewfolder);
 
-			echo $twig->render($ls_viewfile, $pa_viewdata);
+			$templates->addFolder('templates', $this->config->templatepath);
+
+			// Render a template
+			echo $templates->render($ps_action, $pa_viewdata);
 		}
 
 		else
@@ -37,13 +40,19 @@ class View {
 		return true;
 	}
 
+	public function getviewfolder($ps_controller) {
+
+		$ps_controller = strtolower($ps_controller);
+
+		return $this->config->viewpath . '/' . $ps_controller;
+	}
 
 	public function getviewfile($ps_controller, $ps_action = 'index') {
 
 		$ps_controller = strtolower($ps_controller);
 		$ps_action = strtolower($ps_action);
 
-		return "/$ps_controller/$ps_action.html";
+		return "/$ps_controller/$ps_action.php";
 	}
 
 
