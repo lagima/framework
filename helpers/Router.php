@@ -35,6 +35,26 @@ class Router {
 
 	public function setadminroutes() {
 
+		// Get the routes from database
+		$la_routes = $this->db->getallobjects("SELECT r.*, p.`name` as `controller`, m.`name` as `module`
+												FROM `m_route` r
+												LEFT JOIN `m_module` m ON m.`moduleid` = r.`moduleid`
+												LEFT JOIN `m_page` p ON p.`pageid` = r.`pageid`
+												WHERE r.`core` = 1");
+
+		foreach($la_routes as $lo_route) {
+
+			$ls_modue = ucfirst($lo_route->module);
+			$ls_controller = ucfirst($lo_route->controller);
+			$ls_action = ucfirst($lo_route->action);
+
+			$this->router->map($lo_route->method, $lo_route->requesturi, "$ls_modue#$ls_controller#$ls_action");
+		}
+
+	}
+
+	public function setsiteoutes() {
+
 		// map homepage
 		$this->router->map('GET', '/admin', 'Admin#Index#index');
 
@@ -68,7 +88,8 @@ class Router {
 			$lo_page = new \stdClass;
 			$lo_page->controller = $this->controller;
 			$lo_page->action = $this->action;
-			$lo_page->template = 'admin-template';
+			$lo_page->template = 'admin';
+			$lo_page->view = strtolower($this->action);
 			$lo_page->type = 'webpage';
 
 			return $lo_page;

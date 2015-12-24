@@ -48,7 +48,7 @@ class Profiler {
 			$li_runid = $lo_xhprofruns->save_run($lo_xhprofdata, "mercury");
 
 			echo '	<div style="position:absolute; bottom:0; left:0; z-index:1000">
-						<a class="btn btn-warning" target="_blank" href="mercury/vendor/xhprof/xhprof_html/index.php?run=' . $li_runid . '&source=mercury">
+						<a class="btn btn-warning" target="_blank" href="/mercury/vendor/xhprof/xhprof_html/index.php?run=' . $li_runid . '&source=mercury">
 							Profile
 						</a>
 					</div>';

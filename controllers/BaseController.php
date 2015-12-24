@@ -5,9 +5,9 @@ use Mercury\Helper\Controller;
 
 class BaseController extends Controller{
 
-	public function __construct() {
+	public function __construct($di) {
 
-		// Try to set the view from
+		parent::__construct($di);
 	}
 
 }

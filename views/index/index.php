@@ -1,4 +1,4 @@
-<?php $this->layout('templates::admin-template', ['title' => 'User Profile']) ?>
+<?php $this->layout($gs_template, $ga_templatedata) ?>
 
 
 <!-- Content Header (Page header) -->

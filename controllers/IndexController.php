@@ -8,7 +8,12 @@ class IndexController extends BaseController {
 		$this->response = ['test' => 'test value'];
 	}
 
-	public function userAction($pi_id) {
-		echo "user" . $pi_id;
+	public function controllersAction() {
+
+		// Get the controllers
+		$la_controllers = $this->db->getallobjects("SELECT * FROm `m_page` WHERE `type` = :type", ['type' => 'CONTROLLER']);
+
+		$this->response = ['la_controllers' => $la_controllers];
+
 	}
 }

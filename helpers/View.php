@@ -30,7 +30,11 @@ class View {
 
 			$templates->addFolder('templates', $this->config->templatepath);
 
-			// Render a template
+			// Configure the template
+			$pa_viewdata['gs_template'] = 'templates::' . $po_page->template;
+			$pa_viewdata['ga_templatedata'] = ['title' => 'User Profile'];
+
+			// Render the view
 			echo $templates->render($ps_action, $pa_viewdata);
 		}
 

@@ -165,7 +165,7 @@ class Application {
 
 		if (is_callable(array($ps_class, $ps_method))) {
 
-			$lo_controller = new $ps_class();
+			$lo_controller = new $ps_class($this->di);
 
 			call_user_func_array(array($lo_controller, $ps_method), $la_params);
 
