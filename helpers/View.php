@@ -1,8 +1,9 @@
 <?
 namespace Mercury\Helper;
 
+use Mercury\Helper\Core;
 
-class View {
+class View extends Core {
 
 	private $config;
 
@@ -26,16 +27,19 @@ class View {
 			$ps_action = strtolower($po_page->action);
 
 			// Create new Plates instance
-			$templates = new \League\Plates\Engine($ls_viewfolder);
+			$lo_templates = new \League\Plates\Engine($ls_viewfolder);
 
-			$templates->addFolder('templates', $this->config->templatepath);
+			// Load asset extension
+			$lo_templates->loadExtension(new \League\Plates\Extension\Asset($this->config->assetpath, true));
+
+			$lo_templates->addFolder('templates', $this->config->templatepath);
 
 			// Configure the template
 			$pa_viewdata['gs_template'] = 'templates::' . $po_page->template;
 			$pa_viewdata['ga_templatedata'] = ['title' => 'User Profile'];
 
 			// Render the view
-			echo $templates->render($ps_action, $pa_viewdata);
+			echo $lo_templates->render($ps_action, $pa_viewdata);
 		}
 
 		else

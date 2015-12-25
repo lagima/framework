@@ -132,6 +132,7 @@ class Application extends Core {
 		$lo_config = new \stdClass;
 		$lo_config->viewpath = $this->getdocumentroot() . '/mercury/views';
 		$lo_config->templatepath = $this->getdocumentroot() . '/mercury/views/templates';
+		$lo_config->assetpath = $this->getdocumentroot();
 		$this->setconfig('view', $lo_config);
 
 

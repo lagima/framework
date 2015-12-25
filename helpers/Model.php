@@ -35,7 +35,7 @@ class Model extends Core {
 	}
 
 
-	protected function settable($ps_table) {
+	public function settable($ps_table) {
 
 		$this->table = $ps_table;
 	}
@@ -56,7 +56,7 @@ class Model extends Core {
 		return $lo_row;
 	}
 
-	public function getrows($pa_condition) {
+	public function getrows($pa_condition = []) {
 
 		$la_where = [];
 		$la_binds = [];
