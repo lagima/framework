@@ -2,6 +2,7 @@
 namespace Mercury\Helper;
 
 use \Pimple\Container;
+use Mercury\Helper\Core;
 use Mercury\Helper\Database;
 use Mercury\Helper\View;
 use Mercury\Helper\Router;
@@ -9,7 +10,7 @@ use Mercury\Helper\Router;
 /**
 *
 */
-class Application {
+class Application extends Core {
 
 	private $di;
 
@@ -26,12 +27,6 @@ class Application {
 		$this->initdb();
 		$this->initroute();
 		$this->initview();
-
-	}
-
-
-	public function getdocumentroot() {
-		return $_SERVER['DOCUMENT_ROOT'];
 	}
 
 
@@ -165,8 +160,10 @@ class Application {
 
 		if (is_callable(array($ps_class, $ps_method))) {
 
+			// Init the controller
 			$lo_controller = new $ps_class($this->di);
 
+			// Call the action
 			call_user_func_array(array($lo_controller, $ps_method), $la_params);
 
 			$po_page = $lo_router->getpage();
@@ -191,23 +188,6 @@ class Application {
 		// Render the page
 		$lo_view->renderview($po_page, $pa_response);
 
-	}
-
-	public function debug($pm_value) {
-
-		echo '<pre>';
-		print_r($pm_value);
-		echo '</pre>';
-
-	}
-
-	public function debugx($pm_value) {
-
-		echo '<pre>';
-		print_r($pm_value);
-		echo '</pre>';
-
-		exit;
 	}
 
 }

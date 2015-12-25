@@ -1,12 +1,13 @@
 <?
 namespace Mercury\Helper;
 
+use Mercury\Helper\Core;
 
-class Controller {
+class Controller extends Core {
 
 	private $view;
-
-	public $response;
+	protected $di;
+	private $response;
 
 
 	public function __construct($di) {
@@ -18,15 +19,27 @@ class Controller {
 
 		// No point in continuing without database connection
 		if(is_null($this->db)) {
-			trigger_error("No database configured when router is called", E_USER_ERROR);
+			trigger_error("No database configured when controller is called", E_USER_ERROR);
 			return false;
 		}
 
+		// Child classes are not allowed to use the constructor so workaround
+		$this->initcontroller();
+	}
+
+
+	protected function initcontroller() {
+		// Implemented in child class
 	}
 
 	protected function setview($ps_view) {
 
 		$this->view = $ps_view;
+	}
+
+	public function buildresponse($pm_data) {
+
+		$this->response = $pm_data;
 	}
 
 	public function getresponsedata() {
