@@ -2,10 +2,12 @@
 namespace Mercury\Helper;
 
 use Mercury\Helper\Core;
+use Mercury\Helper\HtmlExtension;
 
 class View extends Core {
 
 	private $config;
+	private $view;
 
 	public function __construct($di) {
 
@@ -16,9 +18,18 @@ class View extends Core {
 
 	}
 
-	public function renderview($po_page, $pa_viewdata) {
+	public function setview($ps_view) {
+		$this->view = $ps_view;
+	}
 
-		$ls_viewfolder = $this->getviewfolder($po_page->controller);
+	private function getview() {
+		return $this->view;
+	}
+
+	public function renderpage($po_page, $pa_viewdata) {
+
+		$ls_viewfolder = $this->getviewfolder($po_page);
+		$ls_viewfile = $this->getviewfile($po_page);
 
 		if($po_page->type == 'webpage'){
 
@@ -32,14 +43,18 @@ class View extends Core {
 			// Load asset extension
 			$lo_templates->loadExtension(new \League\Plates\Extension\Asset($this->config->assetpath, true));
 
+			// Load html helpers
+			$lo_templates->loadExtension(new HtmlExtension());
+
+
 			$lo_templates->addFolder('templates', $this->config->templatepath);
 
 			// Configure the template
 			$pa_viewdata['gs_template'] = 'templates::' . $po_page->template;
-			$pa_viewdata['ga_templatedata'] = ['title' => 'User Profile'];
+			$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury', 'gs_currentpage' => $this->getcurrenturl()];
 
 			// Render the view
-			echo $lo_templates->render($ps_action, $pa_viewdata);
+			echo $lo_templates->render($ls_viewfile, $pa_viewdata);
 		}
 
 		else
@@ -48,19 +63,34 @@ class View extends Core {
 		return true;
 	}
 
-	public function getviewfolder($ps_controller) {
 
-		$ps_controller = strtolower($ps_controller);
+	public function getviewfile($po_page) {
 
-		return $this->config->viewpath . '/' . $ps_controller;
+		if(!is_object($po_page))
+			trigger_error('Page is invalid', E_USER_ERROR);
+
+		$ls_viewfile = '';
+
+		// Check if a view is set
+		if(isset($this->view) && !empty($this->view))
+			$ls_viewfile = $this->view;
+
+		// If not set try to resolve from controller
+		if(empty($ls_viewfile))
+			$ls_viewfile = strtolower($po_page->action);
+
+		return $ls_viewfile;
 	}
 
-	public function getviewfile($ps_controller, $ps_action = 'index') {
 
-		$ps_controller = strtolower($ps_controller);
-		$ps_action = strtolower($ps_action);
+	public function getviewfolder($po_page) {
 
-		return "/$ps_controller/$ps_action.php";
+		if(!is_object($po_page))
+			trigger_error('Page is invalid', E_USER_ERROR);
+
+		$ps_controller = strtolower($po_page->controller);
+
+		return "{$this->config->viewpath}/$ps_controller";
 	}
 
 

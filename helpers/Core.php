@@ -323,4 +323,39 @@ class Core {
 		return $_SESSION[$ps_key];
 	}
 
+
+	/**
+	 * Returns the page URL
+	 * @return string
+	 */
+	public function getpageurl($pb_query = true) {
+
+		$ls_protocol = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+
+		$ls_url = $ls_protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+		if(!$pb_query)
+			$ls_url = $ls_protocol . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_URI"],'?');
+
+		return $ls_url;
+	}
+
+
+	/**
+	 * Returns the host URL
+	 * @return string
+	 */
+	public function getcurrenturl($pb_full = false) {
+
+		$ls_protocol = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+
+		if($pb_full)
+			return "$ls_protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+		$la_uriparts = explode('?', $_SERVER['REQUEST_URI'], 2);
+
+		return $la_uriparts[0];
+	}
+
+
 }

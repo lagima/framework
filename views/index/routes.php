@@ -2,7 +2,7 @@
 
 <section class="content-header">
 	<h1>
-		Controllers
+		Routes
 		<small>preview of simple tables</small>
 	</h1>
 	<ol class="breadcrumb">
@@ -24,24 +24,21 @@
 			</div>
 		</div>
 		<div class="col-xs-4">
-			<button class="btn btn-success btn-sm pull-right"><i class="fa fa-plus-square"></i> &nbsp;Add Page</button>
+			<a href="/admin/route/add" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-square"></i> &nbsp;Add Page</a>
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box box-solid">
-				<div class="box-header with-border">
-					<h3 class="box-title">Responsive Hover Table</h3>
-				</div><!-- /.box-header -->
-				<div class="box-body">
+				<div class="box-body no-padding">
 					<table class="table table-hover">
 						<tbody>
 							<tr>
 								<th>Request URI</th>
 								<th>Action</th>
 								<th>Method</th>
-								<th style="width:100px;">&nbsp;</th>
+								<th style="width:50px;">&nbsp;</th>
 							</tr>
 							<?php foreach($la_routes as $lo_row): ?>
 								<tr>
@@ -49,7 +46,7 @@
 									<td><?= $lo_row->action ?></td>
 									<td><?= $lo_row->method ?></td>
 									<td>
-										<a href="/admin/route/edit/<?= $lo_row->pageid ?>" class="btn btn-success btn-xs"><i class="fa fa-edit"></i></a>
+										<a href="/admin/route/edit/<?= $lo_row->routeid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
 									</td>
 								</tr>
 							<?php endforeach; ?>

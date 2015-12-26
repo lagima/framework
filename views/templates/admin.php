@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>AdminLTE 2 | Dashboard</title>
+		<title><?= $gs_title ?> | Dashboard</title>
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<!-- Bootstrap 3.3.5 -->
@@ -36,7 +36,7 @@
 
 			<header class="main-header">
 				<!-- Logo -->
-				<a href="index2.html" class="logo">
+				<a href="/admin" class="logo">
 					<!-- mini logo for sidebar mini 50x50 pixels -->
 					<span class="logo-mini"><b>M</b>PHP</span>
 					<!-- logo for regular state and mobile devices -->
@@ -76,27 +76,27 @@
 					<ul class="sidebar-menu">
 						<li class="header">MAIN NAVIGATION</li>
 
-						<li class="active">
+						<li class="<?= $gs_currentpage == '/admin/controllers' ? active : ''?>">
 							<a href="/admin/controllers">
 								<i class="fa fa-folder"></i> <span>Controllers</span>
 							</a>
 						</li>
-						<li>
+						<li class="<?= $gs_currentpage == '/admin/models' ? active : ''?>">
 							<a href="/admin/models">
 								<i class="fa fa-folder"></i> <span>Models</span>
 							</a>
 						</li>
-						<li>
+						<li class="<?= $gs_currentpage == '/admin/templates' ? active : ''?>">
 							<a href="/admin/templates">
 								<i class="fa fa-folder"></i> <span>Templates</span>
 							</a>
 						</li>
-						<li>
+						<li class="<?= $gs_currentpage == '/admin/views' ? active : ''?>">
 							<a href="/admin/views">
 								<i class="fa fa-folder"></i> <span>Views</span>
 							</a>
 						</li>
-						<li>
+						<li class="<?= $gs_currentpage == '/admin/routes' ? active : ''?>">
 							<a href="/admin/routes">
 								<i class="fa fa-folder"></i> <span>Routes</span>
 							</a>

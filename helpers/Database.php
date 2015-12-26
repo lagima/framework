@@ -267,7 +267,7 @@ class Database {
 
 		} catch(\PDOException $e) {
 
-			trigger_error($e->getMessage(), E_USER_ERROR);
+			trigger_error($e->getMessage() . "($ps_query)", E_USER_ERROR);
 
 		}
 

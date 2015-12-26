@@ -126,10 +126,10 @@ class Model extends Core {
 	}
 
 
-	public function commitaddfrompost($ps_table){
+	public function commitaddfrompost($ps_table = ''){
 
 		if(empty($ps_table))
-			trigger_error("Table name cannot be empty", E_USER_ERROR);
+			$ps_table = $this->table;
 
 		if(empty($_POST))
 			trigger_error("POST data is empty", E_USER_ERROR);
@@ -149,16 +149,16 @@ class Model extends Core {
 		// Now put it in the table
 		$ps_table = addslashes($ps_table);
 
-		$li_id = $this->dbinsert($ps_table, $la_values);
+		$li_id = $this->db->dbinsert($ps_table, $la_values);
 
 		return $li_id;
 	}
 
 
-	public function commitupdatefrompost($ps_table, $ps_keyfield, $ps_keyvalue){
+	public function commitupdatefrompost($ps_keyfield, $ps_keyvalue, $ps_table = ''){
 
 		if(empty($ps_table))
-			trigger_error("Table name cannot be empty", E_USER_ERROR);
+			$ps_table = $this->table;
 
 		if(empty($_POST))
 			trigger_error("POST data is empty", E_USER_ERROR);
@@ -178,7 +178,7 @@ class Model extends Core {
 		// Now put it in the table
 		$ps_table = addslashes($ps_table);
 
-		$li_id = $this->dbupdate($ps_table, $ps_keyfield, $ps_keyvalue, $la_values);
+		$li_id = $this->db->dbupdate($ps_table, $ps_keyfield, $ps_keyvalue, $la_values);
 
 		return $li_id;
 	}

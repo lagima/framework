@@ -1,11 +1,12 @@
 <?
 namespace Mercury\Helper;
 
+use Mercury\Helper\Core;
 
 /**
 *
 */
-class Router {
+class Router extends Core {
 
 	private $di;
 	private $router;
@@ -50,6 +51,15 @@ class Router {
 
 			$this->router->map($lo_route->method, $lo_route->requesturi, "$ls_modue#$ls_controller#$ls_action");
 		}
+
+		// // For anything else we try to auto route
+		// $la_parts = explode('/', ltrim($_SERVER['REQUEST_URI'], '/'));
+		// $ls_module = array_shift($la_parts);
+		// $ls_controller = array_shift($la_parts);
+		// $ls_action = array_shift($la_parts);
+		// // $ls_action = array_shift($la_parts);
+
+		// $this->router->map('GET|POST', $_SERVER['REQUEST_URI'], "$ls_module#$ls_controller#$ls_action");
 
 	}
 

@@ -33,13 +33,19 @@ class Controller extends Core {
 	}
 
 	protected function setview($ps_view) {
-
 		$this->view = $ps_view;
 	}
 
-	public function buildresponse($pm_data) {
+	public function getview() {
+		return $this->view;
+	}
 
-		$this->response = $pm_data;
+	public function buildresponse($pa_data) {
+
+		if(!is_array($this->response))
+			$this->response = [];
+
+		$this->response = array_merge($this->response, $pa_data);
 	}
 
 	public function getresponsedata() {

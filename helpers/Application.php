@@ -84,57 +84,15 @@ class Application extends Core {
 		return true;
 	}
 
-	public function runsite() {
-
-		// Get the route object from DI container
-		$router = isset($di['router']) ? $di['router'] : null;
-
-		if(!$router instanceof Router)
-			trigger_error("Router not defined");
-
-		// Execute the route
-		$pa_match = $router->executeroute();
-
-
-		if ($pa_match === false) {
-
-			// here you can handle 404
-			echo "Here you can handle 404";
-
-		} else {
-
-			list($ps_module, $ps_controller, $ps_action) = explode('#', $pa_match['target']);
-
-			$ps_controller = "Application\\{$ps_module}\\Controller\\$ps_controller";
-
-			if (is_callable(array($ps_controller, $ps_action))) {
-
-				$lo_controller = new $ps_controller();
-
-				call_user_func_array(array($lo_controller, $ps_action), $pa_match['params']);
-
-				$pa_viewdata = $lo_controller->getviewdata();
-
-				$this->servepage($pa_viewdata);
-
-			} else {
-
-				// Throw an exception in debug, send a  500 error in production
-				echo "Trying to call $ps_controller with no luck";
-			}
-		}
-	}
-
 
 	public function runadmin() {
 
-		// Set the admin view folder
+		// Set the view folders
 		$lo_config = new \stdClass;
 		$lo_config->viewpath = $this->getdocumentroot() . '/mercury/views';
 		$lo_config->templatepath = $this->getdocumentroot() . '/mercury/views/templates';
 		$lo_config->assetpath = $this->getdocumentroot();
 		$this->setconfig('view', $lo_config);
-
 
 		// Get the route object from DI container
 		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
@@ -156,6 +114,7 @@ class Application extends Core {
 		$ps_controller = $lo_router->getcontroller();
 		$ps_action = $lo_router->getaction();
 
+		// Build the namespaced class and action of it
 		$ps_class = "Mercury\\Controller\\{$ps_controller}Controller";
 		$ps_method = "{$ps_action}Action";
 
@@ -167,28 +126,25 @@ class Application extends Core {
 			// Call the action
 			call_user_func_array(array($lo_controller, $ps_method), $la_params);
 
-			$po_page = $lo_router->getpage();
+			// Get the page details & data to serve
 			$pa_responsedata = $lo_controller->getresponsedata();
+			$po_page = $lo_router->getpage();
 
-			$this->servepage($po_page, $pa_responsedata);
+			// Get view object from DI
+			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
+
+			// Inject the view from controller if any set
+			$ls_view = $lo_controller->getview();
+			$lo_view->setview($ls_view);
+
+			// Render the page
+			$lo_view->renderpage($po_page, $pa_responsedata);
 
 		} else {
 
 			// Throw an exception in debug, send a  500 error in production
 			trigger_error("Trying to call $ps_controller with no luck", E_USER_NOTICE);
 		}
-
-	}
-
-
-	public function servepage($po_page, $pa_response) {
-
-		// Get view object from DI
-		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
-
-		// Render the page
-		$lo_view->renderview($po_page, $pa_response);
-
 	}
 
 }

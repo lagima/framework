@@ -20,15 +20,15 @@
 					<h3 class="box-title">Horizontal Form</h3>
 				</div><!-- /.box-header -->
 
-				<form role="form" method="POST" action="/admin/route/edit/<?= $po_route->routeid ?>">
+				<form role="form" method="POST" action="/admin/route/add">
 					<div class="box-body">
 
-						<?= $this->htmlinput('text', 'requesturi', 'Request URI', $po_route->requesturi); ?>
-						<?= $this->htmlinput('select', 'moduleid', 'Module', $po_route->moduleid, $pa_modules); ?>
-						<?= $this->htmlinput('select', 'pageid', 'Controller', $po_route->pageid, $pa_controllers); ?>
-						<?= $this->htmlinput('text', 'action', 'Action', $po_route->action); ?>
-						<?= $this->htmlinput('text', 'method', 'Method', $po_route->method); ?>
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $po_route->core); ?>
+						<?= $this->htmlinput('text', 'requesturi', 'Request URI'); ?>
+						<?= $this->htmlinput('select', 'moduleid', 'Module', null, $pa_modules); ?>
+						<?= $this->htmlinput('select', 'pageid', 'Controller', null, $pa_controllers); ?>
+						<?= $this->htmlinput('text', 'action', 'Action'); ?>
+						<?= $this->htmlinput('text', 'method', 'Method'); ?>
+						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>
 
 					</div><!-- /.box-body -->
 

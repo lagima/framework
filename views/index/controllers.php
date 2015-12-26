@@ -13,34 +13,38 @@
 </section>
 
 <section class="content">
+
+	<div class="row" style="margin-bottom:10px;">
+		<div class="col-xs-8">
+			<div class="input-group" style="width:250px">
+				<input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+				<div class="input-group-btn">
+					<button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-4">
+			<button class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-square"></i> &nbsp;Add Page</button>
+		</div>
+	</div>
+
 	<div class="row">
 		<div class="col-xs-12">
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">Responsive Hover Table</h3>
-					<div class="box-tools">
-						<div class="input-group" style="width: 150px;">
-							<input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
-							<div class="input-group-btn">
-								<button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
-							</div>
-						</div>
-					</div>
-				</div><!-- /.box-header -->
-				<div class="box-body">
+			<div class="box box-solid">
+				<div class="box-body no-padding">
 					<table class="table table-hover">
 						<tbody>
 							<tr>
 								<th>Label</th>
 								<th>Name</th>
-								<th style="width:100px;">&nbsp;</th>
+								<th style="width:50px;">&nbsp;</th>
 							</tr>
 							<?php foreach($la_controllers as $lo_controller): ?>
 								<tr>
 									<td><?= $lo_controller->label ?></td>
 									<td><?= $lo_controller->name ?></td>
 									<td>
-										<a href="/admin/controller/edit/<?= $lo_controller->pageid ?>" class="btn btn-success btn-xs"><i class="fa fa-edit"></i></a>
+										<a href="/admin/controller/edit/<?= $lo_controller->pageid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
 									</td>
 								</tr>
 							<?php endforeach; ?>
