@@ -50,6 +50,9 @@ class PagesController extends BaseController {
 						$ls_file = $this->getdocumentroot() . '/application/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 
 					$this->createfile($ls_file);
+
+					// Redirect
+					$this->redirect('/admin/controller');
 				}
 
 				// Add needs a special view
@@ -146,6 +149,9 @@ class PagesController extends BaseController {
 						$ls_file = $this->getdocumentroot() . '/application/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 
 					$this->createfile($ls_file);
+
+					// Redirect
+					$this->redirect('/admin/models');
 				}
 
 				// Add needs a special view
@@ -244,6 +250,9 @@ class PagesController extends BaseController {
 						$ls_file = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
 
 					$this->createfile($ls_file);
+
+					// Redirect
+					$this->redirect('/admin/views');
 				}
 
 				// Add needs a special view
@@ -325,7 +334,7 @@ class PagesController extends BaseController {
 	public function templatesAction() {
 
 		// Get the controllers
-		$la_pages = $this->pagemodel->getviews();
+		$la_pages = $this->pagemodel->getviews('TEMPLATE');
 
 		$this->setview('pages');
 
@@ -360,6 +369,9 @@ class PagesController extends BaseController {
 						$ls_file = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/templates/' . strtolower($this->postvalue('__name')) . '.php';
 
 					$this->createfile($ls_file);
+
+					// Redirect
+					$this->redirect('/admin/templates');
 				}
 
 				// Add needs a special view
@@ -395,11 +407,11 @@ class PagesController extends BaseController {
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
-					$this->setview('page');
-
 					// Redirect
 					$this->redirect('/admin/templates');
 				}
+
+				$this->setview('page');
 
 				$this->buildresponse(['ls_actionurl' => '/admin/template/edit/' . $pi_id]);
 				$this->buildresponse(['lo_page' => $lo_page]);
@@ -493,6 +505,9 @@ class PagesController extends BaseController {
 					$_POST['__created'] = date('Y-m-d H:i:s');
 
 					$this->routemodel->commitaddfrompost();
+
+					// Redirect
+					$this->redirect('/admin/routes');
 				}
 
 				$this->setview('addroute');
@@ -501,8 +516,13 @@ class PagesController extends BaseController {
 
 			case 'edit':
 
-				if(isset($_POST) && !empty($_POST))
+				if(isset($_POST) && !empty($_POST)){
+
 					$this->routemodel->commitupdatefrompost('routeid', $pi_id);
+
+					// Redirect
+					$this->redirect('/admin/routes');
+				}
 
 				// Get the controllers
 				$lo_route = $this->routemodel->getrow(['routeid' => $pi_id]);

@@ -36,7 +36,7 @@
 							<tr>
 								<th>Label</th>
 								<th>Name</th>
-								<th>Model</th>
+								<th>Module</th>
 								<th style="width:50px;">&nbsp;</th>
 							</tr>
 							<?php foreach($la_pages as $lo_page): ?>
