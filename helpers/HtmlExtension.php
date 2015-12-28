@@ -5,7 +5,7 @@ use Mercury\Helper\Core;
 use League\Plates\Engine;
 use League\Plates\Extension\ExtensionInterface;
 
-class HtmlExtension  extends Core implements ExtensionInterface {
+class HtmlExtension extends Core implements ExtensionInterface {
 
 	public $engine;
 	public $template;

@@ -20,11 +20,13 @@
 					<h3 class="box-title">Horizontal Form</h3>
 				</div><!-- /.box-header -->
 
-				<form role="form" method="POST" action="/admin/controller/edit/<?= $po_controller->pageid ?>">
+				<form role="form" method="POST" action="/admin/controller/add">
 					<div class="box-body">
-						<?= $this->htmlinput('text', 'label', 'Label', $po_controller->label); ?>
-						<?= $this->htmlinput('text', 'name', 'Name', $po_controller->name); ?>
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $po_controller->core); ?>
+
+						<?= $this->htmlinput('text', 'label', 'Label'); ?>
+						<?= $this->htmlinput('text', 'name', 'Name'); ?>
+						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>
+
 					</div><!-- /.box-body -->
 
 					<div class="box-footer">

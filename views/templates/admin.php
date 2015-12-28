@@ -101,6 +101,11 @@
 								<i class="fa fa-folder"></i> <span>Routes</span>
 							</a>
 						</li>
+						<li class="<?= $gs_currentpage == '/admin/search' ? active : ''?>">
+							<a href="/admin/search">
+								<i class="fa fa-github"></i> <span>Github</span>
+							</a>
+						</li>
 
 
 					</ul>

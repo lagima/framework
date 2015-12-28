@@ -120,6 +120,9 @@ class Application extends Core {
 
 		if (is_callable(array($ps_class, $ps_method))) {
 
+			// Get the page from route
+			$po_page = $lo_router->getpage();
+
 			// Init the controller
 			$lo_controller = new $ps_class($this->di);
 
@@ -128,7 +131,7 @@ class Application extends Core {
 
 			// Get the page details & data to serve
 			$pa_responsedata = $lo_controller->getresponsedata();
-			$po_page = $lo_router->getpage();
+
 
 			// Get view object from DI
 			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;

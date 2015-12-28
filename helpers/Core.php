@@ -24,6 +24,15 @@ class Core {
 		exit;
 	}
 
+	public function codex($pm_value) {
+
+		echo '<code>';
+		print_r($pm_value);
+		echo '</code>';
+
+		exit;
+	}
+
 	public function createfile($ps_file) {
 
 		if(file_exists($ps_file))

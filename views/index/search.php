@@ -39,15 +39,7 @@
 								<th>Name</th>
 								<th style="width:50px;">&nbsp;</th>
 							</tr>
-							<?php foreach($la_controllers as $lo_controller): ?>
-								<tr>
-									<td><?= $lo_controller->label ?></td>
-									<td><?= $lo_controller->name ?></td>
-									<td>
-										<a href="/admin/controller/edit/<?= $lo_controller->pageid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
-									</td>
-								</tr>
-							<?php endforeach; ?>
+
 						</tbody>
 					</table>
 				</div><!-- /.box-body -->

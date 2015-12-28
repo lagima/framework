@@ -97,7 +97,9 @@ class Router extends Core {
 
 			$lo_page = new \stdClass;
 			$lo_page->controller = $this->controller;
+			$lo_page->controllerpath = $this->getdocumentroot() . '/mercury/controller';
 			$lo_page->action = $this->action;
+			$lo_page->module = 'Admin';
 			$lo_page->template = 'admin';
 			$lo_page->view = strtolower($this->action);
 			$lo_page->type = 'webpage';

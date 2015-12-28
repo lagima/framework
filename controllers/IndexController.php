@@ -29,22 +29,54 @@ class IndexController extends BaseController {
 
 	}
 
-	public function controllerAction($ps_action, $pi_pageid) {
-
+	public function controllerAction($ps_action, $pi_id = null) {
 
 		switch($ps_action) {
 
-			case 'edit':
+			case 'add':
 
-				// Get the controllers
-				$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $pi_pageid]);
+				if (isset($_POST) && !empty($_POST)) {
 
-				$this->buildresponse(['po_controller' => $lo_controller]);
+					// Default values here
+					$_POST['__type'] = 'CONTROLLER';
+
+					$this->pagemodel->commitaddfrompost();
+
+					// Create the file
+					if($this->postvalue('__core'))
+						$ls_file = $this->getdocumentroot() . '/mercury/controller' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+					else
+						$ls_file = $this->getdocumentroot() . '/application/controller' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+
+					$this->createfile($ls_file);
+				}
+
+				$this->setview('addcontroller');
 
 			break;
 
-			case 'save':
+			case 'edit':
 
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'CONTROLLER';
+
+					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
+
+					// Create the file
+					if($this->postvalue('__core'))
+						$ls_file = $this->getdocumentroot() . '/mercury/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+					else
+						$ls_file = $this->getdocumentroot() . '/application/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+
+					$this->createfile($ls_file);
+				}
+
+				// Get the controllers
+				$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $pi_id]);
+
+				$this->buildresponse(['po_controller' => $lo_controller]);
 
 			break;
 		}
@@ -117,5 +149,18 @@ class IndexController extends BaseController {
 
 			break;
 		}
+	}
+
+	public function searchAction() {
+
+		$client = new \SebastianBergmann\Git('/mercury');
+		// $repo = $client->api('repo')->update('skdeepak88', 'mercury', array('description' => 'some new description'));
+
+		// $repositories = $client->api('repo')->all();
+
+		$this->debugx($client);
+
+
+
 	}
 }
