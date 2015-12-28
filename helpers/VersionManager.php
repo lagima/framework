@@ -16,7 +16,7 @@ class VersionManager extends Core {
 
 		$this->config = $di['config']['git'];
 
-		$this->repositorypath = realpath($this->config->repopath);
+		$this->repositorypath = realpath($this->config->localrepopath);
 	}
 
 	public function getcurrentbranch() {
@@ -87,8 +87,25 @@ class VersionManager extends Core {
 
 	public function add($ps_filepath = '-A') {
 
-		$ls_output = $this->execute(
+		$this->execute(
 			'git add ' . $ps_filepath . ' 2>&1'
+		);
+	}
+
+	public function commit($ps_message) {
+
+		$ls_output = $this->execute(
+			'git commit --author="' . $this->config->username . '" -m "' . $ps_message . '"'
+		);
+
+		return $ls_output;
+	}
+
+
+	public function push() {
+
+		$ls_output = $this->execute(
+			'git push https://' . $this->config->username . ':' . $this->config->password . '@' . $this->config->remoterepopath . ' --all'
 		);
 
 		return $ls_output;

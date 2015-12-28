@@ -23,12 +23,16 @@ class GithubController extends BaseController {
 
 	public function searchAction() {
 
-		$client = new VersionManager($this->di);
-		// $repo = $client->api('repo')->update('skdeepak88', 'mercury', array('description' => 'some new description'));
 
-		// $repositories = $client->api('repo')->all();
-		$this->debugx($client->add());
+	}
 
-		$this->debugx($client->getdiff('4188f6bc289e59bce03440a58cf291821dd33ece', '33540bdb7a1fa49b5e29062b1b2525113afd6e96'));
+	public function commitAction() {
+
+		$lo_git = new VersionManager($this->di);
+
+		$lo_git->add();
+		$lo_git->commit("Tweaked VersionManager class to pull configured username while committing\nTidy up Github controller");
+		$lo_git->push();
+
 	}
 }
