@@ -77,12 +77,23 @@ class VersionManager extends Core {
 	public function getchangedfiles() {
 
 		$la_output = $this->execute(
-			'git diff --name-only'
+			'git diff HEAD  --name-only'
 		);
 
 		return $la_output;
 	}
 
+	public function search($ps_search) {
+
+		if(empty($ps_search))
+			return [];
+
+		$la_output = $this->execute(
+			"git grep -l '$ps_search'"
+		);
+
+		return $la_output;
+	}
 
 	/**
 	 * @param string $revision

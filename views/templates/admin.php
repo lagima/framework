@@ -101,12 +101,16 @@
 								<i class="fa fa-folder"></i> <span>Routes</span>
 							</a>
 						</li>
-						<li class="<?= $gs_currentpage == '/admin/search' ? active : ''?>">
-							<a href="/admin/search">
+						<li class="treeview <?= $gs_currentpage == '/admin/gitcommit' ? active : ''?>">
+							<a href="#">
 								<i class="fa fa-github"></i> <span>Github</span>
+								<i class="fa fa-angle-left pull-right"></i>
 							</a>
+							<ul class="treeview-menu">
+								<li><a href="/admin/gitcommit"><i class="fa fa-circle-o"></i> Commit</a></li>
+								<li><a href="/admin/gitsearch"><i class="fa fa-circle-o"></i> Search</a></li>
+							</ul>
 						</li>
-
 
 					</ul>
 				</section>

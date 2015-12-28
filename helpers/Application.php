@@ -146,7 +146,7 @@ class Application extends Core {
 		} else {
 
 			// Throw an exception in debug, send a  500 error in production
-			trigger_error("Trying to call $ps_controller with no luck", E_USER_NOTICE);
+			trigger_error("Trying to call $ps_controller::$ps_action with no luck", E_USER_NOTICE);
 		}
 	}
 

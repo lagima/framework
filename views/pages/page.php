@@ -2,8 +2,7 @@
 
 <section class="content-header">
 	<h1>
-		Controllers
-		<small>preview of simple tables</small>
+		<?= $ls_pagetitle ?> <small>preview of simple tables</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -17,14 +16,15 @@
 		<div class="col-xs-12">
 			<div class="box box-info">
 				<div class="box-header with-border">
-					<h3 class="box-title">Horizontal Form</h3>
+					<h3 class="box-title">Edit Page</h3>
 				</div><!-- /.box-header -->
 
-				<form role="form" method="POST" action="/admin/controller/edit/<?= $po_controller->pageid ?>">
+				<form role="form" method="POST" action="<?= $ls_actionurl ?>">
 					<div class="box-body">
-						<?= $this->htmlinput('text', 'label', 'Label', $po_controller->label); ?>
-						<?= $this->htmlinput('text', 'name', 'Name', $po_controller->name); ?>
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $po_controller->core); ?>
+						<?= $this->htmlinput('text', 'label', 'Label', $lo_page->label); ?>
+						<?= $this->htmlinput('text', 'name', 'Name', $lo_page->name); ?>
+						<?= $this->htmlinput('select', 'moduleid', 'Module', $lo_page->moduleid, $pa_modules); ?>
+						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $lo_page->core); ?>
 					</div><!-- /.box-body -->
 
 					<div class="box-footer">

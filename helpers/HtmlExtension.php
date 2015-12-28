@@ -17,6 +17,8 @@ class HtmlExtension extends Core implements ExtensionInterface {
 		$this->engine = $po_engine;
 
 		$po_engine->registerFunction('htmlinput', [$this, 'htmlinput']);
+		$po_engine->registerFunction('postvalue', [$this, 'postvalue']);
+		$po_engine->registerFunction('getvalue', [$this, 'getvalue']);
 		$po_engine->registerFunction('debug', [$this, 'debug']);
 	}
 
