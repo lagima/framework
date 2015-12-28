@@ -45,9 +45,9 @@ class PagesController extends BaseController {
 
 					// Create the file
 					if($this->postvalue('__core'))
-						$ls_file = $this->getdocumentroot() . '/mercury/controllers' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_file = $this->getdocumentroot() . '/mercury/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 					else
-						$ls_file = $this->getdocumentroot() . '/application/controllers' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_file = $this->getdocumentroot() . '/application/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 
 					$this->createfile($ls_file);
 				}
@@ -141,9 +141,9 @@ class PagesController extends BaseController {
 
 					// Create the file
 					if($this->postvalue('__core'))
-						$ls_file = $this->getdocumentroot() . '/mercury/models' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_file = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 					else
-						$ls_file = $this->getdocumentroot() . '/application/models' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_file = $this->getdocumentroot() . '/application/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 
 					$this->createfile($ls_file);
 				}
