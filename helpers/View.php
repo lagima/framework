@@ -53,8 +53,12 @@ class View extends Core {
 			$pa_viewdata['gs_template'] = 'templates::' . $po_page->template;
 			$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury', 'gs_currentpage' => $this->getcurrenturl()];
 
-			// Render the view
-			echo $lo_templates->render($ls_viewfile, $pa_viewdata);
+			// Render the view if exists
+			if(is_file($ls_viewfolder.'/'.$ls_viewfile.'.php'))
+				echo $lo_templates->render($ls_viewfile, $pa_viewdata);
+
+			else
+				$this->debug($pa_viewdata);
 		}
 
 		else
