@@ -65,14 +65,24 @@ class VersionManager extends Core {
 		return $la_revisions;
 	}
 
-	public function getdiff($ps_from, $ps_to) {
+	public function getdiff($ps_from, $ps_to = '') {
 
 		$la_output = $this->execute(
-			'git diff --no-ext-diff ' . $ps_from . ' ' . $ps_to
+			'git diff --name-only ' . $ps_from . ' ' . $ps_to
 		);
 
-		return implode("\n", $la_output);
+		return $la_output;
 	}
+
+	public function getchangedfiles() {
+
+		$la_output = $this->execute(
+			'git diff --name-only'
+		);
+
+		return $la_output;
+	}
+
 
 	/**
 	 * @param string $revision

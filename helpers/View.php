@@ -37,28 +37,27 @@ class View extends Core {
 			$ps_controller = strtolower($po_page->controller);
 			$ps_action = strtolower($po_page->action);
 
-			// Create new Plates instance
-			$lo_templates = new \League\Plates\Engine($ls_viewfolder);
+			if($this->hasview($po_page)) {
 
-			// Load asset extension
-			$lo_templates->loadExtension(new \League\Plates\Extension\Asset($this->config->assetpath, true));
+				// Create new Plates instance
+				$lo_templates = new \League\Plates\Engine($ls_viewfolder);
 
-			// Load html helpers
-			$lo_templates->loadExtension(new HtmlExtension());
+				// Load asset extension
+				$lo_templates->loadExtension(new \League\Plates\Extension\Asset($this->config->assetpath, true));
+
+				// Load html helpers
+				$lo_templates->loadExtension(new HtmlExtension());
 
 
-			$lo_templates->addFolder('templates', $this->config->templatepath);
+				$lo_templates->addFolder('templates', $this->config->templatepath);
 
-			// Configure the template
-			$pa_viewdata['gs_template'] = 'templates::' . $po_page->template;
-			$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury', 'gs_currentpage' => $this->getcurrenturl()];
+				// Configure the template
+				$pa_viewdata['gs_template'] = 'templates::' . $po_page->template;
+				$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury', 'gs_currentpage' => $this->getcurrenturl()];
 
-			// Render the view if exists
-			if(is_file($ls_viewfolder.'/'.$ls_viewfile.'.php'))
+				// Render the view if exists
 				echo $lo_templates->render($ls_viewfile, $pa_viewdata);
-
-			else
-				$this->debug($pa_viewdata);
+			}
 		}
 
 		else
@@ -67,6 +66,13 @@ class View extends Core {
 		return true;
 	}
 
+	public function hasview($po_page) {
+
+		$ls_viewfolder = $this->getviewfolder($po_page);
+		$ls_viewfile = $this->getviewfile($po_page);
+
+		return is_file($ls_viewfolder.'/'.$ls_viewfile.'.php');
+	}
 
 	public function getviewfile($po_page) {
 
