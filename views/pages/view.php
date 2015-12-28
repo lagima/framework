@@ -16,23 +16,16 @@
 		<div class="col-xs-12">
 			<div class="box box-info">
 				<div class="box-header with-border">
-					<h3 class="box-title">Add Page</h3>
+					<h3 class="box-title">Edit Page</h3>
 				</div><!-- /.box-header -->
 
 				<form role="form" method="POST" action="<?= $ls_actionurl ?>">
 					<div class="box-body">
-
-						<?= $this->htmlinput('text', 'label', 'Label'); ?>
-						<?= $this->htmlinput('text', 'name', 'Name'); ?>
-						<?= $this->htmlinput('select', 'moduleid', 'Module', null, $pa_modules); ?>
-
-						<?php
-						if(isset($pa_controllers) && !empty($pa_controllers))
-							$this->htmlinput('select', 'controllerid', 'Controller', null, $pa_controllers);
-						?>
-
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>
-
+						<?= $this->htmlinput('text', 'label', 'Label', $lo_page->label); ?>
+						<?= $this->htmlinput('text', 'name', 'Name', $lo_page->name); ?>
+						<?= $this->htmlinput('select', 'moduleid', 'Module', $lo_page->moduleid, $pa_modules); ?>
+						<?= $this->htmlinput('select', 'controllerid', 'Controller', $lo_page->controllerid, $pa_controllers); ?>
+						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $lo_page->core); ?>
 					</div><!-- /.box-body -->
 
 					<div class="box-footer">

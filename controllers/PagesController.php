@@ -20,7 +20,7 @@ class PagesController extends BaseController {
 		$this->setview('pages');
 
 		// Get the controllers
-		$la_pages = $this->pagemodel->getrows(['type' => 'CONTROLLER']);
+		$la_pages = $this->pagemodel->getpages('CONTROLLER');
 
 		$this->buildresponse(['la_pages' => $la_pages]);
 		$this->buildresponse(['ls_pagetitle' => 'Controller']);
@@ -93,6 +93,9 @@ class PagesController extends BaseController {
 			break;
 		}
 
+		// Init placeholders
+		$la_modules = [];
+
 		// Get all modules
 		$la_rawmodules = $this->modulemodel->getrows();
 		foreach($la_rawmodules as $lo_item) {
@@ -112,8 +115,8 @@ class PagesController extends BaseController {
 
 		$this->setview('pages');
 
-		// Get the controllers
-		$la_pages = $this->pagemodel->getrows(['type' => 'MODEL']);
+		// Get the models
+		$la_pages = $this->pagemodel->getpages('MODEL');
 
 		$this->buildresponse(['la_pages' => $la_pages]);
 		$this->buildresponse(['ls_pagetitle' => 'Model']);
@@ -154,7 +157,7 @@ class PagesController extends BaseController {
 
 			case 'edit':
 
-				// Get the models
+				// Get the model
 				$lo_page = $this->pagemodel->getrow(['type' => 'MODEL', 'pageid' => $pi_id]);
 
 				if (isset($_POST) && !empty($_POST)) {
@@ -186,6 +189,9 @@ class PagesController extends BaseController {
 			break;
 		}
 
+		// Init placeholders
+		$la_modules = [];
+
 		// Get all modules
 		$la_rawmodules = $this->modulemodel->getrows();
 		foreach($la_rawmodules as $lo_item) {
@@ -199,6 +205,238 @@ class PagesController extends BaseController {
 		$this->buildresponse(['pa_modules' => $la_modules]);
 
 		$this->buildresponse(['ls_pagetitle' => 'Model']);
+	}
+
+	public function viewsAction() {
+
+		// Get the controllers
+		$la_pages = $this->pagemodel->getviews();
+
+		$this->buildresponse(['la_pages' => $la_pages]);
+		$this->buildresponse(['ls_pagetitle' => 'Views']);
+		$this->buildresponse(['ls_addurl' => '/admin/view/add']);
+		$this->buildresponse(['ls_editurl' => '/admin/view/edit']);
+
+	}
+
+	public function viewAction($ps_action, $pi_id = null) {
+
+		switch($ps_action) {
+
+			case 'add':
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'VIEW';
+					$_POST['__created'] = date('Y-m-d H:i:s');
+
+					$this->pagemodel->commitaddfrompost();
+
+					// Get the controller
+					$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $this->postvalue('__controllerid')]);
+					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
+					// Create the file
+					if($this->postvalue('__core'))
+						$ls_file = $this->getdocumentroot() . '/mercury/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
+					else
+						$ls_file = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
+
+					$this->createfile($ls_file);
+				}
+
+				// Add needs a special view
+				$this->setview('addview');
+
+				$this->buildresponse(['ls_actionurl' => '/admin/view/add']);
+
+			break;
+
+			case 'edit':
+
+				// Get the view
+				$lo_page = $this->pagemodel->getrow(['type' => 'VIEW', 'pageid' => $pi_id]);
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'VIEW';
+
+					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
+
+					// Get the controller
+					$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $this->postvalue('__controllerid')]);
+					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
+					// Create the file
+					if($this->postvalue('__core')) {
+						$ls_originalfile = $this->getdocumentroot() . '/mercury/views/' . strtolower($lo_controller->name) . '/' . strtolower($lo_page->name) . '.php';
+						$ls_newfile = $this->getdocumentroot() . '/mercury/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
+					} else {
+						$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/'. strtolower($lo_page->name) . '.php';
+						$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
+					}
+
+					$this->renamefile($ls_originalfile, $ls_newfile);
+
+					// Redirect
+					$this->redirect('/admin/views');
+				}
+
+				$this->buildresponse(['ls_actionurl' => '/admin/view/edit/' . $pi_id]);
+				$this->buildresponse(['lo_page' => $lo_page]);
+
+			break;
+		}
+
+		// Init placeholders
+		$la_modules = [];
+		$la_controllers = [];
+
+		// Get all modules
+		$la_rawmodules = $this->modulemodel->getrows();
+		foreach($la_rawmodules as $lo_item) {
+
+			$lo_row = new \stdClass;
+			$lo_row->id = $lo_item->moduleid;
+			$lo_row->label = $lo_item->name;
+
+			$la_modules[] = $lo_row;
+		}
+		$this->buildresponse(['pa_modules' => $la_modules]);
+
+		// Get all pages
+		$la_pages = $this->pagemodel->getrows();
+		foreach($la_pages as $lo_page) {
+
+			$lo_row = new \stdClass;
+			$lo_row->id = $lo_page->pageid;
+			$lo_row->label = $lo_page->label;
+
+			if($lo_page->type == 'CONTROLLER')
+				$la_controllers[] = $lo_row;
+		}
+		$this->buildresponse(['pa_controllers' => $la_controllers]);
+
+		$this->buildresponse(['ls_pagetitle' => 'View']);
+	}
+
+	public function templatesAction() {
+
+		// Get the controllers
+		$la_pages = $this->pagemodel->getviews();
+
+		$this->setview('pages');
+
+		$this->buildresponse(['la_pages' => $la_pages]);
+		$this->buildresponse(['ls_pagetitle' => 'Templates']);
+		$this->buildresponse(['ls_addurl' => '/admin/template/add']);
+		$this->buildresponse(['ls_editurl' => '/admin/template/edit']);
+
+	}
+
+	public function templateAction($ps_action, $pi_id = null) {
+
+		switch($ps_action) {
+
+			case 'add':
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'TEMPLATE';
+					$_POST['__created'] = date('Y-m-d H:i:s');
+
+					$this->pagemodel->commitaddfrompost();
+
+					// Get the controller
+					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
+					// Create the file
+					if($this->postvalue('__core'))
+						$ls_file = $this->getdocumentroot() . '/mercury/views/templates/' . strtolower($this->postvalue('__name')) . '.php';
+					else
+						$ls_file = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/templates/' . strtolower($this->postvalue('__name')) . '.php';
+
+					$this->createfile($ls_file);
+				}
+
+				// Add needs a special view
+				$this->setview('addpage');
+
+				$this->buildresponse(['ls_actionurl' => '/admin/template/add']);
+
+			break;
+
+			case 'edit':
+
+				// Get the view
+				$lo_page = $this->pagemodel->getrow(['type' => 'TEMPLATE', 'pageid' => $pi_id]);
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'TEMPLATE';
+
+					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
+
+					// Get the controller
+					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
+					// Create the file
+					if($this->postvalue('__core')) {
+						$ls_originalfile = $this->getdocumentroot() . '/mercury/views/templates/' . strtolower($lo_page->name) . '.php';
+						$ls_newfile = $this->getdocumentroot() . '/mercury/views/templates/' . strtolower($this->postvalue('__name')) . '.php';
+					} else {
+						$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/templates/'. strtolower($lo_page->name) . '.php';
+						$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/templates/' . strtolower($this->postvalue('__name')) . '.php';
+					}
+
+					$this->renamefile($ls_originalfile, $ls_newfile);
+
+					$this->setview('page');
+
+					// Redirect
+					$this->redirect('/admin/templates');
+				}
+
+				$this->buildresponse(['ls_actionurl' => '/admin/template/edit/' . $pi_id]);
+				$this->buildresponse(['lo_page' => $lo_page]);
+
+			break;
+		}
+
+		// Init placeholders
+		$la_modules = [];
+		$la_controllers = [];
+
+		// Get all modules
+		$la_rawmodules = $this->modulemodel->getrows();
+		foreach($la_rawmodules as $lo_item) {
+
+			$lo_row = new \stdClass;
+			$lo_row->id = $lo_item->moduleid;
+			$lo_row->label = $lo_item->name;
+
+			$la_modules[] = $lo_row;
+		}
+		$this->buildresponse(['pa_modules' => $la_modules]);
+
+		// Get all pages
+		$la_pages = $this->pagemodel->getrows();
+		foreach($la_pages as $lo_page) {
+
+			$lo_row = new \stdClass;
+			$lo_row->id = $lo_page->pageid;
+			$lo_row->label = $lo_page->label;
+
+			if($lo_page->type == 'CONTROLLER')
+				$la_controllers[] = $lo_row;
+		}
+		$this->buildresponse(['pa_controllers' => $la_controllers]);
+
+		$this->buildresponse(['ls_pagetitle' => 'View']);
 	}
 
 	public function routesAction() {

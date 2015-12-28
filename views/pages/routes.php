@@ -2,8 +2,7 @@
 
 <section class="content-header">
 	<h1>
-		Routes
-		<small>preview of simple tables</small>
+		Routes <small>preview of simple tables</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -24,7 +23,7 @@
 			</div>
 		</div>
 		<div class="col-xs-4">
-			<a href="/admin/route/add" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-square"></i> &nbsp;Add Page</a>
+			<a href="/admin/route/add" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-square"></i> &nbsp;Add Route</a>
 		</div>
 	</div>
 
