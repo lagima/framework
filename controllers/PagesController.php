@@ -4,6 +4,7 @@ namespace Mercury\Controller;
 use Mercury\Model\PageModel;
 use Mercury\Model\RouteModel;
 use Mercury\Model\ModuleModel;
+use Mercury\Model\BlueprintModel;
 
 class PagesController extends BaseController {
 
@@ -13,6 +14,7 @@ class PagesController extends BaseController {
 		$this->pagemodel = new PageModel($this->di);
 		$this->routemodel = new RouteModel($this->di);
 		$this->modulemodel = new ModuleModel($this->di);
+		$this->blueprintmodel = new BlueprintModel($this->di);
 	}
 
 	public function controllersAction() {
@@ -49,10 +51,12 @@ class PagesController extends BaseController {
 					else
 						$ls_file = $this->getdocumentroot() . '/application/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 
-					$this->createfile($ls_file);
+					// Fill some starter content
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'CONTROLLER']);
+					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Redirect
-					$this->redirect('/admin/controller');
+					$this->redirect('/admin/controllers');
 				}
 
 				// Add needs a special view
@@ -132,11 +136,14 @@ class PagesController extends BaseController {
 
 					// Create the file
 					if($this->postvalue('__core'))
-						$ls_file = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_file = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 					else
-						$ls_file = $this->getdocumentroot() . '/application/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_file = $this->getdocumentroot() . '/application/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 
-					$this->createfile($ls_file);
+					// Fill some starter content
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'MODEL']);
+					$this->createfile($ls_file, $lo_blueprint->content);
+
 
 					// Redirect
 					$this->redirect('/admin/models');
@@ -225,7 +232,9 @@ class PagesController extends BaseController {
 					else
 						$ls_file = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
 
-					$this->createfile($ls_file);
+					// Fill some starter content
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'VIEW']);
+					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Redirect
 					$this->redirect('/admin/views');
@@ -324,7 +333,9 @@ class PagesController extends BaseController {
 					else
 						$ls_file = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/templates/' . strtolower($this->postvalue('__name')) . '.php';
 
-					$this->createfile($ls_file);
+					// Fill some starter content
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'TEMPLATE']);
+					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Redirect
 					$this->redirect('/admin/templates');

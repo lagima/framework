@@ -33,12 +33,13 @@ class Core {
 		exit;
 	}
 
-	public function createfile($ps_file) {
+	public function createfile($ps_file, $ps_content = '') {
 
 		if(file_exists($ps_file))
 			return false;
 
 		touch($ps_file);
+		file_put_contents($ps_file, $ps_content);
 		chmod($ps_file, 0664);
 
 		return $ps_file;
