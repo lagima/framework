@@ -96,20 +96,8 @@ class PagesController extends BaseController {
 			break;
 		}
 
-		// Init placeholders
-		$la_modules = [];
-
-		// Get all modules
-		$la_rawmodules = $this->modulemodel->getrows();
-		foreach($la_rawmodules as $lo_item) {
-
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_item->moduleid;
-			$lo_row->label = $lo_item->name;
-
-			$la_modules[] = $lo_row;
-		}
-		$this->buildresponse(['pa_modules' => $la_modules]);
+		$la_modules = $this->getallmodels();
+		$this->buildresponse(['la_modules' => $la_modules]);
 
 		$this->buildresponse(['ls_pagetitle' => 'Controller']);
 	}
@@ -195,20 +183,8 @@ class PagesController extends BaseController {
 			break;
 		}
 
-		// Init placeholders
-		$la_modules = [];
-
-		// Get all modules
-		$la_rawmodules = $this->modulemodel->getrows();
-		foreach($la_rawmodules as $lo_item) {
-
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_item->moduleid;
-			$lo_row->label = $lo_item->name;
-
-			$la_modules[] = $lo_row;
-		}
-		$this->buildresponse(['pa_modules' => $la_modules]);
+		$la_modules = $this->getallmodels();
+		$this->buildresponse(['la_modules' => $la_modules]);
 
 		$this->buildresponse(['ls_pagetitle' => 'Model']);
 	}
@@ -299,34 +275,14 @@ class PagesController extends BaseController {
 			break;
 		}
 
-		// Init placeholders
-		$la_modules = [];
-		$la_controllers = [];
+		$la_controllers = $this->getallcontrollers();
+		$this->buildresponse(['la_controllers' => $la_controllers]);
 
-		// Get all modules
-		$la_rawmodules = $this->modulemodel->getrows();
-		foreach($la_rawmodules as $lo_item) {
+		$la_modules = $this->getallmodels();
+		$this->buildresponse(['la_modules' => $la_modules]);
 
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_item->moduleid;
-			$lo_row->label = $lo_item->name;
-
-			$la_modules[] = $lo_row;
-		}
-		$this->buildresponse(['pa_modules' => $la_modules]);
-
-		// Get all pages
-		$la_pages = $this->pagemodel->getrows();
-		foreach($la_pages as $lo_page) {
-
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_page->pageid;
-			$lo_row->label = $lo_page->label;
-
-			if($lo_page->type == 'CONTROLLER')
-				$la_controllers[] = $lo_row;
-		}
-		$this->buildresponse(['pa_controllers' => $la_controllers]);
+		$la_templates = $this->getalltemplates();
+		$this->buildresponse(['la_templates' => $la_templates]);
 
 		$this->buildresponse(['ls_pagetitle' => 'View']);
 	}
@@ -419,34 +375,11 @@ class PagesController extends BaseController {
 			break;
 		}
 
-		// Init placeholders
-		$la_modules = [];
-		$la_controllers = [];
+		$la_controllers = $this->getallcontrollers();
+		$this->buildresponse(['la_controllers' => $la_controllers]);
 
-		// Get all modules
-		$la_rawmodules = $this->modulemodel->getrows();
-		foreach($la_rawmodules as $lo_item) {
-
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_item->moduleid;
-			$lo_row->label = $lo_item->name;
-
-			$la_modules[] = $lo_row;
-		}
-		$this->buildresponse(['pa_modules' => $la_modules]);
-
-		// Get all pages
-		$la_pages = $this->pagemodel->getrows();
-		foreach($la_pages as $lo_page) {
-
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_page->pageid;
-			$lo_row->label = $lo_page->label;
-
-			if($lo_page->type == 'CONTROLLER')
-				$la_controllers[] = $lo_row;
-		}
-		$this->buildresponse(['pa_controllers' => $la_controllers]);
+		$la_modules = $this->getallmodels();
+		$this->buildresponse(['la_modules' => $la_modules]);
 
 		$this->buildresponse(['ls_pagetitle' => 'View']);
 	}
@@ -462,38 +395,12 @@ class PagesController extends BaseController {
 
 	public function routeAction($ps_action, $pi_id = null) {
 
-		// Get all pages
-		$la_pages = $this->pagemodel->getrows();
 
-		// Get all modules
-		$la_rawmodules = $this->modulemodel->getrows();
+		$la_controllers = $this->getallcontrollers();
+		$this->buildresponse(['la_controllers' => $la_controllers]);
 
-		// Classify them based on type
-		$la_controllers = [];
-		$la_modules = [];
-
-		foreach($la_pages as $lo_page) {
-
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_page->pageid;
-			$lo_row->label = $lo_page->label;
-
-			if($lo_page->type == 'CONTROLLER')
-				$la_controllers[] = $lo_row;
-		}
-
-		$this->buildresponse(['pa_controllers' => $la_controllers]);
-
-		foreach($la_rawmodules as $lo_item) {
-
-			$lo_row = new \stdClass;
-			$lo_row->id = $lo_item->moduleid;
-			$lo_row->label = $lo_item->name;
-
-			$la_modules[] = $lo_row;
-		}
-
-		$this->buildresponse(['pa_modules' => $la_modules]);
+		$la_modules = $this->getallmodels();
+		$this->buildresponse(['la_modules' => $la_modules]);
 
 		switch($ps_action) {
 
@@ -531,6 +438,130 @@ class PagesController extends BaseController {
 
 			break;
 		}
+	}
+
+	public function modulesAction() {
+
+		// Get the controllers
+		$la_modules = $this->modulemodel->getrows();
+
+		$this->buildresponse(['la_modules' => $la_modules]);
+	}
+
+	public function moduleAction($ps_action, $pi_id = null) {
+
+		switch($ps_action) {
+
+			case 'add':
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					$this->modulemodel->commitaddfrompost();
+
+					// Create the file
+					$ls_folder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name'));
+					$this->createfolder($ls_folder);
+
+					// Redirect
+					$this->redirect('/admin/modules');
+				}
+
+				// Add needs a special view
+				$this->setview('addmodule');
+
+			break;
+
+			case 'edit':
+
+				// Get the view
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $pi_id]);
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					$this->modulemodel->commitupdatefrompost('moduleid', $pi_id);
+
+					// Create the file
+					if(!$lo_module->core) {
+
+						$ls_originalfolder = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name);
+						$ls_newfolder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name'));
+
+						$this->renamefolder($ls_originalfolder, $ls_newfolder);
+					}
+
+					// Redirect
+					$this->redirect('/admin/modules');
+				}
+
+				$this->setview('module');
+
+				$this->buildresponse(['lo_module' => $lo_module]);
+
+			break;
+		}
+
+		$la_controllers = $this->getallcontrollers();
+		$this->buildresponse(['la_controllers' => $la_controllers]);
+
+		$la_modules = $this->getallmodels();
+		$this->buildresponse(['la_modules' => $la_modules]);
+
+		$this->buildresponse(['ls_pagetitle' => 'View']);
+	}
+
+	private function getallmodels() {
+
+		$la_rawmodules = $this->modulemodel->getrows();
+		$la_modules = [];
+
+		foreach($la_rawmodules as $lo_item) {
+
+			$lo_row = new \stdClass;
+			$lo_row->id = $lo_item->moduleid;
+			$lo_row->label = $lo_item->name;
+
+			$la_modules[] = $lo_row;
+		}
+
+		return $la_modules;
+	}
+
+	private function getallcontrollers() {
+
+		// Get all pages
+		$la_pages = $this->pagemodel->getrows();
+		$la_controllers = [];
+
+		foreach($la_pages as $lo_page) {
+
+			$lo_row = new \stdClass;
+			$lo_row->id = $lo_page->pageid;
+			$lo_row->label = $lo_page->label;
+
+			if($lo_page->type == 'CONTROLLER')
+				$la_controllers[] = $lo_row;
+		}
+
+		return $la_controllers;
+	}
+
+	private function getalltemplates() {
+
+		// Get all pages
+		$la_pages = $this->pagemodel->getrows();
+		$la_templates = [];
+
+		foreach($la_pages as $lo_page) {
+
+			$lo_row = new \stdClass;
+			$lo_row->id = $lo_page->pageid;
+			$lo_row->label = $lo_page->label;
+
+			if($lo_page->type == 'TEMPLATE')
+				$la_templates[] = $lo_row;
+		}
+
+		return $la_templates;
 	}
 
 }

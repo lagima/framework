@@ -3,6 +3,7 @@ namespace Mercury\Helper;
 
 use Mercury\Helper\Core;
 use Mercury\Helper\HtmlExtension;
+use Mercury\Model\PageModel;
 
 class View extends Core {
 
@@ -16,6 +17,7 @@ class View extends Core {
 
 		$this->config = $di['config']['view'];
 
+		$this->pagemodel = new PageModel($di);
 	}
 
 	public function setview($ps_view) {
@@ -28,40 +30,38 @@ class View extends Core {
 
 	public function renderpage($po_page, $pa_viewdata) {
 
+		// Get view folder and file
 		$ls_viewfolder = $this->getviewfolder($po_page);
 		$ls_viewfile = $this->getviewfile($po_page);
 
-		if($po_page->type == 'webpage'){
-
-			// Prepare data
-			$ps_controller = strtolower($po_page->controller);
-			$ps_action = strtolower($po_page->action);
-
-			if($this->hasview($po_page)) {
-
-				// Create new Plates instance
-				$lo_templates = new \League\Plates\Engine($ls_viewfolder);
-
-				// Load asset extension
-				$lo_templates->loadExtension(new \League\Plates\Extension\Asset($this->config->assetpath, true));
-
-				// Load html helpers
-				$lo_templates->loadExtension(new HtmlExtension());
-
-
-				$lo_templates->addFolder('templates', $this->config->templatepath);
-
-				// Configure the template
-				$pa_viewdata['gs_template'] = 'templates::' . $po_page->template;
-				$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury', 'gs_currentpage' => $this->getcurrenturl()];
-
-				// Render the view if exists
-				echo $lo_templates->render($ls_viewfile, $pa_viewdata);
-			}
-		}
-
-		else
+		if(!$this->hasview($po_page))
 			trigger_error('View not defined: ' . $ls_viewfile, E_USER_ERROR);
+
+		// Create new Plates instance
+		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
+
+		// Load asset extension
+		$lo_templates->loadExtension(new \League\Plates\Extension\Asset($this->config->assetpath, true));
+
+		// Load html helpers
+		$lo_templates->loadExtension(new HtmlExtension());
+
+		$lo_templates->addFolder('templates', $this->config->templatepath);
+		$lo_templates->addFolder('defaults', $this->config->defaultspath);
+
+		// Get the view details from db
+		$lo_search = new \stdClass;
+		$lo_search->name = $ls_viewfile;
+		$lo_search->controllerid = $po_page->controllerid;
+		$lo_search->moduleid = $po_page->moduleid;
+		$lo_viewdetail = $this->pagemodel->getviewdetails($lo_search);
+
+		// Configure the template
+		$pa_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . $lo_viewdetail->template : 'defaults::blank';
+		$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury', 'gs_currentpage' => $this->getcurrenturl()];
+
+		// Render the view if exists
+		echo $lo_templates->render($ls_viewfile, $pa_viewdata);
 
 		return true;
 	}
@@ -85,7 +85,7 @@ class View extends Core {
 		if(isset($this->view) && !empty($this->view))
 			$ls_viewfile = $this->view;
 
-		// If not set try to resolve from controller
+		// If not set try to resolve from controller action
 		if(empty($ls_viewfile))
 			$ls_viewfile = strtolower($po_page->action);
 

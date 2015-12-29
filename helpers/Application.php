@@ -54,7 +54,6 @@ class Application extends Core {
 		};
 
 		return true;
-
 	}
 
 
@@ -91,6 +90,7 @@ class Application extends Core {
 		$lo_config = new \stdClass;
 		$lo_config->viewpath = $this->getdocumentroot() . '/mercury/views';
 		$lo_config->templatepath = $this->getdocumentroot() . '/mercury/views/templates';
+		$lo_config->defaultspath = $this->getdocumentroot() . '/mercury/views/templates';
 		$lo_config->assetpath = $this->getdocumentroot();
 		$this->setconfig('view', $lo_config);
 
@@ -111,8 +111,22 @@ class Application extends Core {
 			return false;
 		}
 
-		$ps_controller = $lo_router->getcontroller();
-		$ps_action = $lo_router->getaction();
+		// Get the page from route
+		$po_page = $lo_router->getpage();
+
+		// Execute the page
+		$this->executepage($po_page, $la_params);
+	}
+
+
+	private function executepage($po_page, $pa_params = []) {
+
+		if(!is_object($po_page))
+			trigger_error("Invalid page", E_USER_NOTICE);
+
+
+		$ps_controller = $po_page->controller;
+		$ps_action = $po_page->action;
 
 		// Build the namespaced class and action of it
 		$ps_class = "Mercury\\Controller\\{$ps_controller}Controller";
@@ -120,18 +134,14 @@ class Application extends Core {
 
 		if (is_callable(array($ps_class, $ps_method))) {
 
-			// Get the page from route
-			$po_page = $lo_router->getpage();
-
 			// Init the controller
 			$lo_controller = new $ps_class($this->di);
 
 			// Call the action
-			call_user_func_array(array($lo_controller, $ps_method), $la_params);
+			call_user_func_array(array($lo_controller, $ps_method), $pa_params);
 
 			// Get the page details & data to serve
 			$pa_responsedata = $lo_controller->getresponsedata();
-
 
 			// Get view object from DI
 			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;

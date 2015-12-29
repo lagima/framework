@@ -2,18 +2,14 @@
 namespace Mercury\Controller;
 
 use Mercury\Helper\VersionManager;
-use Mercury\Model\PageModel;
-use Mercury\Model\RouteModel;
-use Mercury\Model\ModuleModel;
+
 
 class GithubController extends BaseController {
 
 
 	public function initcontroller() {
 
-		$this->pagemodel = new PageModel($this->di);
-		$this->routemodel = new RouteModel($this->di);
-		$this->modulemodel = new ModuleModel($this->di);
+
 	}
 
 	public function indexAction() {

@@ -2,6 +2,7 @@
 namespace Mercury\Helper;
 
 use Mercury\Helper\Core;
+use Mercury\Model\RouteModel;
 
 /**
 *
@@ -15,20 +16,14 @@ class Router extends Core {
 	private $module;
 	private $controller;
 	private $action;
+	private $routeid;
 
 
 	function __construct($di) {
 
 		$this->di = $di;
 
-		// Get the database connection
-		$this->db = isset($di['database']) ? $di['database'] : null;
-
-		// No point in continuing without database connection
-		if(is_null($this->db)) {
-			trigger_error("No database configured when router is called", E_USER_ERROR);
-			return false;
-		}
+		$this->routemodel = new RouteModel($this->di);
 
 		$this->router = new \AltoRouter();
 	}
@@ -37,11 +32,9 @@ class Router extends Core {
 	public function setadminroutes() {
 
 		// Get the routes from database
-		$la_routes = $this->db->getallobjects("SELECT r.*, p.`name` as `controller`, m.`name` as `module`
-												FROM `m_route` r
-												LEFT JOIN `m_module` m ON m.`moduleid` = r.`moduleid`
-												LEFT JOIN `m_page` p ON p.`pageid` = r.`pageid`
-												WHERE r.`core` = 1");
+		$lo_search = new \stdClass;
+		$lo_search->core = 1;
+		$la_routes = $this->routemodel->getroutes($lo_search);
 
 		foreach($la_routes as $lo_route) {
 
@@ -49,18 +42,8 @@ class Router extends Core {
 			$ls_controller = ucfirst($lo_route->controller);
 			$ls_action = ucfirst($lo_route->action);
 
-			$this->router->map($lo_route->method, $lo_route->requesturi, "$ls_modue#$ls_controller#$ls_action");
+			$this->router->map($lo_route->method, $lo_route->requesturi, $lo_route->routeid); //"$ls_modue#$ls_controller#$ls_action"
 		}
-
-		// // For anything else we try to auto route
-		// $la_parts = explode('/', ltrim($_SERVER['REQUEST_URI'], '/'));
-		// $ls_module = array_shift($la_parts);
-		// $ls_controller = array_shift($la_parts);
-		// $ls_action = array_shift($la_parts);
-		// // $ls_action = array_shift($la_parts);
-
-		// $this->router->map('GET|POST', $_SERVER['REQUEST_URI'], "$ls_module#$ls_controller#$ls_action");
-
 	}
 
 	public function setsiteoutes() {
@@ -81,48 +64,31 @@ class Router extends Core {
 		if ($pa_match === false)
 			return false;
 
-		list($ps_module, $ps_controller, $ps_action) = explode('#', $pa_match['target']);
+		$li_routeid = $pa_match['target'];
 
-		// Set the matched module, controller, action
-		$this->module = ucfirst($ps_module);
-		$this->controller = ucfirst($ps_controller);
-		$this->action = ucfirst($ps_action);
+		$this->routeid = $li_routeid;
 
 		return $pa_match['params'];
 	}
 
 	public function getpage() {
 
-		if($this->module == 'Admin') {
+		if(empty($this->routeid))
+			trigger_error("Cannot find the route", E_USER_ERROR);
 
-			$lo_page = new \stdClass;
-			$lo_page->controller = $this->controller;
-			$lo_page->controllerpath = $this->getdocumentroot() . '/mercury/controller';
-			$lo_page->action = $this->action;
-			$lo_page->module = 'Admin';
-			$lo_page->template = 'admin';
-			$lo_page->view = strtolower($this->action);
-			$lo_page->type = 'webpage';
+		// Get the route from DB
+		$lo_route = $this->routemodel->getroute($this->routeid);
 
-			return $lo_page;
-		}
+		$lo_page = new \stdClass;
+		$lo_page->controller = ucfirst($lo_route->controller);
+		$lo_page->controllerid = $lo_route->controllerid;
+		$lo_page->action = ucfirst($lo_route->action);
+		$lo_page->moduleid = $lo_route->moduleid;
+		$lo_page->module = ucfirst($lo_route->module);
 
-		$lo_page = $this->db->getsingleobject("");
-	}
+		// $lo_page->view = strtolower($lo_route->action);
 
-
-	public function getmodule() {
-		return $this->module;
-	}
-
-
-	public function getcontroller() {
-		return $this->controller;
-	}
-
-
-	public function getaction() {
-		return $this->action;
+		return $lo_page;
 	}
 
 }

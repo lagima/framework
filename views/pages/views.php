@@ -37,7 +37,7 @@
 								<th>Label</th>
 								<th>Name</th>
 								<th>Module</th>
-								<th>Controller</th>
+								<th>Template</th>
 								<th style="width:50px;">&nbsp;</th>
 							</tr>
 							<?php foreach($la_pages as $lo_page): ?>
@@ -45,7 +45,7 @@
 									<td><?= $lo_page->label ?></td>
 									<td><?= $lo_page->name ?></td>
 									<td><?= $lo_page->module ?></td>
-									<td><?= $lo_page->controller ?></td>
+									<td><?= $lo_page->template ?></td>
 									<td>
 										<a href="<?= $ls_editurl ?>/<?= $lo_page->pageid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
 									</td>

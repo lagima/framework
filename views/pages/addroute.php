@@ -23,8 +23,8 @@
 					<div class="box-body">
 
 						<?= $this->htmlinput('text', 'requesturi', 'Request URI'); ?>
-						<?= $this->htmlinput('select', 'moduleid', 'Module', null, $pa_modules); ?>
-						<?= $this->htmlinput('select', 'pageid', 'Controller', null, $pa_controllers); ?>
+						<?= $this->htmlinput('select', 'moduleid', 'Module', null, $la_modules); ?>
+						<?= $this->htmlinput('select', 'controllerid', 'Controller', null, $la_controllers); ?>
 						<?= $this->htmlinput('text', 'action', 'Action'); ?>
 						<?= $this->htmlinput('text', 'method', 'Method'); ?>
 						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>

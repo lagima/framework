@@ -25,12 +25,6 @@
 						<?= $this->htmlinput('text', 'label', 'Label'); ?>
 						<?= $this->htmlinput('text', 'name', 'Name'); ?>
 						<?= $this->htmlinput('select', 'moduleid', 'Module', null, $pa_modules); ?>
-
-						<?php
-						if(isset($pa_controllers) && !empty($pa_controllers))
-							$this->htmlinput('select', 'controllerid', 'Controller', null, $pa_controllers);
-						?>
-
 						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>
 
 					</div><!-- /.box-body -->

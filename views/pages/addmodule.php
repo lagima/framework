@@ -2,7 +2,7 @@
 
 <section class="content-header">
 	<h1>
-		<?= $ls_pagetitle ?> <small>preview of simple tables</small>
+		Module <small>preview of simple tables</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -16,19 +16,13 @@
 		<div class="col-xs-12">
 			<div class="box box-info">
 				<div class="box-header with-border">
-					<h3 class="box-title">Add Page</h3>
+					<h3 class="box-title">Add Module</h3>
 				</div><!-- /.box-header -->
 
-				<form role="form" method="POST" action="<?= $ls_actionurl ?>">
+				<form role="form" method="POST" action="/admin/module/add">
 					<div class="box-body">
 
-						<?= $this->htmlinput('text', 'label', 'Label'); ?>
 						<?= $this->htmlinput('text', 'name', 'Name'); ?>
-						<?= $this->htmlinput('select', 'moduleid', 'Module', null, $la_modules); ?>
-						<?= $this->htmlinput('select', 'controllerid', 'Controller', null, $la_controllers); ?>
-						<?= $this->htmlinput('select', 'templateid', 'Template', null, $la_templates); ?>
-
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>
 
 					</div><!-- /.box-body -->
 

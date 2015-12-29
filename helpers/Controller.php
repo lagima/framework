@@ -23,6 +23,7 @@ class Controller extends Core {
 			return false;
 		}
 
+
 		// Child classes are not allowed to use the constructor so workaround
 		$this->initcontroller();
 	}

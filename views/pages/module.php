@@ -2,7 +2,7 @@
 
 <section class="content-header">
 	<h1>
-		<?= $ls_pagetitle ?> <small>preview of simple tables</small>
+		Module <small>preview of simple tables</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -19,14 +19,9 @@
 					<h3 class="box-title">Edit Page</h3>
 				</div><!-- /.box-header -->
 
-				<form role="form" method="POST" action="<?= $ls_actionurl ?>">
+				<form role="form" method="POST" action="/admin/module/edit/<?= $lo_module->moduleid ?>">
 					<div class="box-body">
-						<?= $this->htmlinput('text', 'label', 'Label', $lo_page->label); ?>
-						<?= $this->htmlinput('text', 'name', 'Name', $lo_page->name); ?>
-						<?= $this->htmlinput('select', 'moduleid', 'Module', $lo_page->moduleid, $la_modules); ?>
-						<?= $this->htmlinput('select', 'controllerid', 'Controller', $lo_page->controllerid, $la_controllers); ?>
-						<?= $this->htmlinput('select', 'templateid', 'Template', $lo_page->templateid, $la_templates); ?>
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $lo_page->core); ?>
+						<?= $this->htmlinput('text', 'name', 'Name', $lo_module->name); ?>
 					</div><!-- /.box-body -->
 
 					<div class="box-footer">

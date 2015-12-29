@@ -2,7 +2,7 @@
 
 <section class="content-header">
 	<h1>
-		Search <small>preview of simple tables</small>
+		Modules <small>preview of simple tables</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -15,17 +15,15 @@
 
 	<div class="row" style="margin-bottom:10px;">
 		<div class="col-xs-8">
-			<form method="GET" action="/admin/gitsearch">
-				<div class="input-group" style="width:250px">
-					<input type="text" name="q" class="form-control input-sm pull-right" placeholder="Search" value="<?= $this->getvalue('q') ?>">
-					<div class="input-group-btn">
-						<button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
-					</div>
+			<div class="input-group" style="width:250px">
+				<input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+				<div class="input-group-btn">
+					<button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
 				</div>
-			</form>
+			</div>
 		</div>
 		<div class="col-xs-4">
-			<a href="/admin/controller/add" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-square"></i> &nbsp;Add Page</a>
+			<a href="/admin/module/add" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-square"></i> &nbsp;Add Page</a>
 		</div>
 	</div>
 
@@ -36,28 +34,17 @@
 					<table class="table table-hover">
 						<tbody>
 							<tr>
-								<th>Changed Files</th>
+								<th>Name</th>
 								<th style="width:50px;">&nbsp;</th>
 							</tr>
-
-							<?php if(empty($la_result)): ?>
+							<?php foreach($la_modules as $lo_module): ?>
 								<tr>
-									<td>No files matched</td>
+									<td><?= $lo_module->name ?></td>
 									<td>
-
-									</td>
-								</tr>
-							<?php endif; ?>
-
-							<?php foreach($la_result as $ls_file): ?>
-								<tr>
-									<td><?= $ls_file ?></td>
-									<td>
-
+										<a href="/admin/module/edit/<?= $lo_module->moduleid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
 									</td>
 								</tr>
 							<?php endforeach; ?>
-
 						</tbody>
 					</table>
 				</div><!-- /.box-body -->

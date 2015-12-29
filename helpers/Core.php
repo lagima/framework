@@ -58,76 +58,28 @@ class Core {
 		return $ps_newfile;
 	}
 
-	protected function findfile($po_page) {
+	public function createfolder($ps_folder) {
 
-		if(empty($po_page))
+		if(file_exists($ps_folder))
 			return false;
 
-		$ls_file = $po_page->alias;
+		mkdir($ps_folder, 0755);
 
-		switch($po_page->type) {
+		return $ps_folder;
+	}
 
-			case 'page':
+	public function renamefolder($ps_originalfolder, $ps_newfolder) {
 
-				$ls_filepath = FRONTEND_PATH."/$ls_file.php";
+		if(!file_exists($ps_originalfolder))
+			return false;
 
-			break;
+		// If the filenames are same dont bother renaming
+		if($ps_originalfolder == $ps_newfolder)
+			return false;
 
-			case 'template':
+		rename($ps_originalfolder, $ps_newfolder);
 
-				/**
-				 * Find the file
-				 * In case of templates we have 2 paths one for module and one for frontend
-				 * First check the module and if not exists check the frontend
-				 */
-
-				if($po_page->module == 1)
-					$ls_filepath = ADMIN_PATH."/$ls_file.php";
-
-				if($po_page->corefile == 1 && $po_page->module == 1)
-					$ls_filepath = FRAMEWORK_PATH."/modules/$ls_file.php";
-
-				else
-					$ls_filepath = FRONTEND_PATH."/$ls_file.php";
-
-			break;
-
-			case 'module':
-
-				/**
-				 * Find the file
-				 * In case of modules we have 2 paths one for core and one for user defined
-				 * First check the core path and if not exists check the user path
-				 */
-
-				if($po_page->corefile == 1)
-					$ls_filepath = FRAMEWORK_PATH."/modules/$ls_file.php";
-
-				else
-					$ls_filepath = ADMIN_PATH."/$ls_file.php";
-
-			break;
-
-			case 'javascript':
-
-				$ls_filepath = JAVASCRIPT_PATH."/$ls_file.js";
-
-			break;
-
-			case 'stylesheet':
-
-				$ls_filepath = STYLESHEET_PATH."/$ls_file.css";
-
-			break;
-
-			default:
-
-				$ls_filepath = '';
-
-			break;
-		}
-
-		return $ls_filepath;
+		return $ps_newfolder;
 	}
 
 

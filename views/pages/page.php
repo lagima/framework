@@ -23,7 +23,7 @@
 					<div class="box-body">
 						<?= $this->htmlinput('text', 'label', 'Label', $lo_page->label); ?>
 						<?= $this->htmlinput('text', 'name', 'Name', $lo_page->name); ?>
-						<?= $this->htmlinput('select', 'moduleid', 'Module', $lo_page->moduleid, $pa_modules); ?>
+						<?= $this->htmlinput('select', 'moduleid', 'Module', $lo_page->moduleid, $la_modules); ?>
 						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $lo_page->core); ?>
 					</div><!-- /.box-body -->
 

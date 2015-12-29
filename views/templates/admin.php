@@ -63,11 +63,11 @@
 				<section class="sidebar">
 
 					<!-- search form -->
-					<form action="#" method="get" class="sidebar-form">
+					<form action="/admin/gitsearch" method="get" class="sidebar-form">
 						<div class="input-group">
-							<input type="text" name="q" class="form-control" placeholder="Search...">
+							<input type="text" name="q" class="form-control" placeholder="Search..." value="<?= $this->getvalue('q') ?>">
 							<span class="input-group-btn">
-								<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+								<button type="submit" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
 							</span>
 						</div>
 					</form>
@@ -76,29 +76,34 @@
 					<ul class="sidebar-menu">
 						<li class="header">MAIN NAVIGATION</li>
 
+						<li class="<?= $gs_currentpage == '/admin/modules' ? active : ''?>">
+							<a href="/admin/modules">
+								<i class="fa fa-cubes"></i> <span>Modules</span>
+							</a>
+						</li>
 						<li class="<?= $gs_currentpage == '/admin/controllers' ? active : ''?>">
 							<a href="/admin/controllers">
-								<i class="fa fa-folder"></i> <span>Controllers</span>
+								<i class="fa fa-gamepad"></i> <span>Controllers</span>
 							</a>
 						</li>
 						<li class="<?= $gs_currentpage == '/admin/models' ? active : ''?>">
 							<a href="/admin/models">
-								<i class="fa fa-folder"></i> <span>Models</span>
+								<i class="fa fa-database"></i> <span>Models</span>
 							</a>
 						</li>
 						<li class="<?= $gs_currentpage == '/admin/templates' ? active : ''?>">
 							<a href="/admin/templates">
-								<i class="fa fa-folder"></i> <span>Templates</span>
+								<i class="fa fa-file-o"></i> <span>Templates</span>
 							</a>
 						</li>
 						<li class="<?= $gs_currentpage == '/admin/views' ? active : ''?>">
 							<a href="/admin/views">
-								<i class="fa fa-folder"></i> <span>Views</span>
+								<i class="fa fa-eye"></i> <span>Views</span>
 							</a>
 						</li>
 						<li class="<?= $gs_currentpage == '/admin/routes' ? active : ''?>">
 							<a href="/admin/routes">
-								<i class="fa fa-folder"></i> <span>Routes</span>
+								<i class="fa fa-road"></i> <span>Routes</span>
 							</a>
 						</li>
 						<li class="treeview <?= $gs_currentpage == '/admin/gitcommit' ? active : ''?>">
