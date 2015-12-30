@@ -35,13 +35,14 @@
 						<tbody>
 							<tr>
 								<th>Name</th>
-								<th style="width:50px;">&nbsp;</th>
+								<th style="width:100px;">&nbsp;</th>
 							</tr>
 							<?php foreach($la_modules as $lo_module): ?>
 								<tr>
 									<td><?= $lo_module->name ?></td>
 									<td>
 										<a href="/admin/module/edit/<?= $lo_module->moduleid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+										<a href="/admin/module/delete/<?= $lo_module->moduleid ?>" class="btn btn-danger btn-xs" onclick="return jsconfirm();"><i class="fa fa-trash"></i></a>
 									</td>
 								</tr>
 							<?php endforeach; ?>

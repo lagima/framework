@@ -81,7 +81,7 @@ class HtmlExtension extends Core implements ExtensionInterface {
 			case 'checkbox':
 
 				$ls_checked = !empty($ps_value) ? 'checked' : '';
-				$ls_value = empty($pm_value) ? '1' : htmlentities($pm_value);
+				$ls_value = empty($pm_value) ? '0' : htmlentities($pm_value);
 
 				return '<div class="checkbox">
 							<label>

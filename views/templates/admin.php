@@ -160,5 +160,6 @@
 		<script src="/mercury/assets/plugins/fastclick/fastclick.min.js"></script>
 		<!-- AdminLTE App -->
 		<script src="/mercury/assets/js/app.min.js"></script>
+		<script src="/mercury/assets/js/main.js"></script>
 	</body>
 </html>

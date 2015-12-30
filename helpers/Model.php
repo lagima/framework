@@ -72,6 +72,11 @@ class Model extends Core {
 		return $la_rows;
 	}
 
+	public function delete($pa_condition = []) {
+
+		$this->db->dbdelete($this->table, $pa_condition);
+	}
+
 
 	private function settablefromcalled() {
 

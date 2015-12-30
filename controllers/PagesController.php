@@ -28,6 +28,7 @@ class PagesController extends BaseController {
 		$this->buildresponse(['ls_pagetitle' => 'Controller']);
 		$this->buildresponse(['ls_addurl' => '/admin/controller/add']);
 		$this->buildresponse(['ls_editurl' => '/admin/controller/edit']);
+		$this->buildresponse(['ls_deleteurl' => '/admin/model/delete']);
 
 	}
 
@@ -45,11 +46,14 @@ class PagesController extends BaseController {
 
 					$this->pagemodel->commitaddfrompost();
 
+					// Get the module
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
 					// Create the file
 					if($this->postvalue('__core'))
 						$ls_file = $this->getdocumentroot() . '/mercury/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 					else
-						$ls_file = $this->getdocumentroot() . '/application/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 
 					// Fill some starter content
 					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'CONTROLLER']);
@@ -78,13 +82,16 @@ class PagesController extends BaseController {
 
 					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
 
+					// Get the module
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
 					// Create the file
 					if($this->postvalue('__core')) {
 						$ls_originalfile = $this->getdocumentroot() . '/mercury/controllers/' . ucfirst(strtolower($lo_page->name)) . 'Controller.php';
 						$ls_newfile = $this->getdocumentroot() . '/mercury/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 					} else {
-						$ls_originalfile = $this->getdocumentroot() . '/mercury/controllers/' . ucfirst(strtolower($lo_page->name)) . 'Controller.php';
-						$ls_newfile = $this->getdocumentroot() . '/application/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+						$ls_originalfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/controllers/' . ucfirst(strtolower($lo_page->name)) . 'Controller.php';
+						$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 					}
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
@@ -96,6 +103,31 @@ class PagesController extends BaseController {
 				$this->setview('page');
 				$this->buildresponse(['ls_actionurl' => '/admin/controller/edit/' . $pi_id]);
 				$this->buildresponse(['lo_page' => $lo_page]);
+
+			break;
+
+			case 'delete':
+
+				// Get the models
+				$lo_page = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $pi_id]);
+
+				// Get the module
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $lo_page->moduleid]);
+
+				// Delete the record
+				$this->pagemodel->delete(['pageid' => $pi_id]);
+
+				// Remove the file
+				if($lo_page->core)
+					$ls_file = $this->getdocumentroot() . '/mercury/controllers/' . ucfirst(strtolower($lo_page->name)) . 'Controller.php';
+
+				else
+					$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/controllers/' . ucfirst(strtolower($lo_page->name)) . 'Controller.php';
+
+				unlink($ls_file);
+
+				// Redirect
+				$this->redirect('/admin/controllers');
 
 			break;
 		}
@@ -117,6 +149,7 @@ class PagesController extends BaseController {
 		$this->buildresponse(['ls_pagetitle' => 'Model']);
 		$this->buildresponse(['ls_addurl' => '/admin/model/add']);
 		$this->buildresponse(['ls_editurl' => '/admin/model/edit']);
+		$this->buildresponse(['ls_deleteurl' => '/admin/model/delete']);
 
 	}
 
@@ -134,11 +167,14 @@ class PagesController extends BaseController {
 
 					$this->pagemodel->commitaddfrompost();
 
+					// Get the module
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
 					// Create the file
 					if($this->postvalue('__core'))
 						$ls_file = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 					else
-						$ls_file = $this->getdocumentroot() . '/application/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
+						$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 
 					// Fill some starter content
 					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'MODEL']);
@@ -168,13 +204,16 @@ class PagesController extends BaseController {
 
 					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
 
+					// Get the module
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+
 					// Create the file
 					if($this->postvalue('__core')) {
 						$ls_originalfile = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
 						$ls_newfile = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 					} else {
-						$ls_originalfile = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
-						$ls_newfile = $this->getdocumentroot() . '/application/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
+						$ls_originalfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
+						$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 					}
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
@@ -186,6 +225,31 @@ class PagesController extends BaseController {
 				$this->setview('page');
 				$this->buildresponse(['ls_actionurl' => '/admin/model/edit/' . $pi_id]);
 				$this->buildresponse(['lo_page' => $lo_page]);
+
+			break;
+
+			case 'delete':
+
+				// Get the models
+				$lo_page = $this->pagemodel->getrow(['type' => 'MODEL', 'pageid' => $pi_id]);
+
+				// Get the module
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $lo_page->moduleid]);
+
+				// Delete the record
+				$this->pagemodel->delete(['pageid' => $pi_id]);
+
+				// Remove the file
+				if($lo_page->core)
+					$ls_file = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
+
+				else
+					$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
+
+				unlink($ls_file);
+
+				// Redirect
+				$this->redirect('/admin/models');
 
 			break;
 		}
@@ -205,6 +269,7 @@ class PagesController extends BaseController {
 		$this->buildresponse(['ls_pagetitle' => 'Views']);
 		$this->buildresponse(['ls_addurl' => '/admin/view/add']);
 		$this->buildresponse(['ls_editurl' => '/admin/view/edit']);
+		$this->buildresponse(['ls_deleteurl' => '/admin/model/delete']);
 
 	}
 
@@ -222,9 +287,9 @@ class PagesController extends BaseController {
 
 					$this->pagemodel->commitaddfrompost();
 
-					// Get the controller
+					// Get the controller & module
 					$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $this->postvalue('__controllerid')]);
-					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
 					// Create the file
 					if($this->postvalue('__core'))
@@ -261,7 +326,7 @@ class PagesController extends BaseController {
 
 					// Get the controller
 					$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $this->postvalue('__controllerid')]);
-					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
 					// Create the file
 					if($this->postvalue('__core')) {
@@ -282,6 +347,33 @@ class PagesController extends BaseController {
 				$this->buildresponse(['lo_page' => $lo_page]);
 
 			break;
+
+			case 'delete':
+
+				// Get the models
+				$lo_page = $this->pagemodel->getrow(['type' => 'VIEW', 'pageid' => $pi_id]);
+
+				// Get the module
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $lo_page->moduleid]);
+
+				// Delete the record
+				$this->pagemodel->delete(['pageid' => $pi_id]);
+
+				// Remove the file
+				if($lo_page->core)
+					$ls_file = $this->getdocumentroot() . '/mercury/views/' . ucfirst(strtolower($lo_page->name)) . '.php';
+
+				else
+					$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/' . ucfirst(strtolower($lo_page->name)) . '.php';
+
+				unlink($ls_file);
+
+				// Redirect
+				$this->redirect('/admin/views');
+
+			break;
+
+
 		}
 
 		$la_controllers = $this->getallcontrollers();
@@ -307,6 +399,7 @@ class PagesController extends BaseController {
 		$this->buildresponse(['ls_pagetitle' => 'Templates']);
 		$this->buildresponse(['ls_addurl' => '/admin/template/add']);
 		$this->buildresponse(['ls_editurl' => '/admin/template/edit']);
+		$this->buildresponse(['ls_deleteurl' => '/admin/model/delete']);
 
 	}
 
@@ -325,7 +418,7 @@ class PagesController extends BaseController {
 					$this->pagemodel->commitaddfrompost();
 
 					// Get the controller
-					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
 					// Create the file
 					if($this->postvalue('__core'))
@@ -382,6 +475,31 @@ class PagesController extends BaseController {
 
 				$this->buildresponse(['ls_actionurl' => '/admin/template/edit/' . $pi_id]);
 				$this->buildresponse(['lo_page' => $lo_page]);
+
+			break;
+
+			case 'delete':
+
+				// Get the models
+				$lo_page = $this->pagemodel->getrow(['type' => 'MODEL', 'pageid' => $pi_id]);
+
+				// Get the module
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $lo_page->moduleid]);
+
+				// Delete the record
+				$this->pagemodel->delete(['pageid' => $pi_id]);
+
+				// Remove the file
+				if($lo_page->core)
+					$ls_file = $this->getdocumentroot() . '/mercury/views/templates/' . ucfirst(strtolower($lo_page->name)) . '.php';
+
+				else
+					$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/templates/' . ucfirst(strtolower($lo_page->name)) . '.php';
+
+				unlink($ls_file);
+
+				// Redirect
+				$this->redirect('/admin/templates');
 
 			break;
 		}
@@ -469,9 +587,26 @@ class PagesController extends BaseController {
 
 					$this->modulemodel->commitaddfrompost();
 
-					// Create the file
+					// Create the module folder
 					$ls_folder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name'));
 					$this->createfolder($ls_folder);
+
+					// Create the controller folder
+					$ls_folder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/controllers';
+					$this->createfolder($ls_folder);
+
+					// Create the model folder
+					$ls_folder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/models';
+					$this->createfolder($ls_folder);
+
+					// Create the view folder
+					$ls_folder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/views';
+					$this->createfolder($ls_folder);
+
+					// Create the template folder
+					$ls_folder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/views/templates';
+					$this->createfolder($ls_folder);
+
 
 					// Redirect
 					$this->redirect('/admin/modules');
@@ -484,7 +619,7 @@ class PagesController extends BaseController {
 
 			case 'edit':
 
-				// Get the view
+				// Get the module
 				$lo_module = $this->modulemodel->getrow(['moduleid' => $pi_id]);
 
 				if (isset($_POST) && !empty($_POST)) {
@@ -496,8 +631,28 @@ class PagesController extends BaseController {
 
 						$ls_originalfolder = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name);
 						$ls_newfolder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name'));
-
 						$this->renamefolder($ls_originalfolder, $ls_newfolder);
+
+						// Create the controller folder
+						$ls_originalfolder = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/controllers';
+						$ls_newfolder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/controllers';
+						$this->renamefolder($ls_originalfolder, $ls_newfolder);
+
+						// Create the model folder
+						$ls_originalfolder = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models';
+						$ls_newfolder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/models';
+						$this->renamefolder($ls_originalfolder, $ls_newfolder);
+
+						// Create the view folder
+						$ls_originalfolder = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views';
+						$ls_newfolder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/views';
+						$this->renamefolder($ls_originalfolder, $ls_newfolder);
+
+						// Create the template folder
+						$ls_originalfolder = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/templates';
+						$ls_newfolder = $this->getdocumentroot() . '/application/' . strtolower($this->postvalue('__name')) . '/views/templates';
+						$this->renamefolder($ls_originalfolder, $ls_newfolder);
+
 					}
 
 					// Redirect
@@ -507,6 +662,32 @@ class PagesController extends BaseController {
 				$this->setview('module');
 
 				$this->buildresponse(['lo_module' => $lo_module]);
+
+			break;
+
+			case 'delete':
+
+				// Get the module
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $pi_id]);
+
+				// Delete the record
+				$this->modulemodel->delete(['moduleid' => $pi_id]);
+
+				if(!is_object($lo_module))
+					$this->redirect('/admin/modules');
+
+				// Remove the file
+				if(!$lo_module->core) {
+					$ls_folder = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name);
+					$this->deletefolder($ls_folder);
+				}
+
+				// Remove orphaned records
+				$this->pagemodel->delete(['moduleid' => $pi_id]);
+				$this->routemodel->delete(['moduleid' => $pi_id]);
+
+				// Redirect
+				$this->redirect('/admin/modules');
 
 			break;
 		}
@@ -574,5 +755,6 @@ class PagesController extends BaseController {
 
 		return $la_templates;
 	}
+
 
 }

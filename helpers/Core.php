@@ -84,6 +84,28 @@ class Core {
 	}
 
 
+	public function deletefolder($ps_dir) {
+
+		if(!file_exists($ps_dir))
+			return false;
+
+		$lo_it = new \RecursiveDirectoryIterator($ps_dir, \RecursiveDirectoryIterator::SKIP_DOTS);
+		$la_files = new \RecursiveIteratorIterator($lo_it, \RecursiveIteratorIterator::CHILD_FIRST);
+
+		foreach($la_files as $lo_file) {
+
+		    if ($lo_file->isDir())
+		        rmdir($lo_file->getRealPath());
+
+		   	else
+		        unlink($lo_file->getRealPath());
+
+		}
+
+		return rmdir($ps_dir);
+	}
+
+
 	public function showerrorpage($pi_type) {
 
 		ob_clean();
