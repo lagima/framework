@@ -146,10 +146,6 @@ class Application extends Core {
 			// Get view object from DI
 			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-			// Inject the view from controller if any set
-			$ls_view = $lo_controller->getview();
-			$lo_view->setview($ls_view);
-
 			// Render the page
 			$lo_view->renderpage($po_page, $pa_responsedata);
 

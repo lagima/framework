@@ -5,7 +5,6 @@ use Mercury\Helper\Core;
 
 class Controller extends Core {
 
-	private $view;
 	protected $di;
 	private $response;
 
@@ -23,7 +22,6 @@ class Controller extends Core {
 			return false;
 		}
 
-
 		// Child classes are not allowed to use the constructor so workaround
 		$this->initcontroller();
 	}
@@ -34,12 +32,16 @@ class Controller extends Core {
 	}
 
 	protected function setview($ps_view) {
-		$this->view = $ps_view;
+
+		// Get view object from DI
+		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
+
+		if(!is_object($lo_view))
+			trigger_error("View is not initialised");
+
+		$lo_view->setview($ps_view);
 	}
 
-	public function getview() {
-		return $this->view;
-	}
 
 	public function buildresponse($pa_data) {
 

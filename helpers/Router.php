@@ -85,6 +85,7 @@ class Router extends Core {
 		$lo_page->action = ucfirst($lo_route->action);
 		$lo_page->moduleid = $lo_route->moduleid;
 		$lo_page->module = ucfirst($lo_route->module);
+		$lo_page->pagetitle = 'Mercury';
 
 		// $lo_page->view = strtolower($lo_route->action);
 

@@ -28,6 +28,7 @@ class View extends Core {
 		return $this->view;
 	}
 
+
 	public function renderpage($po_page, $pa_viewdata) {
 
 		// Get view folder and file
@@ -49,16 +50,26 @@ class View extends Core {
 		$lo_templates->addFolder('templates', $this->config->templatepath);
 		$lo_templates->addFolder('defaults', $this->config->defaultspath);
 
-		// Get the view details from db
-		$lo_search = new \stdClass;
-		$lo_search->name = $ls_viewfile;
-		$lo_search->controllerid = $po_page->controllerid;
-		$lo_search->moduleid = $po_page->moduleid;
-		$lo_viewdetail = $this->pagemodel->getviewdetails($lo_search);
+		// Get the view details from db if non admin
+		if(strcasecmp($po_page->module, 'admin') === 0 ) {
 
-		// Configure the template
-		$pa_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . $lo_viewdetail->template : 'defaults::blank';
-		$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury', 'gs_currentpage' => $this->getcurrenturl()];
+			// Configure the template
+			$pa_viewdata['gs_template'] = 'templates::admin';
+			$pa_viewdata['ga_templatedata'] = ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()];
+
+		} else {
+
+			$lo_search = new \stdClass;
+			$lo_search->name = $ls_viewfile;
+			$lo_search->controllerid = $po_page->controllerid;
+			$lo_search->moduleid = $po_page->moduleid;
+			$lo_viewdetail = $this->pagemodel->getviewdetails($lo_search);
+
+			// Configure the template
+			$pa_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . $lo_viewdetail->template : 'defaults::blank';
+			$pa_viewdata['ga_templatedata'] = ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()];
+		}
+
 
 		// Render the view if exists
 		echo $lo_templates->render($ls_viewfile, $pa_viewdata);
