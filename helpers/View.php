@@ -55,7 +55,7 @@ class View extends Core {
 
 			// Configure the template
 			$pa_viewdata['gs_template'] = 'templates::admin';
-			$pa_viewdata['ga_templatedata'] = ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()];
+			$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury PHP', 'gs_currentpage' => $this->getcurrenturl()];
 
 		} else {
 
@@ -69,7 +69,6 @@ class View extends Core {
 			$pa_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . $lo_viewdetail->template : 'defaults::blank';
 			$pa_viewdata['ga_templatedata'] = ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()];
 		}
-
 
 		// Render the view if exists
 		echo $lo_templates->render($ls_viewfile, $pa_viewdata);

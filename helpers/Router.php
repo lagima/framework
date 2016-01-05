@@ -18,6 +18,8 @@ class Router extends Core {
 	private $action;
 	private $routeid;
 
+	private $routes = [];
+
 
 	function __construct($di) {
 
@@ -31,9 +33,23 @@ class Router extends Core {
 
 	public function setadminroutes() {
 
+		// Get the redefined admin routes
+		$la_routes = $this->routemodel->getadminroutes();
 		// Get the routes from database
 		$lo_search = new \stdClass;
 		$lo_search->core = 1;
+		$la_routes = $this->routemodel->getroutes($lo_search);
+
+		foreach($la_routes as $lo_route)
+			$this->router->map($lo_route->method, $lo_route->requesturi, $lo_route->routeid);
+	}
+
+
+	public function setsiteoutes() {
+
+		// Get the routes from database
+		$lo_search = new \stdClass;
+		$lo_search->core = 0;
 		$la_routes = $this->routemodel->getroutes($lo_search);
 
 		foreach($la_routes as $lo_route) {
@@ -44,16 +60,6 @@ class Router extends Core {
 
 			$this->router->map($lo_route->method, $lo_route->requesturi, $lo_route->routeid); //"$ls_modue#$ls_controller#$ls_action"
 		}
-	}
-
-	public function setsiteoutes() {
-
-		// map homepage
-		$this->router->map('GET', '/admin', 'Admin#Index#index');
-
-		// map users details page
-		$this->router->map('GET|POST', '/admin/[i:id]', 'Admin#Index#user');
-
 	}
 
 
@@ -87,7 +93,22 @@ class Router extends Core {
 		$lo_page->module = ucfirst($lo_route->module);
 		$lo_page->pagetitle = 'Mercury';
 
-		// $lo_page->view = strtolower($lo_route->action);
+		return $lo_page;
+	}
+
+	public function getadminpage() {
+
+		if(empty($this->routeid))
+			trigger_error("Cannot find the route", E_USER_ERROR);
+
+		// Get the route from DB
+		$lo_route = $this->routemodel->getadminroute($this->routeid);
+
+		$lo_page = new \stdClass;
+		$lo_page->controller = ucfirst($lo_route->controller);
+		$lo_page->action = ucfirst($lo_route->action);
+		$lo_page->module = ucfirst($lo_route->module);
+		$lo_page->pagetitle = 'Mercury';
 
 		return $lo_page;
 	}

@@ -83,8 +83,41 @@ class Application extends Core {
 		return true;
 	}
 
-
 	public function runadmin() {
+
+		// Set the view folders
+		$lo_config = new \stdClass;
+		$lo_config->viewpath = $this->getdocumentroot() . '/mercury/views';
+		$lo_config->templatepath = $this->getdocumentroot() . '/mercury/views/templates';
+		$lo_config->defaultspath = $this->getdocumentroot() . '/mercury/views/templates';
+		$lo_config->assetpath = $this->getdocumentroot();
+		$this->setconfig('view', $lo_config);
+
+		// Get the route object from DI container
+		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
+
+		// Set the admin routes
+		$lo_router->setadminroutes();
+
+		// Execute the route
+		$la_params = $lo_router->executeroute();
+
+		if ($la_params === false) {
+
+			// here you can handle 404
+			echo "Here you can handle 404";
+
+			return false;
+		}
+
+		// Get the page from route
+		$po_page = $lo_router->getadminpage();
+
+		// Execute the page
+		$this->executepage($po_page, $la_params);
+	}
+
+	public function runsite() {
 
 		// Set the view folders
 		$lo_config = new \stdClass;
@@ -150,7 +183,6 @@ class Application extends Core {
 			$lo_view->renderpage($po_page, $pa_responsedata);
 
 		} else {
-
 			// Throw an exception in debug, send a  500 error in production
 			trigger_error("Trying to call $ps_controller::$ps_action with no luck", E_USER_NOTICE);
 		}
