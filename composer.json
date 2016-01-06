@@ -1,5 +1,8 @@
 {
+    "name": "mercuryphp/framework",
+    "description": "A short description of what your package does",
     "require": {
+        "php": ">=7.0",
         "altorouter/altorouter": "1.1.0",
         "pimple/pimple": "~3.0",
         "league/plates": "3.*",

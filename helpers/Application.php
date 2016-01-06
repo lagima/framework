@@ -114,16 +114,16 @@ class Application extends Core {
 		$po_page = $lo_router->getadminpage();
 
 		// Execute the page
-		$this->executepage($po_page, $la_params);
+		$this->executeadminpage($po_page, $la_params);
 	}
 
 	public function runsite() {
 
 		// Set the view folders
 		$lo_config = new \stdClass;
-		$lo_config->viewpath = $this->getdocumentroot() . '/mercury/views';
-		$lo_config->templatepath = $this->getdocumentroot() . '/mercury/views/templates';
-		$lo_config->defaultspath = $this->getdocumentroot() . '/mercury/views/templates';
+		$lo_config->viewpath = $this->getdocumentroot() . '/application/views';
+		$lo_config->templatepath = $this->getdocumentroot() . '/application/views/templates';
+		$lo_config->defaultspath = $this->getdocumentroot() . '/application/views/templates';
 		$lo_config->assetpath = $this->getdocumentroot();
 		$this->setconfig('view', $lo_config);
 
@@ -131,7 +131,7 @@ class Application extends Core {
 		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
 
 		// Set the admin routes
-		$lo_router->setadminroutes();
+		$lo_router->setsiteroutes();
 
 		// Execute the route
 		$la_params = $lo_router->executeroute();
@@ -152,7 +152,7 @@ class Application extends Core {
 	}
 
 
-	private function executepage($po_page, $pa_params = []) {
+	private function executeadminpage($po_page, $pa_params = []) {
 
 		if(!is_object($po_page))
 			trigger_error("Invalid page", E_USER_NOTICE);
@@ -184,8 +184,45 @@ class Application extends Core {
 
 		} else {
 			// Throw an exception in debug, send a  500 error in production
-			trigger_error("Trying to call $ps_controller::$ps_action with no luck", E_USER_NOTICE);
+			trigger_error("Trying to call $ps_class::$ps_action with no luck", E_USER_NOTICE);
 		}
 	}
 
+
+	private function executepage($po_page, $pa_params = []) {
+
+		if(!is_object($po_page))
+			trigger_error("Invalid page", E_USER_NOTICE);
+
+
+		$ps_controller = $po_page->controller;
+		$ps_action = $po_page->action;
+		$ps_module = $po_page->module;
+
+		// Build the namespaced class and action of it
+		$ps_class = "Mercury\\{$ps_module}\\Controller\\{$ps_controller}Controller";
+		$ps_method = "{$ps_action}Action";
+
+		if (is_callable(array($ps_class, $ps_method))) {
+
+			// Init the controller
+			$lo_controller = new $ps_class($this->di);
+
+			// Call the action
+			call_user_func_array(array($lo_controller, $ps_method), $pa_params);
+
+			// Get the page details & data to serve
+			$pa_responsedata = $lo_controller->getresponsedata();
+
+			// Get view object from DI
+			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
+
+			// Render the page
+			$lo_view->renderpage($po_page, $pa_responsedata);
+
+		} else {
+			// Throw an exception in debug, send a  500 error in production
+			trigger_error("Trying to call $ps_class::$ps_action with no luck", E_USER_NOTICE);
+		}
+	}
 }

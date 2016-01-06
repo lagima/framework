@@ -4,6 +4,7 @@ namespace Mercury\Model;
 class RouteModel extends BaseModel {
 
 	private $routes;
+	private $adminroutes;
 
 	protected function initmodel() {
 
@@ -143,20 +144,19 @@ class RouteModel extends BaseModel {
 
 		// Make it an object
 		foreach($la_routes as $la_route)
-			$this->routes[$la_route['routeid']] = json_decode(json_encode($la_route));
+			$this->adminroutes[$la_route['routeid']] = json_decode(json_encode($la_route));
 
-
-		return $this->routes;
+		return $this->adminroutes;
 	}
 
 
 	public function getadminroute($pi_routeid) {
 
 		// Check if we already got this route
-		if(!isset($this->routes[$pi_routeid]))
+		if(!isset($this->adminroutes[$pi_routeid]))
 			trigger_error("Cannot find route by calling getadminroute($pi_routeid)");
 
-		return $this->routes[$pi_routeid];
+		return $this->adminroutes[$pi_routeid];
 	}
 
 }

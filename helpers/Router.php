@@ -35,17 +35,13 @@ class Router extends Core {
 
 		// Get the redefined admin routes
 		$la_routes = $this->routemodel->getadminroutes();
-		// Get the routes from database
-		$lo_search = new \stdClass;
-		$lo_search->core = 1;
-		$la_routes = $this->routemodel->getroutes($lo_search);
 
 		foreach($la_routes as $lo_route)
 			$this->router->map($lo_route->method, $lo_route->requesturi, $lo_route->routeid);
 	}
 
 
-	public function setsiteoutes() {
+	public function setsiteroutes() {
 
 		// Get the routes from database
 		$lo_search = new \stdClass;
@@ -107,7 +103,7 @@ class Router extends Core {
 		$lo_page = new \stdClass;
 		$lo_page->controller = ucfirst($lo_route->controller);
 		$lo_page->action = ucfirst($lo_route->action);
-		$lo_page->module = ucfirst($lo_route->module);
+		$lo_page->module = 'Admin';
 		$lo_page->pagetitle = 'Mercury';
 
 		return $lo_page;

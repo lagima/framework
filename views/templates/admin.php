@@ -50,9 +50,11 @@
 					</a>
 					<div class="navbar-custom-menu">
 						<ul class="nav navbar-nav">
-
-
-
+							<li class="dropdown messages-menu">
+								<a href="/" target="_blank">
+									<i class="fa fa-eye"></i>
+								</a>
+							</li>
 						</ul>
 					</div>
 				</nav>
