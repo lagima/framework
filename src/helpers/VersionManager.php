@@ -115,7 +115,7 @@ class VersionManager extends Core {
 
 	public function removedeleted() {
 		$this->execute(
-			'git add -u 2>&1'
+			'git add -u'
 		);
 	}
 
