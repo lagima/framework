@@ -106,10 +106,14 @@ class VersionManager extends Core {
 	}
 
 
-	public function add($ps_filepath = '-u .') {
+	public function add($ps_filepath = '-A') {
 
 		$this->execute(
 			'git add ' . $ps_filepath . ' 2>&1'
+		);
+
+		$this->execute(
+			'git add -u . 2>&1'
 		);
 	}
 
