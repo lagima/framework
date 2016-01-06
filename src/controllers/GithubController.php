@@ -38,12 +38,11 @@ class GithubController extends BaseController {
 		$lo_git = new VersionManager($this->di);
 
 		if (isset($_POST) && !empty($_POST)) {
+			$lo_git->add();
+			$lo_git->removedeleted();
 			$lo_git->commit($this->postvalue('__message'));
 			$lo_git->push();
 		}
-
-		$lo_git->add();
-		$lo_git->removedeleted();
 
 		$la_changes = $lo_git->getchangedfiles();
 
