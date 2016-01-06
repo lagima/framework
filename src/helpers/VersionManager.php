@@ -111,9 +111,11 @@ class VersionManager extends Core {
 		$this->execute(
 			'git add ' . $ps_filepath . ' 2>&1'
 		);
+	}
 
+	public function removedeleted() {
 		$this->execute(
-			'git add -u . 2>&1'
+			'git add -u 2>&1'
 		);
 	}
 

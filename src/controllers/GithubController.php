@@ -39,6 +39,7 @@ class GithubController extends BaseController {
 
 		if (isset($_POST) && !empty($_POST)) {
 			$lo_git->add();
+			$lo_git->removedeleted();
 			$lo_git->commit($this->postvalue('__message'));
 			$lo_git->push();
 		}
