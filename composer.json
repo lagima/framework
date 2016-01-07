@@ -9,10 +9,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Mercury\\Controller\\": "mercuryphp/framework/src/controllers",
-            "Mercury\\View\\": "mercuryphp/framework/src/views",
-            "Mercury\\Model\\": "mercuryphp/framework/src/models",
-            "Mercury\\Helper\\": "mercuryphp/framework/src/helpers"
+            "Mercury\\Controller\\": "src/controllers",
+            "Mercury\\View\\": "src/views",
+            "Mercury\\Model\\": "src/models",
+            "Mercury\\Helper\\": "src/helpers"
         }
     }
 }
