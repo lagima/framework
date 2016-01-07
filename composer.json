@@ -1,5 +1,5 @@
 {
-    "name": "Mercury",
+    "name": "mercuryphp/framework",
     "description": "A short description of what your package does",
     "require": {
         "php": ">=7.0",
@@ -9,10 +9,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Mercury\\Controller\\": "controllers",
-            "Mercury\\View\\": "views",
-            "Mercury\\Model\\": "models",
-            "Mercury\\Helper\\": "helpers"
+            "Mercury\\Controller\\": "mercuryphp/framework/src/controllers",
+            "Mercury\\View\\": "mercuryphp/framework/src/views",
+            "Mercury\\Model\\": "mercuryphp/framework/src/models",
+            "Mercury\\Helper\\": "mercuryphp/framework/src/helpers"
         }
     }
 }
