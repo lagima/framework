@@ -1,4 +1,5 @@
 /src/vendor
+vendor
 .git
 .gitignore
 composer.lock
