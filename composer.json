@@ -1,6 +1,10 @@
 {
-    "name": "mercuryphp/framework",
-    "description": "A short description of what your package does",
+    "name": "skdeepak88/Mercury",
+    "description": "MVC framework with admin interface to manage files",
+    "author": {
+        "name": "Deepak Sinnamani",
+        "email": "skdeepak88@gmail.com"
+    },
     "require": {
         "php": ">=7.0",
         "altorouter/altorouter": "1.1.0",
