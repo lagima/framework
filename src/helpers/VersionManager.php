@@ -122,7 +122,7 @@ class VersionManager extends Core {
 	public function commit($ps_message) {
 
 		$ls_output = $this->execute(
-			'git commit --author="' . $this->config->username . '" -m "' . $ps_message . '"'
+			'git commit -a --author="' . $this->config->username . '" -m "' . $ps_message . '"'
 		);
 
 		return $ls_output;

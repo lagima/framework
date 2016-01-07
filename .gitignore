@@ -1,3 +1,6 @@
 /src/vendor
+.git
+.gitignore
 composer.lock
 composer.phar
+index.php
