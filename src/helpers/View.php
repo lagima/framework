@@ -8,14 +8,12 @@ use Mercury\Model\PageModel;
 class View extends Core {
 
 	private $config;
+	private $defaulttemplate;
 	private $view;
 
 	public function __construct($di) {
 
-		if(!isset($di['config']['view']))
-			trigger_error('View configuration not defined');
-
-		$this->config = $di['config']['view'];
+		$this->defaulttemplate = __DIR__ . '/../views/templates';
 
 		$this->pagemodel = new PageModel($di);
 	}
@@ -34,21 +32,23 @@ class View extends Core {
 		// Get view folder and file
 		$ls_viewfolder = $this->getviewfolder($po_page);
 		$ls_viewfile = $this->getviewfile($po_page);
+		$ls_templatefolder = $this->gettemplatefolder($po_page);
+		$ls_assetsfolder = $this->getasstesfolder($po_page);
 
 		if(!$this->hasview($po_page))
-			trigger_error('View not defined: ' . $ls_viewfile, E_USER_ERROR);
+			trigger_error('View not defined: ' . $ls_viewfolder . '/' . $ls_viewfile, E_USER_ERROR);
 
 		// Create new Plates instance
 		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
 
 		// Load asset extension
-		$lo_templates->loadExtension(new \League\Plates\Extension\Asset($this->config->assetpath, true));
+		$lo_templates->loadExtension(new \League\Plates\Extension\Asset($ls_assetsfolder, true));
 
 		// Load html helpers
 		$lo_templates->loadExtension(new HtmlExtension());
 
-		$lo_templates->addFolder('templates', $this->config->templatepath);
-		$lo_templates->addFolder('defaults', $this->config->defaultspath);
+		$lo_templates->addFolder('templates', $ls_templatefolder);
+		$lo_templates->addFolder('defaults', $this->defaulttemplate);
 
 		// Get the view details from db if non admin
 		if(strcasecmp($po_page->module, 'admin') === 0 ) {
@@ -109,8 +109,38 @@ class View extends Core {
 			trigger_error('Page is invalid', E_USER_ERROR);
 
 		$ps_controller = strtolower($po_page->controller);
+		$ps_module = strtolower($po_page->module);
 
-		return "{$this->config->viewpath}/$ps_controller";
+		if(strcasecmp($po_page->module, 'admin') === 0)
+			return  __DIR__ . '/../views/' . $ps_controller;
+
+		return  $this->getdocumentroot() . '/application/' . $ps_module . '/views/' . $ps_controller;
+	}
+
+
+	public function gettemplatefolder($po_page) {
+
+		if(!is_object($po_page))
+			trigger_error('Page is invalid', E_USER_ERROR);
+
+
+		if(strcasecmp($po_page->module, 'admin') === 0)
+			return  __DIR__ . '/../views/templates';
+
+		return  $this->getdocumentroot() . '/application/' . $ps_module . '/views/templates';
+	}
+
+
+	public function getasstesfolder($po_page) {
+
+		if(!is_object($po_page))
+			trigger_error('Page is invalid', E_USER_ERROR);
+
+
+		if(strcasecmp($po_page->module, 'admin') === 0)
+			return  realpath(__DIR__ . '/../');
+
+		return  $this->getdocumentroot();
 	}
 
 

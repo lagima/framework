@@ -85,14 +85,6 @@ class Application extends Core {
 
 	public function runadmin() {
 
-		// Set the view folders
-		$lo_config = new \stdClass;
-		$lo_config->viewpath = $this->getdocumentroot() . '/mercury/views';
-		$lo_config->templatepath = $this->getdocumentroot() . '/mercury/views/templates';
-		$lo_config->defaultspath = $this->getdocumentroot() . '/mercury/views/templates';
-		$lo_config->assetpath = $this->getdocumentroot();
-		$this->setconfig('view', $lo_config);
-
 		// Get the route object from DI container
 		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
 
@@ -121,7 +113,6 @@ class Application extends Core {
 
 		// Set the view folders
 		$lo_config = new \stdClass;
-		$lo_config->viewpath = $this->getdocumentroot() . '/application/views';
 		$lo_config->templatepath = $this->getdocumentroot() . '/application/views/templates';
 		$lo_config->defaultspath = $this->getdocumentroot() . '/application/views/templates';
 		$lo_config->assetpath = $this->getdocumentroot();
@@ -151,6 +142,12 @@ class Application extends Core {
 		$this->executepage($po_page, $la_params);
 	}
 
+
+	public function install() {
+
+		chdir($this->getdocumentroot() . '/assets');
+		exec("git archive --remote=https://github.com/skdeepak88/mercury.git master <path> | tar xvf -");
+	}
 
 	private function executeadminpage($po_page, $pa_params = []) {
 
