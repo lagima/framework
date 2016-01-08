@@ -197,7 +197,7 @@ class Application extends Core {
 		$ps_module = $po_page->module;
 
 		// Build the namespaced class and action of it
-		$ps_class = "Mercury\\App\\{$ps_module}\\Controller\\{$ps_controller}Controller";
+		$ps_class = "Mercury\\App\\{$ps_module}\\Controllers\\{$ps_controller}Controller";
 		$ps_method = "{$ps_action}Action";
 
 		if (is_callable(array($ps_class, $ps_method))) {
