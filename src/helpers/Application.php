@@ -83,6 +83,23 @@ class Application extends Core {
 		return true;
 	}
 
+	public function runapp() {
+
+		// Get the url part and check if its admin or site
+		$ls_type = $this->geturlparameter(0);
+
+		switch($ls_type) {
+
+			case 'admin':
+				$this->runadmin();
+			break;
+
+			default:
+				$this->runsite();
+			break;
+		}
+	}
+
 	public function runadmin() {
 
 		// Get the route object from DI container
@@ -97,7 +114,7 @@ class Application extends Core {
 		if ($la_params === false) {
 
 			// here you can handle 404
-			echo "Here you can handle 404";
+			$this->showerrorpage(404);
 
 			return false;
 		}
@@ -130,7 +147,7 @@ class Application extends Core {
 		if ($la_params === false) {
 
 			// here you can handle 404
-			echo "Here you can handle 404";
+			$this->showerrorpage(404);
 
 			return false;
 		}

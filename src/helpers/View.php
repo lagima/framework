@@ -108,13 +108,13 @@ class View extends Core {
 		if(!is_object($po_page))
 			trigger_error('Page is invalid', E_USER_ERROR);
 
-		$ps_controller = strtolower($po_page->controller);
-		$ps_module = strtolower($po_page->module);
+		$ls_controller = strtolower($po_page->controller);
+		$ls_module = strtolower($po_page->module);
 
-		if(strcasecmp($po_page->module, 'admin') === 0)
-			return  __DIR__ . '/../views/' . $ps_controller;
+		if(strcasecmp($ls_module, 'admin') === 0)
+			return  __DIR__ . '/../views/' . $ls_controller;
 
-		return  $this->getdocumentroot() . '/application/' . $ps_module . '/views/' . $ps_controller;
+		return  $this->getdocumentroot() . '/application/' . $ls_module . '/views/' . $ls_controller;
 	}
 
 
@@ -123,11 +123,12 @@ class View extends Core {
 		if(!is_object($po_page))
 			trigger_error('Page is invalid', E_USER_ERROR);
 
+		$ls_module = strtolower($po_page->module);
 
-		if(strcasecmp($po_page->module, 'admin') === 0)
+		if(strcasecmp($ls_module, 'admin') === 0)
 			return  __DIR__ . '/../views/templates';
 
-		return  $this->getdocumentroot() . '/application/' . $ps_module . '/views/templates';
+		return  $this->getdocumentroot() . '/application/' . $ls_module . '/views/templates';
 	}
 
 

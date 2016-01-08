@@ -94,11 +94,11 @@ class Core {
 
 		foreach($la_files as $lo_file) {
 
-		    if ($lo_file->isDir())
-		        rmdir($lo_file->getRealPath());
+			if ($lo_file->isDir())
+				rmdir($lo_file->getRealPath());
 
-		   	else
-		        unlink($lo_file->getRealPath());
+			else
+				unlink($lo_file->getRealPath());
 
 		}
 
@@ -114,7 +114,7 @@ class Core {
 
 			case 404:
 
-				header("HTTP/1.0 403 Not Found");
+				header("HTTP/1.0 404 Not Found");
 				$ls_content = "The page that you have requested could not be found.";
 
 			break;
@@ -127,7 +127,7 @@ class Core {
 			break;
 		}
 
-		echo str_ireplace('[CONTENT]', $ls_content, $this->geterrortemplate());
+		echo $ls_content;
 
 		exit;
 	}
@@ -148,18 +148,18 @@ class Core {
 	public function getrandomhash($pi_length = 30, $ps_filterexp = '[:alnum:]') {
 
 		// Base characters are based on the [:graph:] character class ("printing characters, excluding space") with a code of 127 or less
-        $ls_basechars = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+		$ls_basechars = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
 
-        // Filter to the specified characters. Defaults to alpha-numeric.
-        $ls_source = preg_replace('/[^' . $ps_filterexp . ']/', '', $ls_basechars);
+		// Filter to the specified characters. Defaults to alpha-numeric.
+		$ls_source = preg_replace('/[^' . $ps_filterexp . ']/', '', $ls_basechars);
 
-        $ls_string = '';
+		$ls_string = '';
 
-        for ($i = 0; $i < $pi_length; ++$i) {
-            $ls_string .= $ls_source[rand(0, strlen($ls_source  ) - 1)];
-        }
+		for ($i = 0; $i < $pi_length; ++$i) {
+			$ls_string .= $ls_source[rand(0, strlen($ls_source  ) - 1)];
+		}
 
-        return $ls_string;
+		return $ls_string;
 	}
 
 	public function getuniquehash($ps_string = '') {
@@ -339,6 +339,18 @@ class Core {
 		$la_uriparts = explode('?', $_SERVER['REQUEST_URI'], 2);
 
 		return $la_uriparts[0];
+	}
+
+
+	public function geturlparameter($pi_position = 1, $ps_separator = '/') {
+
+		$ls_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+		$la_params = explode($ps_separator, $ls_path);
+		array_shift($la_params);
+
+		return isset($la_params[$pi_position])? $la_params[$pi_position]: null;
+
 	}
 
 
