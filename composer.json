@@ -1,27 +1,27 @@
 {
-    "name": "skdeepak88/mercury",
-    "description": "MVC framework with admin interface to manage files",
-    "license": " MIT",
-    "author": {
-        "name": "Deepak Sinnamani",
-        "email": "skdeepak88@gmail.com"
-    },
-    "require": {
-        "php": ">=7.0",
-        "altorouter/altorouter": "1.1.0",
-        "pimple/pimple": "~3.0",
-        "league/plates": "3.*",
-        "reputation-vip/composer-assets-installer": "~1.0"
-    },
-    "autoload": {
-        "classmap": [
-            "src/controllers",
-            "src/views",
-            "src/models",
-            "src/helpers"
-        ]
-    },
-    "extra": {
-        "assets-dir" : "src/assets"
-    }
+	"name": "skdeepak88/mercury",
+	"description": "MVC framework with admin interface to manage files",
+	"license": " MIT",
+	"author": {
+		"name": "Deepak Sinnamani",
+		"email": "skdeepak88@gmail.com"
+	},
+	"require": {
+		"php": ">=7.0",
+		"altorouter/altorouter": "1.1.0",
+		"pimple/pimple": "~3.0",
+		"league/plates": "3.*",
+		"reputation-vip/composer-assets-installer": "~1.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Mercury\\Controller\\": "src/controllers",
+			"Mercury\\View\\": "src/views",
+			"Mercury\\Model\\": "src/models",
+			"Mercury\\Helper\\": "src/helpers"
+		}
+	},
+	"extra": {
+		"assets-dir" : "src/assets"
+	}
 }

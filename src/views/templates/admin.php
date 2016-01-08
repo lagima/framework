@@ -7,22 +7,22 @@
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<!-- Bootstrap 3.3.5 -->
-		<link rel="stylesheet" href="<?= $this->asset('/assets/bootstrap/css/bootstrap.min.css') ?>">
+		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/bootstrap/css/bootstrap.min.css') ?>">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 		<!-- Ionicons -->
 		<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 		<!-- Theme style -->
-		<link rel="stylesheet" href="<?= $this->asset('/assets/css/AdminLTE.min.css') ?>">
+		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/css/AdminLTE.min.css') ?>">
 		<!-- AdminLTE Skins. Choose a skin from the css/skins
 				 folder instead of downloading all of them to reduce the load. -->
-		<link rel="stylesheet" href="<?= $this->asset('/assets/css/skins/_all-skins.min.css') ?>">
+		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/css/skins/_all-skins.min.css') ?>">
 		<!-- Date Picker -->
-		<link rel="stylesheet" href="<?= $this->asset('/assets/plugins/datepicker/datepicker3.css') ?>">
+		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/plugins/datepicker/datepicker3.css') ?>">
 		<!-- Daterange picker -->
-		<link rel="stylesheet" href="<?= $this->asset('/assets/plugins/daterangepicker/daterangepicker-bs3.css') ?>">
+		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/plugins/daterangepicker/daterangepicker-bs3.css') ?>">
 		<!-- bootstrap wysihtml5 - text editor -->
-		<link rel="stylesheet" href="<?= $this->asset('/assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') ?>">
+		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') ?>">
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -140,7 +140,7 @@
 		</div><!-- ./wrapper -->
 
 		<!-- jQuery 2.1.4 -->
-		<script src="/mercury/assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 		<!-- jQuery UI 1.11.4 -->
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 		<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -148,20 +148,20 @@
 			$.widget.bridge('uibutton', $.ui.button);
 		</script>
 		<!-- Bootstrap 3.3.5 -->
-		<script src="/mercury/assets/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/bootstrap/js/bootstrap.min.js"></script>
 		<!-- daterangepicker -->
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-		<script src="/mercury/assets/plugins/daterangepicker/daterangepicker.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/plugins/daterangepicker/daterangepicker.js"></script>
 		<!-- datepicker -->
-		<script src="/mercury/assets/plugins/datepicker/bootstrap-datepicker.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/plugins/datepicker/bootstrap-datepicker.js"></script>
 		<!-- Bootstrap WYSIHTML5 -->
-		<script src="/mercury/assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 		<!-- Slimscroll -->
-		<script src="/mercury/assets/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 		<!-- FastClick -->
-		<script src="/mercury/assets/plugins/fastclick/fastclick.min.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/plugins/fastclick/fastclick.min.js"></script>
 		<!-- AdminLTE App -->
-		<script src="/mercury/assets/js/app.min.js"></script>
-		<script src="/mercury/assets/js/main.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/js/app.min.js"></script>
+		<script src="/mercury/assets/vendors/skdeepak88/mercury/js/main.js"></script>
 	</body>
 </html>
