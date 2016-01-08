@@ -137,9 +137,6 @@ class View extends Core {
 			trigger_error('Page is invalid', E_USER_ERROR);
 
 
-		if(strcasecmp($po_page->module, 'admin') === 0)
-			return  realpath(__DIR__ . '/../');
-
 		return  $this->getdocumentroot();
 	}
 
