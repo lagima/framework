@@ -146,7 +146,7 @@ class Application extends Core {
 
 		if ($la_params === false) {
 
-			// here you can handle 404
+			// Show the error page
 			$this->showerrorpage(404);
 
 			return false;
@@ -199,6 +199,9 @@ class Application extends Core {
 		} else {
 			// Throw an exception in debug, send a  500 error in production
 			trigger_error("Trying to call $ps_class::$ps_action with no luck", E_USER_NOTICE);
+
+			// Show the error page
+			$this->showerrorpage(404);
 		}
 	}
 

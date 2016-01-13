@@ -11,6 +11,7 @@
 		"altorouter/altorouter": "1.1.0",
 		"pimple/pimple": "~3.0",
 		"league/plates": "3.*",
+		"lox/xhprof": "dev-master",
 		"reputation-vip/composer-assets-installer": "~1.0"
 	},
 	"autoload": {

@@ -4,7 +4,7 @@ namespace Mercury\Helper;
 /**
 *
 */
-class Profiler {
+class Profiler extends Core {
 
 	private $profiling;
 
@@ -39,16 +39,13 @@ class Profiler {
 			// stop profiler
 			$lo_xhprofdata = xhprof_disable();
 
-			include_once "mercury/vendor/xhprof/xhprof_lib/utils/xhprof_lib.php";
-			include_once "mercury/vendor/xhprof/xhprof_lib/utils/xhprof_runs.php";
-
 			$lo_xhprofruns = new \XHProfRuns_Default();
 
 			// Save the run under a namespace "xhprof_basket".
 			$li_runid = $lo_xhprofruns->save_run($lo_xhprofdata, "mercury");
 
 			echo '	<div style="position:absolute; bottom:0; left:0; z-index:1000">
-						<a class="btn btn-warning" target="_blank" href="/mercury/vendor/xhprof/xhprof_html/index.php?run=' . $li_runid . '&source=mercury">
+						<a class="btn btn-warning" target="_blank" href="/vendor/lox/xhprof/xhprof_html/index.php?run=' . $li_runid . '&source=mercury">
 							Profile
 						</a>
 					</div>';

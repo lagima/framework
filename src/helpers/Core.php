@@ -110,19 +110,31 @@ class Core {
 
 		ob_clean();
 
+		$ls_customdir = $this->getdocumentroot() . '/errors';
+
 		switch($pi_type) {
 
 			case 404:
 
 				header("HTTP/1.0 404 Not Found");
-				$ls_content = "The page that you have requested could not be found.";
+
+				$ls_customfile = $ls_customdir . '/404.html';
+
+				if(is_file($ls_customfile))
+					$ls_content = file_get_contents($ls_customfile);
+				else
+					$ls_content = "The page that you have requested could not be found.";
 
 			break;
 
 			case 403:
 
 				header("HTTP/1.0 403 Not Found");
-				$ls_content = "The page that you have requested could not be found.";
+
+				if(is_file($ls_customfile))
+					$ls_content = file_get_contents($ls_customfile);
+				else
+					$ls_content = "The page that you have requested could not be found.";
 
 			break;
 		}
