@@ -59,7 +59,12 @@ class GithubController extends BaseController {
 				$lb_status = $lo_git->push();
 
 			// If it ever failed set the message
-			$this->setflashmessage($lo_git->getlasterror());
+			$ls_error = $lo_git->getlasterror();
+
+			if(!empty($ls_error))
+				$this->setflashmessage($lo_git->getlasterror());
+			else
+				$this->setflashmessage("All done :)", 'SUCCESS');
 
 		}
 
