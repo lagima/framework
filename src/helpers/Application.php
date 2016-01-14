@@ -163,7 +163,7 @@ class Application extends Core {
 	public function install() {
 
 		chdir($this->getdocumentroot() . '/assets');
-		exec("git archive --remote=https://github.com/skdeepak88/mercury.git master <path> | tar xvf -");
+		exec("git archive --remote=https://github.com/mercury/mercury.git master <path> | tar xvf -");
 	}
 
 	private function executeadminpage($po_page, $pa_params = []) {

@@ -6,8 +6,9 @@ You can always download the files and mess with it but good luck with that. I re
 
 ```
 {
+  "minimum-stability": "dev",
 	"require": {
-        "skdeepak88/mercury": "dev-master"
+        "mercury/framework": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -51,9 +52,9 @@ LOCK TABLES `m_blueprint` WRITE;
 
 INSERT INTO `m_blueprint` (`blueprintid`, `type`, `content`)
 VALUES
-	(1,'CONTROLLER','<?\nnamespace Mercury\\Controller;\n\nclass SampleController extends Controller {\n\n\n	public function initcontroller() {\n\n		/**\n		 * Avoid defining a constructor use this method instead\n		 */\n	}\n\n	public function indexAction() {\n\n		echo \"Sample file\";\n	}\n\n}'),
+	(1,'CONTROLLER','<?\nnamespace Mercury\\App\\ModuleName\\Controllers;\n\nclass SampleController extends Controller {\n\n\n	public function initcontroller() {\n\n		/**\n		 * Avoid defining a constructor use this method instead\n		 */\n	}\n\n	public function indexAction() {\n\n		echo \"Sample file\";\n	}\n\n}'),
 	(2,'VIEW','<?php $this->layout($gs_template, $ga_templatedata) ?>'),
-	(3,'MODEL','<?\nnamespace Mercury\\Model;\n\nclass SampleModel extends Model {\n\n\n	protected function initmodel() {\n\n		// Set this because the table name is not in standard format\n		$this->settable(\'some_table\');\n\n	}\n\n}');
+	(3,'MODEL','<?\nnamespace Mercury\\App\\ModuleName\\Model;\n\nclass SampleModel extends Model {\n\n\n	protected function initmodel() {\n\n		// Set this because the table name is not in standard format\n		$this->settable(\'some_table\');\n\n	}\n\n}');
 
 /*!40000 ALTER TABLE `m_blueprint` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -158,7 +159,7 @@ Thats it! you have just installed an awesome framework ;)
 
 # Usage
 
-Not much documentation at this stage might do it later when I get some time but use the following content in your `index.php` to start with
+Not much documentation at this stage, might do it later when I get some time but use the following content in your `index.php` to start with
 
 ```
 <?
@@ -191,6 +192,7 @@ $go_app->setconfig('database', $lo_config);
 $lo_config = new \stdClass;
 $lo_config->localrepopath = '/path/to/your/repo';
 $lo_config->remoterepopath = 'github.com/remote/repo.git';
+$lo_config->author = 'gitauthorusername';
 $lo_config->username = 'gitusername';
 $lo_config->password = 'gitpassword';
 $lo_config->branch = 'master';
