@@ -145,7 +145,7 @@ class VersionManager extends Core {
 	public function push() {
 
 		$ls_output = $this->execute(
-			'git push https://' . $this->config->username . ':' . $this->config->password . '@' . $this->config->remoterepopath . ' --all'
+			'git push https://' . $this->config->username . ':' . $this->config->password . '@' . $this->config->remoterepopath . ' --all --force'
 		);
 
 		return $ls_output;
