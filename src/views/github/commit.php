@@ -32,6 +32,9 @@
 
 	<div class="row">
 		<div class="col-xs-12">
+
+			<?= $this->getflashmessage() ?>
+
 			<div class="box box-solid">
 				<div class="box-body no-padding">
 					<table class="table table-hover">

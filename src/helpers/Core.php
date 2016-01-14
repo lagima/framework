@@ -243,14 +243,14 @@ class Core {
 	 * @param  string $ps_type    Type can be INFO, ERROR, WARNING
 	 * @return boolean            TRUE on success, FALSE on failure
 	 */
-	public function setflashmessage($pm_message, $ps_type = 'WARNING') {
+	public function setflashmessage($pm_message, $ps_type = 'ERROR') {
 
 		if (empty($pm_message))
 			return false;
 
 		$pm_message = !is_array($pm_message) ? array($pm_message) : $pm_message;
 
-		$lo_message = new stdClass;
+		$lo_message = new \stdClass;
 		$lo_message->content = implode(PHP_EOL, $pm_message);
 		$lo_message->type = $ps_type;
 

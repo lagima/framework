@@ -20,6 +20,7 @@ class HtmlExtension extends Core implements ExtensionInterface {
 		$po_engine->registerFunction('postvalue', [$this, 'postvalue']);
 		$po_engine->registerFunction('getvalue', [$this, 'getvalue']);
 		$po_engine->registerFunction('debug', [$this, 'debug']);
+		$po_engine->registerFunction('getflashmessage', [$this, 'getflashmessage']);
 	}
 
 	public function htmlinput($ps_type, $ps_name = null, $ps_label = null, $ps_defaultvalue = null, $pm_value = null) {

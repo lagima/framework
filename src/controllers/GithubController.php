@@ -38,10 +38,29 @@ class GithubController extends BaseController {
 		$lo_git = new VersionManager($this->di);
 
 		if (isset($_POST) && !empty($_POST)) {
-			$lo_git->add();
-			$lo_git->removedeleted();
-			$lo_git->commit($this->postvalue('__message'));
-			$lo_git->push();
+
+			// If the status is ever false stop
+			$lb_status = true;
+
+			// Stage any new files
+			if($lb_status !== false)
+				$lb_status = $lo_git->add();
+
+			// Remove any deleted files from repo
+			if($lb_status !== false)
+				$lb_status = $lo_git->removedeleted();
+
+			// Commit with the message
+			if($lb_status !== false)
+				$lb_status = $lo_git->commit($this->postvalue('__message'));
+
+			//Push it to remove repo
+			if($lb_status !== false)
+				$lb_status = $lo_git->push();
+
+			// If it ever failed set the message
+			$this->setflashmessage($lo_git->getlasterror());
+
 		}
 
 		$la_changes = $lo_git->getchangedfiles();

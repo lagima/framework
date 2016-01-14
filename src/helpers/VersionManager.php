@@ -8,6 +8,7 @@ class VersionManager extends Core {
 	private $config;
 	private $git;
 	private $repositorypath;
+	private $error;
 
 	public function __construct($di) {
 
@@ -100,29 +101,41 @@ class VersionManager extends Core {
 	 */
 	public function checkout($ps_revision) {
 
-		$this->execute(
+		$ls_output = $this->execute(
 			'git checkout --force --quiet ' . $ps_revision . ' 2>&1'
 		);
+
+		return $ls_output;
 	}
 
 
 	public function add($ps_filepath = '-A') {
 
-		$this->execute(
-			'git add ' . $ps_filepath . ' 2>&1'
+		$ls_output = $this->execute(
+			'git add ' . $ps_filepath
 		);
+
+		return $ls_output;
 	}
 
 	public function removedeleted() {
-		$this->execute(
+
+		$ls_output = $this->execute(
 			'git add -u'
 		);
+
+		return $ls_output;
 	}
 
 	public function commit($ps_message) {
 
+		if(empty($ps_message)) {
+			$this->setlasterror("Commit message cannot be empty");
+			return false;
+		}
+
 		$ls_output = $this->execute(
-			'git commit -a --author="' . $this->config->username . '" -m "' . $ps_message . '"'
+			'git commit -a --author="' . $this->config->author . '" -m "' . $ps_message . '"'
 		);
 
 		return $ls_output;
@@ -148,9 +161,21 @@ class VersionManager extends Core {
 		chdir($ls_cwd);
 
 		if ($lm_returnvalue !== 0) {
-			throw new \RuntimeException(implode("\r\n", $lm_output));
+
+			$lm_output = empty($lm_output) ? 'An unknown error occured from calling ' . debug_backtrace()[1]['function'] . '()' : $lm_output;
+			$this->setlasterror($lm_output);
+
+			return false;
 		}
 
 		return $lm_output;
+	}
+
+	private function setlasterror($ps_error) {
+		$this->error = $ps_error;
+	}
+
+	public function getlasterror() {
+		return $this->error;
 	}
 }
