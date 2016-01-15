@@ -128,13 +128,6 @@ class Application extends Core {
 
 	public function runsite() {
 
-		// Set the view folders
-		$lo_config = new \stdClass;
-		$lo_config->templatepath = $this->getdocumentroot() . '/application/views/templates';
-		$lo_config->defaultspath = $this->getdocumentroot() . '/application/views/templates';
-		$lo_config->assetpath = $this->getdocumentroot();
-		$this->setconfig('view', $lo_config);
-
 		// Get the route object from DI container
 		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
 
