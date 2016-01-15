@@ -170,11 +170,12 @@ class PagesController extends BaseController {
 					// Get the module
 					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
+					// Create the folder
+					$ls_folder = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/models';
+					$this->createfolder($ls_folder);
+
 					// Create the file
-					if($this->postvalue('__core'))
-						$ls_file = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
-					else
-						$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
+					$ls_file = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 
 					// Fill some starter content
 					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'MODEL']);
@@ -208,13 +209,8 @@ class PagesController extends BaseController {
 					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
 					// Create the file
-					if($this->postvalue('__core')) {
-						$ls_originalfile = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
-						$ls_newfile = $this->getdocumentroot() . '/mercury/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
-					} else {
-						$ls_originalfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
-						$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
-					}
+					$ls_originalfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
+					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
 

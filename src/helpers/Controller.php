@@ -7,6 +7,7 @@ class Controller extends Core {
 
 	protected $di;
 	private $response;
+	private $templatedata;
 
 
 	public function __construct($di) {
@@ -51,8 +52,23 @@ class Controller extends Core {
 		$this->response = array_merge($this->response, $pa_data);
 	}
 
+
 	public function getresponsedata() {
 		return $this->response;
+	}
+
+
+	public function buildtemplatedata($pa_data) {
+
+		if(!is_array($this->templatedata))
+			$this->templatedata = [];
+
+		$this->templatedata = array_merge($this->templatedata, $pa_data);
+	}
+
+
+	public function gettemplatedata() {
+		return $this->templatedata;
 	}
 
 }

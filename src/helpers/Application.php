@@ -231,12 +231,13 @@ class Application extends Core {
 
 			// Get the page details & data to serve
 			$pa_responsedata = $lo_controller->getresponsedata();
+			$pa_templatedata = $lo_controller->gettemplatedata();
 
 			// Get view object from DI
 			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
 			// Render the page
-			$lo_view->renderpage($po_page, $pa_responsedata);
+			$lo_view->renderpage($po_page, $pa_responsedata, $pa_templatedata);
 
 		} else {
 			// Throw an exception in debug, send a  500 error in production

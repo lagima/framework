@@ -27,7 +27,7 @@ class View extends Core {
 	}
 
 
-	public function renderpage($po_page, $pa_viewdata) {
+	public function renderpage($po_page, $pa_viewdata, $pa_templatedata = []) {
 
 		// Get view folder and file
 		$ls_viewfolder = $this->getviewfolder($po_page);
@@ -67,7 +67,8 @@ class View extends Core {
 
 			// Configure the template
 			$pa_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . strtolower($lo_viewdetail->template) : 'defaults::blank';
-			$pa_viewdata['ga_templatedata'] = ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()];
+			$la_templatedata = ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()];
+			$pa_viewdata['ga_templatedata'] = array_merge($la_templatedata, $pa_templatedata);
 		}
 
 		// Render the view if exists
