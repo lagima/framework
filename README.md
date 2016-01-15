@@ -6,8 +6,8 @@ You can always download the files and mess with it but good luck with that. I re
 
 ```
 {
-  "minimum-stability": "dev",
-	"require": {
+    "minimum-stability": "dev",
+    "require": {
         "mercury/framework": "dev-master"
     },
     "autoload": {
