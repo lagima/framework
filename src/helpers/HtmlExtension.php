@@ -23,6 +23,17 @@ class HtmlExtension extends Core implements ExtensionInterface {
 		$po_engine->registerFunction('getflashmessage', [$this, 'getflashmessage']);
 	}
 
+	public function styleselector($ps_current, $ps_actual, $ps_style = 'active') {
+
+		if(empty($ps_current) && empty($ps_actual))
+			return false;
+
+		if(strcasecmp($ps_actual, $ps_current) == 0)
+			return $ps_style;
+
+		return false;
+	}
+
 	public function htmlinput($ps_type, $ps_name = null, $ps_label = null, $ps_defaultvalue = null, $pm_value = null) {
 
 		$ps_value = $this->postvalue('__'.$ps_name);
