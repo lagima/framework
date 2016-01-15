@@ -3,6 +3,8 @@ namespace Mercury\Helper;
 
 class Core {
 
+	protected $errors;
+
 
 	function __construct() {
 
@@ -16,6 +18,79 @@ class Core {
 
 		session_write_close();
 	}
+
+
+	/**
+	 * Track the visitor/ each page requests into a log file
+	 * It records IP address time and the URL visited
+	 * @return none
+	 */
+	public function trackvisitor(){
+
+		if(get_class($this) != 'admin'){
+
+			$ls_protocol = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+
+			$ls_url = $ls_protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+
+			if(!isset($_SESSION['gs_visitor_log']))
+				$_SESSION['gs_visitor_log'] = '';
+
+			if($_SESSION['gs_visitor_log'] == $ls_url)
+			 	return false;
+
+			$_SESSION['gs_visitor_log'] = $ls_url;
+
+
+			$this->logtofile('visitors.txt', "[{$_SERVER['REMOTE_ADDR']}] visited $ls_url", true, 2);
+
+		}
+
+	}
+
+	/**
+	 * This function will log the message to specified file also uses log rotating feature
+	 * @param  string  $ls_file
+	 * @param  string  $ls_content
+	 * @param  boolean $lb_enablerotator
+	 * @param  integer $li_rotateduration
+	 * @return boolean
+	 */
+	public function logtofile($ls_file, $ls_content, $lb_enablerotator = false, $li_rotateduration = 30)
+	{
+
+		$ls_filepath = $this->getdocumentroot()."/sitelogs/$ls_file";
+
+		// Create the folder if not exists
+		$this->createfolder($this->getdocumentroot()."/sitelogs");
+
+		// This method will create file if not exists
+		$this->createfile($ls_filepath);
+
+
+		$ls_templatedata = "----------------------------\nCreated: " . date('Y-m-d') . "\n----------------------------\n";
+		$ls_currentcontent = file_get_contents($ls_filepath);
+
+		if (empty($ls_currentcontent)) {
+			file_put_contents($ls_filepath, $ls_templatedata);
+			$ls_currentcontent = $ls_templatedata;
+
+		} elseif ($lb_enablerotator) { //Check for rotation
+
+			$ls_lines = file($ls_filepath);
+			$ls_created = trim(str_replace("Created:", "", $ls_lines[1]));
+
+			if (strtotime("+$li_rotateduration days", strtotime($ls_created)) < time()) {
+				file_put_contents($ls_filepath, $ls_templatedata);
+			}
+		}
+
+		$ls_newfilecontent = "\n" . date("Y-m-d H:i:s") . ": " . $ls_content;
+		file_put_contents($ls_filepath, $ls_newfilecontent, FILE_APPEND);
+
+		return true;
+	}
+
 
 	public function getdocumentroot() {
 		return $_SERVER['DOCUMENT_ROOT'];
@@ -378,5 +453,57 @@ class Core {
 		return isset($la_params[$pi_position])? $la_params[$pi_position]: null;
 	}
 
+
+	/**
+	 * Accumulate the error in errors array.
+	 * Which will then be used in geterrors()
+	 * @param  string $ps_error
+	 * @return boolean
+	 */
+	public function seterror($ps_error) {
+
+		if(empty($ps_error))
+			return false;
+
+		$this->errors[] = $ps_error;
+
+		return true;
+	}
+
+
+	/**
+	 * Returns the error accumulated by seterror()
+	 * There are 2 ways this method can return data
+	 * ARRAY => As the array of errors
+	 * PLAIN => The error array will be imploded using PHP_EOL
+	 * @param  string $ps_type
+	 * @return mixed
+	 */
+	public function geterrors($ps_type = 'ARRAY') {
+
+		if(empty($this->errors))
+			return false;
+
+		switch($ps_type) {
+
+			case 'ARRAY':
+				return $this->errors;
+
+			case 'PLAIN':
+				return implode(PHP_EOL, $this->errors);
+
+		}
+
+		return;
+	}
+
+
+	/**
+	 * Checks if any error is set and returns true on success
+	 * @return boolean
+	 */
+	public function haserrors() {
+		return !empty($this->errors);
+	}
 
 }
