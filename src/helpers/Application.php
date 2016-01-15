@@ -16,6 +16,9 @@ class Application extends Core {
 
 	function __construct() {
 
+		// IMPORTANT!!!
+		parent::__construct();
+
 		// Initialize the DI container
 		$this->di = new Container();
 
