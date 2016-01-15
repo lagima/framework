@@ -293,7 +293,7 @@ class PagesController extends BaseController {
 
 					// Create the folder
 					$ls_folder = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name);
-					$this->createfolder($ls_file);
+					$this->createfolder($ls_folder);
 
 					// Create the file
 					$ls_file = $ls_folder . '/' . strtolower($this->postvalue('__name')) . '.php';
@@ -331,12 +331,11 @@ class PagesController extends BaseController {
 
 					// Rename the folder
 					$ls_folder = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name);
-					$this->createfolder($ls_file);
+					$this->createfolder($ls_folder);
 
 					// Create the file
 					$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/'. strtolower($lo_page->name) . '.php';
 					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
-
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
