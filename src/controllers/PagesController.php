@@ -291,11 +291,12 @@ class PagesController extends BaseController {
 					$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $this->postvalue('__controllerid')]);
 					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
+					// Create the folder
+					$ls_folder = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name);
+					$this->createfolder($ls_file);
+
 					// Create the file
-					if($this->postvalue('__core'))
-						$ls_file = $this->getdocumentroot() . '/mercury/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
-					else
-						$ls_file = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
+					$ls_file = $ls_folder . '/' . strtolower($this->postvalue('__name')) . '.php';
 
 					// Fill some starter content
 					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'VIEW']);
@@ -328,14 +329,14 @@ class PagesController extends BaseController {
 					$lo_controller = $this->pagemodel->getrow(['type' => 'CONTROLLER', 'pageid' => $this->postvalue('__controllerid')]);
 					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
+					// Rename the folder
+					$ls_folder = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name);
+					$this->createfolder($ls_file);
+
 					// Create the file
-					if($this->postvalue('__core')) {
-						$ls_originalfile = $this->getdocumentroot() . '/mercury/views/' . strtolower($lo_controller->name) . '/' . strtolower($lo_page->name) . '.php';
-						$ls_newfile = $this->getdocumentroot() . '/mercury/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
-					} else {
-						$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/'. strtolower($lo_page->name) . '.php';
-						$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
-					}
+					$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/'. strtolower($lo_page->name) . '.php';
+					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
+
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
