@@ -68,7 +68,7 @@ class Controller extends Core {
 
 
 	public function gettemplatedata() {
-		return $this->templatedata;
+		return is_array($this->templatedata) ? $this->templatedata : [];
 	}
 
 }
