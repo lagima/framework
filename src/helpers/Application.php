@@ -29,7 +29,12 @@ class Application extends Core {
 		$this->initview();
 	}
 
-
+	/**
+	 * Set any custom configuration to DI
+	 * @param string $ps_type 	Identifier for the custom configuration, this can be anything
+	 * @param mixed $pm_value 	Value to store agains the identifier
+	 * @return boolean
+	 */
 	public function setconfig($ps_type, $pm_value) {
 
 		$this->di['config'] = $this->di->extend('config', function($pa_config) use ($ps_type, $pm_value) {
@@ -155,8 +160,8 @@ class Application extends Core {
 
 	public function install() {
 
-		chdir($this->getdocumentroot() . '/assets');
-		exec("git archive --remote=https://github.com/mercury/mercury.git master <path> | tar xvf -");
+		/* Implement */
+
 	}
 
 	private function executeadminpage($po_page, $pa_params = []) {

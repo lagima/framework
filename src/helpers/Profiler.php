@@ -27,7 +27,6 @@ class Profiler extends Core {
 
 		if($this->profiling)
 			xhprof_enable();
-
 	}
 
 

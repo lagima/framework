@@ -55,7 +55,7 @@ class RouteModel extends BaseModel {
 		$la_routes[] = ['routeid' => 1,
 						'requesturi' => '/admin',
 						'controller' => 'Pages',
-						'action' => 'index',
+						'action' => 'routes',
 						'method' => 'GET|POST'];
 
 		$la_routes[] = ['routeid' => 2,

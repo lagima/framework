@@ -3,6 +3,20 @@ namespace Mercury\Helper;
 
 class Core {
 
+
+	function __construct() {
+
+		// Start the session if not already started
+		if (session_status() == PHP_SESSION_NONE)
+    		session_start();
+
+	}
+
+	function __destruct() {
+
+		session_write_close();
+	}
+
 	public function getdocumentroot() {
 		return $_SERVER['DOCUMENT_ROOT'];
 	}
@@ -362,7 +376,6 @@ class Core {
 		array_shift($la_params);
 
 		return isset($la_params[$pi_position])? $la_params[$pi_position]: null;
-
 	}
 
 
