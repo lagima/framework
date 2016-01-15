@@ -16,7 +16,7 @@
 		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/css/AdminLTE.min.css') ?>">
 		<!-- AdminLTE Skins. Choose a skin from the css/skins
 				 folder instead of downloading all of them to reduce the load. -->
-		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/css/skins/_all-skins.min.css') ?>">
+		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/css/skins/skin-blue.min.css') ?>">
 		<!-- Date Picker -->
 		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/skdeepak88/mercury/plugins/datepicker/datepicker3.css') ?>">
 		<!-- Daterange picker -->
