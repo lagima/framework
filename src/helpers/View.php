@@ -10,6 +10,9 @@ class View extends Core {
 	private $config;
 	private $defaulttemplate;
 	private $view;
+	private $viewdata;
+	private $templatedata;
+
 
 	public function __construct($di) {
 
@@ -26,8 +29,31 @@ class View extends Core {
 		return $this->view;
 	}
 
+	public function buildresponse($pa_data) {
 
-	public function renderpage($po_page, $pa_viewdata, $pa_templatedata = []) {
+		if(!is_array($this->viewdata))
+			$this->viewdata = [];
+
+		$this->viewdata = array_merge($this->viewdata, $pa_data);
+	}
+
+	public function getviewdata() {
+		return $this->viewdata;
+	}
+
+	public function buildtemplatedata($pa_data) {
+
+		if(!is_array($this->templatedata))
+			$this->templatedata = [];
+
+		$this->templatedata = array_merge($this->templatedata, $pa_data);
+	}
+
+	public function gettemplatedata() {
+		return $this->templatedata;
+	}
+
+	public function renderpage($po_page) {
 
 		// Get view folder and file
 		$ls_viewfolder = $this->getviewfolder($po_page);
@@ -35,8 +61,16 @@ class View extends Core {
 		$ls_templatefolder = $this->gettemplatefolder($po_page);
 		$ls_assetsfolder = $this->getasstesfolder($po_page);
 
-		if(!$this->hasview($po_page))
+		// Get the data
+		$la_viewdata = $this->getviewdata();
+		$la_templatedata = $this->gettemplatedata();
+
+		// If no view is defined and view data is set throw error
+		if(!$this->hasview($po_page) && !empty($pa_viewdata))
 			trigger_error('View not defined: ' . $ls_viewfolder . '/' . $ls_viewfile, E_USER_ERROR);
+
+		if(!$this->hasview($po_page))
+			return false;
 
 		// Create new Plates instance
 		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
@@ -54,8 +88,8 @@ class View extends Core {
 		if(strcasecmp($po_page->module, 'admin') === 0 ) {
 
 			// Configure the template
-			$pa_viewdata['gs_template'] = 'templates::admin';
-			$pa_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury PHP', 'gs_currentpage' => $this->getcurrenturl()];
+			$la_viewdata['gs_template'] = 'templates::admin';
+			$la_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury PHP', 'gs_currentpage' => $this->getcurrenturl()];
 
 		} else {
 
@@ -66,13 +100,12 @@ class View extends Core {
 			$lo_viewdetail = $this->pagemodel->getviewdetails($lo_search);
 
 			// Configure the template
-			$pa_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . strtolower($lo_viewdetail->template) : 'defaults::blank';
-			$la_templatedata = ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()];
-			$pa_viewdata['ga_templatedata'] = array_merge($la_templatedata, $pa_templatedata);
+			$la_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . strtolower($lo_viewdetail->template) : 'defaults::blank';
+			$la_viewdata['ga_templatedata'] = array_merge($la_templatedata, ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()]);
 		}
 
 		// Render the view if exists
-		echo $lo_templates->render($ls_viewfile, $pa_viewdata);
+		echo $lo_templates->render($ls_viewfile, $la_viewdata);
 
 		return true;
 	}

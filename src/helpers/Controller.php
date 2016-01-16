@@ -8,9 +8,6 @@ class Controller extends Core {
 	protected $di;
 	protected $currentpage;
 
-	private $response;
-	private $templatedata;
-
 
 	public function __construct($di) {
 
@@ -51,29 +48,25 @@ class Controller extends Core {
 
 	public function buildresponse($pa_data) {
 
-		if(!is_array($this->response))
-			$this->response = [];
+		// Get view object from DI
+		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-		$this->response = array_merge($this->response, $pa_data);
-	}
+		if(!is_object($lo_view))
+			trigger_error("View is not initialised");
 
-
-	public function getresponsedata() {
-		return $this->response;
+		$lo_view->buildresponse($pa_data);
 	}
 
 
 	public function buildtemplatedata($pa_data) {
 
-		if(!is_array($this->templatedata))
-			$this->templatedata = [];
+		// Get view object from DI
+		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-		$this->templatedata = array_merge($this->templatedata, $pa_data);
-	}
+		if(!is_object($lo_view))
+			trigger_error("View is not initialised");
 
-
-	public function gettemplatedata() {
-		return is_array($this->templatedata) ? $this->templatedata : [];
+		$lo_view->buildtemplatedata($pa_data);
 	}
 
 }

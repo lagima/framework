@@ -206,14 +206,11 @@ class Application extends Core {
 			// Call the action
 			call_user_func_array(array($lo_controller, $ps_method), $pa_params);
 
-			// Get the page details & data to serve
-			$pa_responsedata = $lo_controller->getresponsedata();
-
 			// Get view object from DI
 			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
 			// Render the page
-			$lo_view->renderpage($po_page, $pa_responsedata);
+			$lo_view->renderpage($po_page);
 
 		} else {
 			// Throw an exception in debug, send a  500 error in production
@@ -247,15 +244,11 @@ class Application extends Core {
 			// Call the action
 			call_user_func_array(array($lo_controller, $ps_method), $pa_params);
 
-			// Get the page details & data to serve
-			$pa_responsedata = $lo_controller->getresponsedata();
-			$pa_templatedata = $lo_controller->gettemplatedata();
-
 			// Get view object from DI
 			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
 			// Render the page
-			$lo_view->renderpage($po_page, $pa_responsedata, $pa_templatedata);
+			$lo_view->renderpage($po_page);
 
 		} else {
 			// Throw an exception in debug, send a  500 error in production
