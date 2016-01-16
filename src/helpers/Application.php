@@ -22,8 +22,8 @@ class Application extends Core {
 		// Initialize the DI container
 		$this->di = new Container();
 
-		// Set the enpty config container
-		$this->di['config'] = function () {
+		// Set the empty config container
+		$this->di['config'] = function() {
 			return [];
 		};
 
@@ -45,8 +45,20 @@ class Application extends Core {
 			$pa_config[$ps_type] = $pm_value;
 
 			return $pa_config;
-
 		});
+
+		return true;
+	}
+
+
+	/**
+	 * Set any current page to DI
+	 * @param  mixed    $po_page 	The page object
+	 * @return boolean
+	 */
+	public function setcurrentpage($po_page) {
+
+		$this->di['currentpage'] = $po_page;
 
 		return true;
 	}
@@ -130,6 +142,9 @@ class Application extends Core {
 		// Get the page from route
 		$po_page = $lo_router->getadminpage();
 
+		// Set this page in DI so we can use this other places
+		$this->setcurrentpage($po_page);
+
 		// Execute the page
 		$this->executeadminpage($po_page, $la_params);
 	}
@@ -155,6 +170,9 @@ class Application extends Core {
 
 		// Get the page from route
 		$po_page = $lo_router->getpage();
+
+		// Set this page in DI so we can use this other places
+		$this->setcurrentpage($po_page);
 
 		// Execute the page
 		$this->executepage($po_page, $la_params);

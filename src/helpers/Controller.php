@@ -6,6 +6,8 @@ use Mercury\Helper\Core;
 class Controller extends Core {
 
 	protected $di;
+	protected $currentpage;
+
 	private $response;
 	private $templatedata;
 
@@ -22,6 +24,9 @@ class Controller extends Core {
 			trigger_error("No database configured when controller is called", E_USER_ERROR);
 			return false;
 		}
+
+		// Get the current page
+		$this->currentpage = isset($di['currentpage']) ? $di['currentpage'] : null;
 
 		// Child classes are not allowed to use the constructor so workaround
 		$this->initcontroller();
