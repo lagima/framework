@@ -69,4 +69,27 @@ class Controller extends Core {
 		$lo_view->buildtemplatedata($pa_data);
 	}
 
+	public function addscript($ps_file) {
+
+		// Get view object from DI
+		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
+
+		if(!is_object($lo_view))
+			trigger_error("View is not initialised");
+
+		$lo_view->addscript($ps_file);
+	}
+
+
+	public function addstylesheet($ps_file) {
+
+		// Get view object from DI
+		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
+
+		if(!is_object($lo_view))
+			trigger_error("View is not initialised");
+
+		$lo_view->addstylesheet($ps_file);
+	}
+
 }

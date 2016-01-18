@@ -13,6 +13,8 @@ class View extends Core {
 	private $viewdata;
 	private $templatedata;
 
+	protected $replacement;
+
 
 	public function __construct($di) {
 
@@ -76,7 +78,8 @@ class View extends Core {
 		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
 
 		// Load asset extension
-		$lo_templates->loadExtension(new \League\Plates\Extension\Asset($ls_assetsfolder, true));
+		$lo_assetextention = new \League\Plates\Extension\Asset($ls_assetsfolder, true);
+		$lo_templates->loadExtension($lo_assetextention);
 
 		// Load html helpers
 		$lo_templates->loadExtension(new HtmlExtension());
@@ -105,7 +108,13 @@ class View extends Core {
 		}
 
 		// Render the view if exists
-		echo $lo_templates->render($ls_viewfile, $la_viewdata);
+		$ls_pagecontent = $lo_templates->render($ls_viewfile, $la_viewdata);
+
+		// Do the replacements if configured any
+		$ls_pagecontent = $this->replacecontents($ls_pagecontent, $lo_assetextention);
+
+		// Output the page
+		echo $ls_pagecontent;
 
 		return true;
 	}
@@ -175,5 +184,61 @@ class View extends Core {
 		return  $this->getdocumentroot();
 	}
 
+
+	protected function addresourcefile($ps_file) {
+
+		if(empty($ps_file))
+			return false;
+
+		// Check if the page is external
+		$ls_file = $this->getdocumentroot() . $ps_file;
+
+		if(!is_file($ls_file))
+			trigger_error("Invalid resource file or file not found!", E_USER_ERROR);
+
+		return $ps_file;
+	}
+
+	public function addscript($ps_file) {
+
+		if(empty($ps_file))
+			return false;
+
+		$this->replacement['script'][] = $this->addresourcefile($ps_file);
+	}
+
+
+	public function addstylesheet($ps_file) {
+
+		if(empty($ps_file))
+			return false;
+
+		$this->replacement['stylesheet'][] = $this->addresourcefile($ps_file);
+
+	}
+
+	private function replacecontents($ps_buffer, $po_assetextention) {
+
+		// Get all the replacement
+		if(isset($this->replacement['script'])){
+
+			$lf_filter = function($ls_file) use ($po_assetextention) { return '<script type="text/javascript" src="' . $po_assetextention->cachedAssetUrl($ls_file) . '"></script>' . PHP_EOL; };
+
+			$la_files = array_map($lf_filter, $this->replacement['script']);
+
+			$ps_buffer = preg_replace('#</body>#i', implode(PHP_EOL, $la_files) . PHP_EOL . '</body>', $ps_buffer);
+		}
+
+		if(isset($this->replacement['stylesheet'])){
+
+			$lf_filter = function($ls_file) use ($po_assetextention) { return '<link href="' . $po_assetextention->cachedAssetUrl($ls_file) . '" rel="stylesheet" type="text/css"/>' . PHP_EOL; };
+
+			$la_files = array_map($lf_filter, $this->replacement['stylesheet']);
+
+			$ps_buffer = preg_replace('#</head>#i', implode(PHP_EOL, $la_files) . PHP_EOL . '</head>', $ps_buffer);
+		}
+
+		return $ps_buffer;
+	}
 
 }
