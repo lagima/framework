@@ -25,7 +25,6 @@
 						<?= $this->htmlinput('text', 'label', 'Label'); ?>
 						<?= $this->htmlinput('text', 'name', 'Name'); ?>
 						<?= $this->htmlinput('select', 'moduleid', 'Module', null, $la_modules); ?>
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>
 
 					</div><!-- /.box-body -->
 

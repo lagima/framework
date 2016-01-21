@@ -3,6 +3,7 @@ namespace Mercury\Helper;
 
 use Mercury\Helper\Core;
 use Mercury\Helper\HtmlExtension;
+use Mercury\Helper\AssetExtension;
 use Mercury\Model\PageModel;
 
 class View extends Core {
@@ -52,7 +53,11 @@ class View extends Core {
 	}
 
 	public function gettemplatedata() {
-		return $this->templatedata;
+
+		$la_return = $this->templatedata;
+		$la_return = is_array($la_return) ? $la_return : [];
+
+		return $la_return;
 	}
 
 	public function renderpage($po_page) {
@@ -61,6 +66,7 @@ class View extends Core {
 		$ls_viewfolder = $this->getviewfolder($po_page);
 		$ls_viewfile = $this->getviewfile($po_page);
 		$ls_templatefolder = $this->gettemplatefolder($po_page);
+		$ls_partialfolder = $this->getpartialfolder($po_page);
 		$ls_assetsfolder = $this->getasstesfolder($po_page);
 
 		// Get the data
@@ -78,13 +84,14 @@ class View extends Core {
 		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
 
 		// Load asset extension
-		$lo_assetextention = new \League\Plates\Extension\Asset($ls_assetsfolder, true);
+		$lo_assetextention = new AssetExtension($ls_assetsfolder, true);
 		$lo_templates->loadExtension($lo_assetextention);
 
 		// Load html helpers
 		$lo_templates->loadExtension(new HtmlExtension());
 
 		$lo_templates->addFolder('templates', $ls_templatefolder);
+		$lo_templates->addFolder('partials', $ls_partialfolder);
 		$lo_templates->addFolder('defaults', $this->defaulttemplate);
 
 		// Get the view details from db if non admin
@@ -109,9 +116,6 @@ class View extends Core {
 
 		// Render the view if exists
 		$ls_pagecontent = $lo_templates->render($ls_viewfile, $la_viewdata);
-
-		// Do the replacements if configured any
-		$ls_pagecontent = $this->replacecontents($ls_pagecontent, $lo_assetextention);
 
 		// Output the page
 		echo $ls_pagecontent;
@@ -175,6 +179,20 @@ class View extends Core {
 	}
 
 
+	public function getpartialfolder($po_page) {
+
+		if(!is_object($po_page))
+			trigger_error('Page is invalid', E_USER_ERROR);
+
+		$ls_module = strtolower($po_page->module);
+
+		if(strcasecmp($ls_module, 'admin') === 0)
+			return  __DIR__ . '/../views/partials';
+
+		return  $this->getdocumentroot() . '/application/' . $ls_module . '/views/partials';
+	}
+
+
 	public function getasstesfolder($po_page) {
 
 		if(!is_object($po_page))
@@ -182,63 +200,6 @@ class View extends Core {
 
 
 		return  $this->getdocumentroot();
-	}
-
-
-	protected function addresourcefile($ps_file) {
-
-		if(empty($ps_file))
-			return false;
-
-		// Check if the page is external
-		$ls_file = $this->getdocumentroot() . $ps_file;
-
-		if(!is_file($ls_file))
-			trigger_error("Invalid resource file or file not found!", E_USER_ERROR);
-
-		return $ps_file;
-	}
-
-	public function addscript($ps_file) {
-
-		if(empty($ps_file))
-			return false;
-
-		$this->replacement['script'][] = $this->addresourcefile($ps_file);
-	}
-
-
-	public function addstylesheet($ps_file) {
-
-		if(empty($ps_file))
-			return false;
-
-		$this->replacement['stylesheet'][] = $this->addresourcefile($ps_file);
-
-	}
-
-	private function replacecontents($ps_buffer, $po_assetextention) {
-
-		// Get all the replacement
-		if(isset($this->replacement['script'])){
-
-			$lf_filter = function($ls_file) use ($po_assetextention) { return '<script type="text/javascript" src="' . $po_assetextention->cachedAssetUrl($ls_file) . '"></script>' . PHP_EOL; };
-
-			$la_files = array_map($lf_filter, $this->replacement['script']);
-
-			$ps_buffer = preg_replace('#</body>#i', implode(PHP_EOL, $la_files) . PHP_EOL . '</body>', $ps_buffer);
-		}
-
-		if(isset($this->replacement['stylesheet'])){
-
-			$lf_filter = function($ls_file) use ($po_assetextention) { return '<link href="' . $po_assetextention->cachedAssetUrl($ls_file) . '" rel="stylesheet" type="text/css"/>' . PHP_EOL; };
-
-			$la_files = array_map($lf_filter, $this->replacement['stylesheet']);
-
-			$ps_buffer = preg_replace('#</head>#i', implode(PHP_EOL, $la_files) . PHP_EOL . '</head>', $ps_buffer);
-		}
-
-		return $ps_buffer;
 	}
 
 }

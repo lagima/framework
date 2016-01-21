@@ -24,6 +24,8 @@
 		<!-- bootstrap wysihtml5 - text editor -->
 		<link rel="stylesheet" href="<?= $this->asset('/assets/vendors/mercury/framework/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') ?>">
 
+		<?= $this->getstylesheets(); ?>
+
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
@@ -108,6 +110,11 @@
 								<i class="fa fa-eye"></i> <span>Views</span>
 							</a>
 						</li>
+						<li class="<?= $gs_currentpage == '/admin/partials' ? active : ''?>">
+							<a href="/admin/partials">
+								<i class="fa fa-puzzle-piece"></i> <span>Partials</span>
+							</a>
+						</li>
 						<li class="<?= $gs_currentpage == '/admin/routes' ? active : ''?>">
 							<a href="/admin/routes">
 								<i class="fa fa-road"></i> <span>Routes</span>
@@ -168,5 +175,8 @@
 		<!-- AdminLTE App -->
 		<script src="/assets/vendors/mercury/framework/js/app.min.js"></script>
 		<script src="/assets/vendors/mercury/framework/js/main.js"></script>
+
+		<?= $this->getscripts() ?>
+
 	</body>
 </html>

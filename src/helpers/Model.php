@@ -188,4 +188,32 @@ class Model extends Core {
 		return $li_id;
 	}
 
+	public function update($ps_keyfield, $ps_keyvalue, $pa_values, $ps_table = ''){
+
+		if(empty($ps_table))
+			$ps_table = $this->table;
+
+		if(empty($pa_values))
+			trigger_error("Data is empty", E_USER_ERROR);
+
+		// Get values from POST with __ prefix in an useable array
+		$la_values = array();
+
+		foreach($pa_values as $ls_key => $lm_value) {
+
+			if(strpos($ls_key, '__') !== false)
+				$la_values[substr($ls_key, 2)] = $lm_value;
+		}
+
+		if(empty($la_values))
+			trigger_error("Useable data is empty", E_USER_ERROR);
+
+		// Now put it in the table
+		$ps_table = addslashes($ps_table);
+
+		$li_id = $this->db->dbupdate($ps_table, $ps_keyfield, $ps_keyvalue, $la_values);
+
+		return $li_id;
+	}
+
 }

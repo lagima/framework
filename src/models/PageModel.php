@@ -14,10 +14,10 @@ class PageModel extends BaseModel {
 	public function getviews($ps_type = 'VIEW') {
 
 		$la_views = $this->db->getallobjects("SELECT p.*, c.`label` as `template`, m.`name` as `module`
-											FROM `m_page` p
-											LEFT JOIN `m_page` c ON c.`pageid` = p.`templateid`
-											LEFT JOIN `m_module` m ON m.`moduleid` = p.`moduleid`
-											WHERE p.`type` = :type", ['type' => $ps_type]);
+												FROM `m_page` p
+												LEFT JOIN `m_page` c ON c.`pageid` = p.`templateid`
+												LEFT JOIN `m_module` m ON m.`moduleid` = p.`moduleid`
+												WHERE p.`type` = :type", ['type' => $ps_type]);
 
 		return $la_views;
 	}

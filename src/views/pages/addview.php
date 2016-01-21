@@ -28,8 +28,6 @@
 						<?= $this->htmlinput('select', 'controllerid', 'Controller', null, $la_controllers); ?>
 						<?= $this->htmlinput('select', 'templateid', 'Template', null, $la_templates); ?>
 
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?'); ?>
-
 					</div><!-- /.box-body -->
 
 					<div class="box-footer">

@@ -8,8 +8,6 @@ use League\Plates\Extension\ExtensionInterface;
 class HtmlExtension extends Core implements ExtensionInterface {
 
 	public $engine;
-	public $template;
-	protected $helper;
 
 
 	public function register(Engine $po_engine) {

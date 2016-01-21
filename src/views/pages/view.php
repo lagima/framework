@@ -21,12 +21,13 @@
 
 				<form role="form" method="POST" action="<?= $ls_actionurl ?>">
 					<div class="box-body">
+
 						<?= $this->htmlinput('text', 'label', 'Label', $lo_page->label); ?>
 						<?= $this->htmlinput('text', 'name', 'Name', $lo_page->name); ?>
 						<?= $this->htmlinput('select', 'moduleid', 'Module', $lo_page->moduleid, $la_modules); ?>
 						<?= $this->htmlinput('select', 'controllerid', 'Controller', $lo_page->controllerid, $la_controllers); ?>
 						<?= $this->htmlinput('select', 'templateid', 'Template', $lo_page->templateid, $la_templates); ?>
-						<?= $this->htmlinput('checkbox', 'core', 'Is Core ?', $lo_page->core); ?>
+
 					</div><!-- /.box-body -->
 
 					<div class="box-footer">
