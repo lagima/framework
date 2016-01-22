@@ -26,17 +26,6 @@ Then run the composer
 The framework uses database for its operation so create a DB with the following
 
 ```
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
-# Dump of table m_blueprint
-# ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `m_blueprint`;
 
@@ -47,21 +36,13 @@ CREATE TABLE `m_blueprint` (
   PRIMARY KEY (`blueprintid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `m_blueprint` WRITE;
-/*!40000 ALTER TABLE `m_blueprint` DISABLE KEYS */;
-
 INSERT INTO `m_blueprint` (`blueprintid`, `type`, `content`)
 VALUES
-	(1,'CONTROLLER','<?\nnamespace Mercury\\App\\ModuleName\\Controllers;\n\nclass SampleController extends Controller {\n\n\n	public function initcontroller() {\n\n		/**\n		 * Avoid defining a constructor use this method instead\n		 */\n	}\n\n	public function indexAction() {\n\n		echo \"Sample file\";\n	}\n\n}'),
-	(2,'VIEW','<?php $this->layout($gs_template, $ga_templatedata) ?>'),
-	(3,'MODEL','<?\nnamespace Mercury\\App\\ModuleName\\Model;\n\nclass SampleModel extends Model {\n\n\n	protected function initmodel() {\n\n		// Set this because the table name is not in standard format\n		$this->settable(\'some_table\');\n\n	}\n\n}');
+  (1, 'CONTROLLER', '<?\nnamespace Mercury\\App\\{ModuleName}\\Controllers;\n\nuse Mercury\\Helper\\Controller;\n\nclass SampleController extends Controller {\n\n\n  public function initcontroller() {\n\n    /**\n    * Avoid defining a constructor use this method instead\n    */\n }\n\n public function indexAction() {\n\n   echo \"Sample file\";\n }\n\n}'),
+  (2, 'VIEW', '<?php $this->layout($gs_template, $ga_templatedata) ?>'),
+  (3, 'MODEL', '<?\nnamespace Mercury\\App\\{ModuleName}\\Models;\n\nuse Mercury\\Helper\\Model;\n\nclass SampleModel extends Model {\n\n\n protected function initmodel() {\n\n    // Set this because the table name is not in standard format\n    $this->settable(\'some_table\');\n\n  }\n\n}'),
+  (4, 'HELPER', '<?\nnamespace Mercury\\App\\Helpers;\n\nuse Mercury\\Helper\\Core;\n\nclass [HelperName] extends Core {\n\n}');
 
-/*!40000 ALTER TABLE `m_blueprint` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table m_module
-# ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `m_module`;
 
@@ -72,19 +53,6 @@ CREATE TABLE `m_module` (
   PRIMARY KEY (`moduleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `m_module` WRITE;
-/*!40000 ALTER TABLE `m_module` DISABLE KEYS */;
-
-INSERT INTO `m_module` (`moduleid`, `name`, `core`)
-VALUES
-	(2,'Frontend',NULL);
-
-/*!40000 ALTER TABLE `m_module` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table m_page
-# ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `m_page`;
 
@@ -104,21 +72,6 @@ CREATE TABLE `m_page` (
   KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `m_page` WRITE;
-/*!40000 ALTER TABLE `m_page` DISABLE KEYS */;
-
-INSERT INTO `m_page` (`pageid`, `label`, `name`, `content`, `type`, `moduleid`, `controllerid`, `templateid`, `core`, `created`, `deleted`)
-VALUES
-	(1,'Login Controller','Login',NULL,'CONTROLLER',2,NULL,NULL,0,'2016-01-06 12:36:47',NULL),
-	(3,'Login Template','Login',NULL,'TEMPLATE',2,NULL,NULL,0,'2016-01-06 12:37:55',NULL),
-	(4,'Login View','Login',NULL,'VIEW',2,1,3,0,'2016-01-08 13:23:59',NULL);
-
-/*!40000 ALTER TABLE `m_page` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table m_route
-# ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `m_route`;
 
@@ -134,24 +87,6 @@ CREATE TABLE `m_route` (
   PRIMARY KEY (`routeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `m_route` WRITE;
-/*!40000 ALTER TABLE `m_route` DISABLE KEYS */;
-
-INSERT INTO `m_route` (`routeid`, `requesturi`, `moduleid`, `controllerid`, `action`, `method`, `core`, `created`)
-VALUES
-	(1,'/',2,1,'login','GET',0,'2016-01-06 12:45:19');
-
-/*!40000 ALTER TABLE `m_route` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 ```
 
@@ -168,8 +103,6 @@ use Mercury\Helper\Profiler;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-define('DS', '/'); // Directory separator (Unix-Style works on all OS)
 
 // Autoload
 require('vendor/autoload.php');
