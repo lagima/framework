@@ -120,6 +120,11 @@
 								<i class="fa fa-road"></i> <span>Routes</span>
 							</a>
 						</li>
+						<li class="<?= $gs_currentpage == '/admin/helpers' ? active : ''?>">
+							<a href="/admin/helpers">
+								<i class="fa fa-life-ring"></i> <span>Helpers</span>
+							</a>
+						</li>
 						<li class="treeview <?= $gs_currentpage == '/admin/gitcommit' ? active : ''?>">
 							<a href="#">
 								<i class="fa fa-github"></i> <span>Github</span>

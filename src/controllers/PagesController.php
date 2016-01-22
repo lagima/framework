@@ -626,7 +626,115 @@ class PagesController extends BaseController {
 		$la_modules = $this->getallmodels();
 		$this->buildresponse(['la_modules' => $la_modules]);
 
-		$this->buildresponse(['ls_pagetitle' => 'Template']);
+		$this->buildresponse(['ls_pagetitle' => 'Partial']);
+	}
+
+	public function helpersAction() {
+
+		// Get the controllers
+		$la_pages = $this->pagemodel->getviews('HELPER');
+
+		$this->buildresponse(['la_pages' => $la_pages]);
+		$this->buildresponse(['ls_pagetitle' => 'Helpers']);
+		$this->buildresponse(['ls_addurl' => '/admin/helper/add']);
+		$this->buildresponse(['ls_editurl' => '/admin/helper/edit']);
+		$this->buildresponse(['ls_deleteurl' => '/admin/helper/delete']);
+
+	}
+
+	public function helperAction($ps_action, $pi_id = null) {
+
+		switch($ps_action) {
+
+			case 'add':
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'HELPER';
+					$_POST['__created'] = date('Y-m-d H:i:s');
+
+					$this->pagemodel->commitaddfrompost();
+
+					// Create the folder if not exists
+					$ls_folder = $this->getdocumentroot() . '/application/helpers';
+					$this->createfolder($ls_folder);
+
+					// Create the file
+					$ls_file = $ls_folder . '/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'HELPER']); // Fill some starter content
+					$this->createfile($ls_file, $lo_blueprint->content);
+
+					// Redirect
+					$this->redirect('/admin/helpers');
+				}
+
+				$this->buildresponse(['ls_actionurl' => '/admin/helper/add']);
+
+			break;
+
+			case 'edit':
+
+				// Get the view
+				$lo_page = $this->pagemodel->getrow(['type' => 'HELPER', 'pageid' => $pi_id]);
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'HELPER';
+
+					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
+
+					// Create the folder if not exists
+					$ls_folder = $this->getdocumentroot() . '/application/helpers';
+					$this->createfolder($ls_folder);
+
+					// Create the file if not exists
+					$ls_file = $ls_folder . '/' . ucfirst(strtolower($lo_page->name)) . '.php';
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'HELPER']); // Fill some starter content
+					$this->createfile($ls_file, $lo_blueprint->content);
+
+					// Create the file
+					$ls_originalfile = $this->getdocumentroot() . '/application/helpers/'. ucfirst(strtolower($lo_page->name)) . '.php';
+					$ls_newfile = $this->getdocumentroot() . '/application/helpers/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
+
+					$this->renamefile($ls_originalfile, $ls_newfile);
+
+					// Redirect
+					$this->redirect('/admin/helpers');
+				}
+
+				$this->buildresponse(['ls_actionurl' => '/admin/helper/edit/' . $pi_id]);
+				$this->buildresponse(['lo_page' => $lo_page]);
+
+			break;
+
+			case 'delete':
+
+				// Get the models
+				$lo_page = $this->pagemodel->getrow(['type' => 'PARTIAL', 'pageid' => $pi_id]);
+
+				// Get the module
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $lo_page->moduleid]);
+
+				// Delete the record
+				$this->pagemodel->delete(['pageid' => $pi_id]);
+
+				// Remove the file
+				$ls_file = $this->getdocumentroot() . '/application/helpers/' . ucfirst(strtolower($lo_page->name)) . '.php';
+
+				unlink($ls_file);
+
+				// Redirect
+				$this->redirect('/admin/partials');
+
+			break;
+		}
+
+		$la_controllers = $this->getallcontrollers();
+		$this->buildresponse(['la_controllers' => $la_controllers]);
+
+		$this->buildresponse(['ls_pagetitle' => 'Helper']);
 	}
 
 	public function routesAction() {

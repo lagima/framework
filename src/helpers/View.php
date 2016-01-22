@@ -91,7 +91,10 @@ class View extends Core {
 		$lo_templates->loadExtension(new HtmlExtension());
 
 		$lo_templates->addFolder('templates', $ls_templatefolder);
-		$lo_templates->addFolder('partials', $ls_partialfolder);
+
+		if(file_exists($ls_partialfolder))
+			$lo_templates->addFolder('partials', $ls_partialfolder);
+
 		$lo_templates->addFolder('defaults', $this->defaulttemplate);
 
 		// Get the view details from db if non admin
