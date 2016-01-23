@@ -155,12 +155,24 @@ class RouteModel extends BaseModel {
 						'method' => 'GET|POST'];
 
 		$la_routes[] = ['routeid' => 18,
+						'requesturi' => '/admin/extensions',
+						'controller' => 'Pages',
+						'action' => 'extensions',
+						'method' => 'GET'];
+
+		$la_routes[] = ['routeid' => 19,
+						'requesturi' => '/admin/extension/[a:a]?/[i:id]?',
+						'controller' => 'Pages',
+						'action' => 'extension',
+						'method' => 'GET|POST'];
+
+		$la_routes[] = ['routeid' => 20,
 						'requesturi' => '/admin/modules',
 						'controller' => 'Pages',
 						'action' => 'modules',
 						'method' => 'GET'];
 
-		$la_routes[] = ['routeid' => 19,
+		$la_routes[] = ['routeid' => 21,
 						'requesturi' => '/admin/module/[a:a]?/[i:id]?',
 						'controller' => 'Pages',
 						'action' => 'module',

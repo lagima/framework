@@ -20,7 +20,9 @@
 			"Mercury\\Controller\\": "src/controllers",
 			"Mercury\\View\\": "src/views",
 			"Mercury\\Model\\": "src/models",
-			"Mercury\\Helper\\": "src/helpers"
+			"Mercury\\Helper\\": "src/helpers",
+			"Mercury\\Extension\\": "src/extensions",
+			"Mercury\\App\\": "application"
 		}
 	},
 	"extra": {

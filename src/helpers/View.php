@@ -2,8 +2,8 @@
 namespace Mercury\Helper;
 
 use Mercury\Helper\Core;
-use Mercury\Helper\HtmlExtension;
-use Mercury\Helper\AssetExtension;
+use Mercury\Extension\HtmlExtension;
+use Mercury\Extension\AssetExtension;
 use Mercury\Model\PageModel;
 
 class View extends Core {
@@ -77,6 +77,7 @@ class View extends Core {
 		if(!$this->hasview($po_page) && !empty($pa_viewdata))
 			trigger_error('View not defined: ' . $ls_viewfolder . '/' . $ls_viewfile, E_USER_ERROR);
 
+		// Dont show anything if no view is defined
 		if(!$this->hasview($po_page))
 			return false;
 
@@ -84,18 +85,10 @@ class View extends Core {
 		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
 
 		// Load asset extension
-		$lo_assetextention = new AssetExtension($ls_assetsfolder, true);
-		$lo_templates->loadExtension($lo_assetextention);
+		$lo_templates->loadExtension(new AssetExtension($ls_assetsfolder, true));
 
 		// Load html helpers
 		$lo_templates->loadExtension(new HtmlExtension());
-
-		$lo_templates->addFolder('templates', $ls_templatefolder);
-
-		if(file_exists($ls_partialfolder))
-			$lo_templates->addFolder('partials', $ls_partialfolder);
-
-		$lo_templates->addFolder('defaults', $this->defaulttemplate);
 
 		// Get the view details from db if non admin
 		if(strcasecmp($po_page->module, 'admin') === 0 ) {
@@ -105,6 +98,16 @@ class View extends Core {
 			$la_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury PHP', 'gs_currentpage' => $this->getcurrenturl()];
 
 		} else {
+
+			// Load any additional custom extensions
+			$la_extensions = $this->pagemodel->getpages('VIEWEXTENSIONS');
+			foreach($la_extensions as $lo_extension) {
+
+				$ls_extension = "\Mercury\App\Extensions\{$lo_extension->name}";
+				if(class_exists($ls_extension))
+					$lo_templates->loadExtension(new $ls_extension());
+			}
+
 
 			$lo_search = new \stdClass;
 			$lo_search->name = $ls_viewfile;
@@ -117,6 +120,13 @@ class View extends Core {
 			$la_viewdata['ga_templatedata'] = array_merge($la_templatedata, ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()]);
 		}
 
+		// Add folders used for the engine
+		$lo_templates->addFolder('templates', $ls_templatefolder);
+		$lo_templates->addFolder('defaults', $this->defaulttemplate);
+
+		if(file_exists($ls_partialfolder))
+			$lo_templates->addFolder('partials', $ls_partialfolder);
+
 		// Render the view if exists
 		$ls_pagecontent = $lo_templates->render($ls_viewfile, $la_viewdata);
 
@@ -126,6 +136,7 @@ class View extends Core {
 		return true;
 	}
 
+
 	public function hasview($po_page) {
 
 		$ls_viewfolder = $this->getviewfolder($po_page);
@@ -133,6 +144,7 @@ class View extends Core {
 
 		return is_file($ls_viewfolder.'/'.$ls_viewfile.'.php');
 	}
+
 
 	public function getviewfile($po_page) {
 

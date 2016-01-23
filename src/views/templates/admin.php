@@ -115,6 +115,11 @@
 								<i class="fa fa-puzzle-piece"></i> <span>Partials</span>
 							</a>
 						</li>
+						<li class="<?= $gs_currentpage == '/admin/extensions' ? active : ''?>">
+							<a href="/admin/extensions">
+								<i class="fa fa-rocket"></i> <span>View Extensions</span>
+							</a>
+						</li>
 						<li class="<?= $gs_currentpage == '/admin/routes' ? active : ''?>">
 							<a href="/admin/routes">
 								<i class="fa fa-road"></i> <span>Routes</span>

@@ -1,4 +1,6 @@
 /src/vendor
+application
+assets
 vendor
 .git
 .gitignore

@@ -1,5 +1,5 @@
 <?
-namespace Mercury\Helper;
+namespace Mercury\Extension;
 
 use League\Plates\Engine;
 use League\Plates\Extension\ExtensionInterface;

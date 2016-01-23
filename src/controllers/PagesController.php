@@ -669,6 +669,8 @@ class PagesController extends BaseController {
 					$this->redirect('/admin/helpers');
 				}
 
+				$this->setview('addhelper');
+
 				$this->buildresponse(['ls_actionurl' => '/admin/helper/add']);
 
 			break;
@@ -712,7 +714,7 @@ class PagesController extends BaseController {
 			case 'delete':
 
 				// Get the models
-				$lo_page = $this->pagemodel->getrow(['type' => 'PARTIAL', 'pageid' => $pi_id]);
+				$lo_page = $this->pagemodel->getrow(['type' => 'HELPER', 'pageid' => $pi_id]);
 
 				// Get the module
 				$lo_module = $this->modulemodel->getrow(['moduleid' => $lo_page->moduleid]);
@@ -733,9 +735,119 @@ class PagesController extends BaseController {
 
 		$la_controllers = $this->getallcontrollers();
 		$this->buildresponse(['la_controllers' => $la_controllers]);
-
 		$this->buildresponse(['ls_pagetitle' => 'Helper']);
+
 	}
+
+
+	public function extensionsAction() {
+
+		// Get the controllers
+		$la_pages = $this->pagemodel->getviews('VIEWEXTENSION');
+
+		$this->buildresponse(['la_pages' => $la_pages]);
+		$this->buildresponse(['ls_pagetitle' => 'View Extensions']);
+		$this->buildresponse(['ls_addurl' => '/admin/extension/add']);
+		$this->buildresponse(['ls_editurl' => '/admin/extension/edit']);
+		$this->buildresponse(['ls_deleteurl' => '/admin/extension/delete']);
+
+	}
+
+	public function extensionAction($ps_action, $pi_id = null) {
+
+		switch($ps_action) {
+
+			case 'add':
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'VIEWEXTENSION';
+					$_POST['__created'] = date('Y-m-d H:i:s');
+
+					$this->pagemodel->commitaddfrompost();
+
+					// Create the folder if not exists
+					$ls_folder = $this->getdocumentroot() . '/application/extensions';
+					$this->createfolder($ls_folder);
+
+					// Create the file
+					$ls_file = $ls_folder . '/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'VIEWEXTENSION']); // Fill some starter content
+					$this->createfile($ls_file, $lo_blueprint->content);
+
+					// Redirect
+					$this->redirect('/admin/extensions');
+				}
+
+				$this->setview('addextension');
+				$this->buildresponse(['ls_actionurl' => '/admin/extension/add']);
+
+			break;
+
+			case 'edit':
+
+				// Get the view
+				$lo_page = $this->pagemodel->getrow(['type' => 'VIEWEXTENSION', 'pageid' => $pi_id]);
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// Default values here
+					$_POST['__type'] = 'VIEWEXTENSION';
+
+					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
+
+					// Create the folder if not exists
+					$ls_folder = $this->getdocumentroot() . '/application/extenstions';
+					$this->createfolder($ls_folder);
+
+					// Create the file if not exists
+					$ls_file = $ls_folder . '/' . ucfirst(strtolower($lo_page->name)) . '.php';
+					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'VIEWEXTENSION']); // Fill some starter content
+					$this->createfile($ls_file, $lo_blueprint->content);
+
+					// Create the file
+					$ls_originalfile = $this->getdocumentroot() . '/application/extensions/'. ucfirst(strtolower($lo_page->name)) . '.php';
+					$ls_newfile = $this->getdocumentroot() . '/application/extensions/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
+
+					$this->renamefile($ls_originalfile, $ls_newfile);
+
+					// Redirect
+					$this->redirect('/admin/extensions');
+				}
+
+				$this->buildresponse(['ls_actionurl' => '/admin/extension/edit/' . $pi_id]);
+				$this->buildresponse(['lo_page' => $lo_page]);
+
+			break;
+
+			case 'delete':
+
+				// Get the models
+				$lo_page = $this->pagemodel->getrow(['type' => 'VIEWEXTENSION', 'pageid' => $pi_id]);
+
+				// Get the module
+				$lo_module = $this->modulemodel->getrow(['moduleid' => $lo_page->moduleid]);
+
+				// Delete the record
+				$this->pagemodel->delete(['pageid' => $pi_id]);
+
+				// Remove the file
+				$ls_file = $this->getdocumentroot() . '/application/extensions/' . ucfirst(strtolower($lo_page->name)) . '.php';
+
+				unlink($ls_file);
+
+				// Redirect
+				$this->redirect('/admin/extensions');
+
+			break;
+		}
+
+		$la_controllers = $this->getallcontrollers();
+		$this->buildresponse(['la_controllers' => $la_controllers]);
+		$this->buildresponse(['ls_pagetitle' => 'View Extensions']);
+	}
+
 
 	public function routesAction() {
 
