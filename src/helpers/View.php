@@ -100,15 +100,19 @@ class View extends Core {
 		} else {
 
 			// Load any additional custom extensions
-			$la_extensions = $this->pagemodel->getpages('VIEWEXTENSIONS');
+			$la_extensions = $this->pagemodel->getpages('VIEWEXTENSION');
 			foreach($la_extensions as $lo_extension) {
 
-				$ls_extension = "\Mercury\App\Extensions\{$lo_extension->name}";
-				if(class_exists($ls_extension))
+				$ls_extension = "\\Mercury\\App\Extensions\\$lo_extension->name";
+				// $this->debugx($ls_extension);
+
+				if(class_exists($ls_extension)){
 					$lo_templates->loadExtension(new $ls_extension());
+				}
+
 			}
 
-
+			// Get more details about template
 			$lo_search = new \stdClass;
 			$lo_search->name = $ls_viewfile;
 			$lo_search->controllerid = $po_page->controllerid;

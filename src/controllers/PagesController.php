@@ -94,8 +94,8 @@ class PagesController extends BaseController {
 					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Rename the file
-					$ls_originalfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/controllers/' . ucfirst(strtolower($lo_page->name)) . 'Controller.php';
-					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/controllers/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
+					$ls_originalfile = $ls_folder . '/' . ucfirst(strtolower($lo_page->name)) . 'Controller.php';
+					$ls_newfile = $ls_folder . '/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Controller.php';
 
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
@@ -216,8 +216,8 @@ class PagesController extends BaseController {
 					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Rename the file
-					$ls_originalfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
-					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/models/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
+					$ls_originalfile = $ls_folder . '/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
+					$ls_newfile = $ls_folder . '/' . ucfirst(strtolower($this->postvalue('__name'))) . 'Model.php';
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
 					// Redirect
@@ -335,8 +335,8 @@ class PagesController extends BaseController {
 					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Rename the folder
-					$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/'. strtolower($lo_page->name) . '.php';
-					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/' . strtolower($lo_controller->name) . '/' . strtolower($this->postvalue('__name')) . '.php';
+					$ls_originalfile = $ls_folder . '/' . strtolower($lo_page->name) . '.php';
+					$ls_newfile = $ls_folder . '/' . strtolower($this->postvalue('__name')) . '.php';
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
 					// Redirect
@@ -461,8 +461,8 @@ class PagesController extends BaseController {
 					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Rename the file
-					$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/templates/'. strtolower($lo_page->name) . '.php';
-					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/templates/' . strtolower($this->postvalue('__name')) . '.php';
+					$ls_originalfile = $ls_folder . '/' . strtolower($lo_page->name) . '.php';
+					$ls_newfile = $ls_folder . '/' . strtolower($this->postvalue('__name')) . '.php';
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
 					// Redirect
@@ -582,8 +582,8 @@ class PagesController extends BaseController {
 					$this->createfile($ls_file);
 
 					// Create the file
-					$ls_originalfile = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/partials/'. strtolower($lo_page->name) . '.php';
-					$ls_newfile = $this->getdocumentroot() . '/application/' . strtolower($lo_module->name) . '/views/partials/' . strtolower($this->postvalue('__name')) . '.php';
+					$ls_originalfile = $ls_folder . '/'. strtolower($lo_page->name) . '.php';
+					$ls_newfile = $ls_folder . '/'. strtolower($this->postvalue('__name')) . '.php';
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
@@ -697,8 +697,8 @@ class PagesController extends BaseController {
 					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Create the file
-					$ls_originalfile = $this->getdocumentroot() . '/application/helpers/'. ucfirst(strtolower($lo_page->name)) . '.php';
-					$ls_newfile = $this->getdocumentroot() . '/application/helpers/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
+					$ls_originalfile = $ls_folder . '/' . ucfirst(strtolower($lo_page->name)) . '.php';
+					$ls_newfile = $ls_folder . '/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
@@ -807,8 +807,8 @@ class PagesController extends BaseController {
 					$this->createfile($ls_file, $lo_blueprint->content);
 
 					// Create the file
-					$ls_originalfile = $this->getdocumentroot() . '/application/extensions/'. ucfirst(strtolower($lo_page->name)) . '.php';
-					$ls_newfile = $this->getdocumentroot() . '/application/extensions/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
+					$ls_originalfile = $ls_folder . '/'. ucfirst(strtolower($lo_page->name)) . '.php';
+					$ls_newfile = $ls_folder . '/' . ucfirst(strtolower($this->postvalue('__name'))) . '.php';
 
 					$this->renamefile($ls_originalfile, $ls_newfile);
 
