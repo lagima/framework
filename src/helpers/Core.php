@@ -153,7 +153,7 @@ class Core {
 		if(file_exists($ps_folder))
 			return false;
 
-		mkdir($ps_folder, 0755);
+		mkdir($ps_folder, 0755, true);
 
 		return $ps_folder;
 	}

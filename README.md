@@ -34,7 +34,7 @@ CREATE TABLE `m_blueprint` (
   `type` varchar(10) DEFAULT NULL,
   `content` longtext,
   PRIMARY KEY (`blueprintid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `m_blueprint` (`blueprintid`, `type`, `content`)
 VALUES
@@ -51,7 +51,7 @@ CREATE TABLE `m_module` (
   `name` varchar(50) DEFAULT NULL,
   `core` tinyint(1) unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`moduleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `m_page`;
@@ -70,7 +70,7 @@ CREATE TABLE `m_page` (
   `deleted` tinyint(1) unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`pageid`),
   KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `m_route`;
@@ -85,7 +85,7 @@ CREATE TABLE `m_route` (
   `core` tinyint(1) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`routeid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 ```
