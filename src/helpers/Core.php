@@ -3,20 +3,12 @@ namespace Mercury\Helper;
 
 class Core {
 
-	protected $errors;
+	private $_errors;
 
 
 	function __construct() {
 
-		// Start the session if not already started
-		if (session_status() == PHP_SESSION_NONE)
-    		session_start();
 
-	}
-
-	function __destruct() {
-
-		session_write_close();
 	}
 
 
@@ -197,7 +189,7 @@ class Core {
 
 	public function showerrorpage($pi_type) {
 
-		ob_clean();
+		$this->cleanbuffer();
 
 		$ls_customdir = $this->getdocumentroot() . '/errors';
 
@@ -235,8 +227,7 @@ class Core {
 
 	public function sendjson($po_data) {
 
-		ob_clean();
-		ob_start();
+		$this->cleanbuffer();
 
 		header('Content-Type: application/json');
 
@@ -244,6 +235,14 @@ class Core {
 		echo $ls_json;
 
 		exit;
+	}
+
+	public function cleanbuffer() {
+
+		if(ob_get_length()) {
+			ob_end_clean();
+			ob_start();
+		}
 	}
 
 	public function getrandomhash($pi_length = 30, $ps_filterexp = '[:alnum:]') {
@@ -432,7 +431,7 @@ class Core {
 	 */
 	public function getcurrenturl($pb_full = false) {
 
-		$ls_protocol = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+		$ls_protocol = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") ? "https://" : "http://";
 
 		if($pb_full)
 			return "$ls_protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -465,7 +464,7 @@ class Core {
 		if(empty($ps_error))
 			return false;
 
-		$this->errors[] = $ps_error;
+		$this->_errors[] = $ps_error;
 
 		return true;
 	}
@@ -481,16 +480,16 @@ class Core {
 	 */
 	public function geterrors($ps_type = 'ARRAY') {
 
-		if(empty($this->errors))
+		if(empty($this->_errors))
 			return false;
 
 		switch($ps_type) {
 
 			case 'ARRAY':
-				return $this->errors;
+				return $this->_errors;
 
 			case 'PLAIN':
-				return implode(PHP_EOL, $this->errors);
+				return implode(PHP_EOL, $this->_errors);
 
 		}
 
@@ -503,7 +502,7 @@ class Core {
 	 * @return boolean
 	 */
 	public function haserrors() {
-		return !empty($this->errors);
+		return !empty($this->_errors);
 	}
 
 }

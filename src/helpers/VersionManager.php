@@ -154,10 +154,21 @@ class VersionManager extends Core {
 
 	protected function execute($ps_command) {
 
+		if(!is_dir($this->repositorypath)) {
+			trigger_error("Please check if your repository is configured properly", E_USER_WARNING);
+			return false;
+		}
+
+		// Get the current working directory
 		$ls_cwd = getcwd();
+
+		// Change to the repository path
 		chdir($this->repositorypath);
 
+		// Run the command
 		exec($ps_command, $lm_output, $lm_returnvalue);
+
+		// Change back to working directory
 		chdir($ls_cwd);
 
 		if ($lm_returnvalue !== 0) {
@@ -169,6 +180,7 @@ class VersionManager extends Core {
 		}
 
 		return $lm_output;
+
 	}
 
 	private function setlasterror($ps_error) {

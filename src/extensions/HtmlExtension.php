@@ -9,6 +9,9 @@ class HtmlExtension extends Core implements ExtensionInterface {
 
 	public $engine;
 
+	// function __construct() {
+	// 	// This doesnt have to do all the shit the core class does
+	// }
 
 	public function register(Engine $po_engine) {
 

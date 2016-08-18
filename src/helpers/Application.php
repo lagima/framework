@@ -16,8 +16,16 @@ class Application extends Core {
 
 	function __construct() {
 
+		// Start the session if not already started
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+		}
+
 		// IMPORTANT!!!
 		parent::__construct();
+
+		// Set the custom error handler
+		$this->seterrorhandler();
 
 		// Initialize the DI container
 		$this->di = new Container();
@@ -30,6 +38,21 @@ class Application extends Core {
 		$this->initdb();
 		$this->initroute();
 		$this->initview();
+	}
+
+
+	function __destruct() {
+		session_write_close();
+	}
+
+	/**
+	 * Lets do this until I find a better way
+	 * If needed this method can be extended from any controller/model
+	 * to implement custom error handlers
+	 * @return none
+	 */
+	public function seterrorhandler() {
+		new ErrorHandler();
 	}
 
 	/**

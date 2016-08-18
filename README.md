@@ -90,6 +90,21 @@ CREATE TABLE `m_route` (
 
 ```
 
+# NGINX Config
+
+In addition to your other config you need to have the following
+
+```
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+
+location ~* (.+)\.(?:\d+)\.(js|css|png|jpg|jpeg|gif)$ {
+   try_files $uri $1.$2;
+}
+
+```
+
 Thats it! you have just installed an awesome framework ;)
 
 # Usage

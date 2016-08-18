@@ -69,6 +69,7 @@ class GithubController extends BaseController {
 		}
 
 		$la_changes = $lo_git->getchangedfiles();
+		$la_changes = !is_array($la_changes) ? [] : $la_changes;
 
 		$this->buildresponse(['la_changes' => $la_changes]);
 	}
