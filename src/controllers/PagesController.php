@@ -5,6 +5,7 @@ use Mercury\Model\PageModel;
 use Mercury\Model\RouteModel;
 use Mercury\Model\ModuleModel;
 use Mercury\Model\BlueprintModel;
+use Mercury\Model\ConfigModel;
 
 class PagesController extends BaseController {
 
@@ -15,6 +16,7 @@ class PagesController extends BaseController {
 		$this->routemodel = new RouteModel($this->di);
 		$this->modulemodel = new ModuleModel($this->di);
 		$this->blueprintmodel = new BlueprintModel($this->di);
+		$this->configmodel = new ConfigModel($this->di);
 	}
 
 	public function controllersAction() {
@@ -1041,6 +1043,74 @@ class PagesController extends BaseController {
 
 		$this->buildresponse(['ls_pagetitle' => 'View']);
 	}
+
+
+	public function configvarsAction() {
+
+		// Get the config vars
+		$la_configvars = $this->configmodel->getrows();
+
+		$this->buildresponse(['la_configvars' => $la_configvars]);
+
+	}
+
+
+	public function configvarAction($ps_action, $pi_id = null) {
+
+		switch($ps_action) {
+
+			case 'add':
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					$this->configmodel->commitaddfrompost();
+
+					// Redirect
+					$this->redirect('/admin/configvars');
+				}
+
+				// Add needs a special view
+				$this->setview('addconfigvar');
+
+			break;
+
+			case 'edit':
+
+				// Get the module
+				$lo_configvar = $this->configmodel->getrow(['configid' => $pi_id]);
+
+				if (isset($_POST) && !empty($_POST)) {
+
+					// If the config type is admin remove the key frm POST coz we dont wanna save it
+					if($lo_configvar->admin)
+						unset($_POST['__key']);
+
+					$this->configmodel->commitupdatefrompost('configid', $pi_id);
+
+					// Redirect
+					$this->redirect('/admin/configvars');
+				}
+
+				$this->setview('configvar');
+
+				$this->buildresponse(['lo_configvar' => $lo_configvar]);
+
+			break;
+
+			case 'delete':
+
+				// Delete the record
+				$this->configmodel->delete(['configid' => $pi_id, 'admin' => 0]);
+
+				// Redirect
+				$this->redirect('/admin/configvars');
+
+			break;
+		}
+
+		$this->buildresponse(['ls_pagetitle' => 'Config Variable']);
+	}
+
 
 	private function getallmodels() {
 

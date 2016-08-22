@@ -3,12 +3,19 @@ namespace Mercury\Helper;
 
 class Core {
 
+	// Constants
+	const FRAMEWORK_VERSION = '1.0.0';
+
 	private $_errors;
 
 
 	function __construct() {
 
 
+	}
+
+	public function getversion() {
+		return self::FRAMEWORK_VERSION;
 	}
 
 
@@ -86,6 +93,14 @@ class Core {
 
 	public function getdocumentroot() {
 		return $_SERVER['DOCUMENT_ROOT'];
+	}
+
+	public function vardump($pm_value) {
+
+		echo '<pre>';
+		var_dump($pm_value);
+		echo '</pre>';
+
 	}
 
 	public function debug($pm_value) {

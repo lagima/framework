@@ -35,6 +35,7 @@ class Application extends Core {
 			return [];
 		};
 
+		$this->initconfig();
 		$this->initdb();
 		$this->initroute();
 		$this->initview();
@@ -63,11 +64,11 @@ class Application extends Core {
 	 */
 	public function setconfig($ps_type, $pm_value) {
 
-		$this->di['config'] = $this->di->extend('config', function($pa_config) use ($ps_type, $pm_value) {
+		$this->di['config'] = $this->di->extend('config', function($po_config) use ($ps_type, $pm_value) {
 
-			$pa_config[$ps_type] = $pm_value;
+			$po_config->setconfig($ps_type, $pm_value);
 
-			return $pa_config;
+			return $po_config;
 		});
 
 		return true;
@@ -87,7 +88,7 @@ class Application extends Core {
 	}
 
 
-	protected function initdb() {
+	private function initdb() {
 
 		$this->di['database'] = function($di) {
 
@@ -100,7 +101,7 @@ class Application extends Core {
 	}
 
 
-	protected function initroute() {
+	private function initroute() {
 
 		$this->di['router'] = function($di) {
 
@@ -112,7 +113,8 @@ class Application extends Core {
 		return true;
 	}
 
-	protected function initview() {
+
+	private function initview() {
 
 		$di = $this->di;
 
@@ -125,6 +127,31 @@ class Application extends Core {
 
 		return true;
 	}
+
+
+	private function initconfig() {
+
+		$di = $this->di;
+
+		$this->di['config'] = function() use($di) {
+
+			$lo_config = new Configuration($di);
+
+			return $lo_config;
+		};
+	}
+
+
+	public function setdbconfig($po_config) {
+
+		if(!is_object($po_config)) {
+			trigger_error("Invalid DB configuration data", E_USER_ERROR);
+			return false;
+		}
+
+		$this->setconfig('database', $po_config);
+	}
+
 
 	public function runapp() {
 
@@ -236,7 +263,7 @@ class Application extends Core {
 			$lo_view->renderpage($po_page);
 
 		} else {
-			// Throw an exception in debug, send a  500 error in production
+			// Throw an exception in debug, send a 500 error in production
 			trigger_error("Trying to call $ps_class::$ps_action with no luck", E_USER_NOTICE);
 
 			// Show the error page

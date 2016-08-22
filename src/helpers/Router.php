@@ -11,14 +11,6 @@ class Router extends Core {
 
 	private $di;
 	private $router;
-	private $db;
-
-	private $module;
-	private $controller;
-	private $action;
-	private $routeid;
-
-	private $routes = [];
 
 
 	function __construct($di) {

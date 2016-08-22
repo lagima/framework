@@ -178,6 +178,18 @@ class RouteModel extends BaseModel {
 						'action' => 'module',
 						'method' => 'GET|POST'];
 
+		$la_routes[] = ['routeid' => 22,
+						'requesturi' => '/admin/configvars',
+						'controller' => 'Pages',
+						'action' => 'configvars',
+						'method' => 'GET'];
+
+		$la_routes[] = ['routeid' => 23,
+						'requesturi' => '/admin/configvar/[a:a]?/[i:id]?',
+						'controller' => 'Pages',
+						'action' => 'configvar',
+						'method' => 'GET|POST'];
+
 		// Make it an object
 		foreach($la_routes as $la_route)
 			$this->adminroutes[$la_route['routeid']] = json_decode(json_encode($la_route));

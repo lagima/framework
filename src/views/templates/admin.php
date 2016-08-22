@@ -130,6 +130,11 @@
 								<i class="fa fa-life-ring"></i> <span>Helpers</span>
 							</a>
 						</li>
+						<li class="<?= $gs_currentpage == '/admin/configvars' ? active : ''?>">
+							<a href="/admin/configvars">
+								<i class="fa fa-cogs"></i> <span>Config Vars</span>
+							</a>
+						</li>
 						<li class="treeview <?= $gs_currentpage == '/admin/gitcommit' ? active : ''?>">
 							<a href="#">
 								<i class="fa fa-github"></i> <span>Github</span>
@@ -154,9 +159,9 @@
 			</div><!-- /.content-wrapper -->
 			<footer class="main-footer">
 				<div class="pull-right hidden-xs">
-					<b>Version</b> 1.0.0
+					<b>Version</b> <?= $gs_version ?>
 				</div>
-				<strong>Copyright &copy; 2015 <a href="https://github.com/mercury/framework" target="_blank">Mercury</a>.</strong> All rights reserved.
+				<strong>Copyright &copy; <?= $gi_copyrightyear ?> <a href="https://github.com/mercury/framework" target="_blank">Mercury</a>.</strong> All rights reserved.
 			</footer>
 
 		</div><!-- ./wrapper -->

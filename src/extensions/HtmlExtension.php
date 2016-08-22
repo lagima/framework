@@ -53,6 +53,15 @@ class HtmlExtension extends Core implements ExtensionInterface {
 
 			break;
 
+			case 'readonly':
+
+				return '<div class="form-group">
+							<label for="' . $ps_name . '">' . $ps_label . '</label>
+							<input type="text" class="form-control" id="__' . $ps_name . '" name="__' . $ps_name . '" value="' . $ps_value . '" placeholder="' . $ps_label . '" readonly>
+						</div>';
+
+			break;
+
 			case 'textarea':
 
 				return '<div class="form-group">

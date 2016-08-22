@@ -74,7 +74,7 @@ class View extends Core {
 		$la_templatedata = $this->gettemplatedata();
 
 		// If no view is defined and view data is set throw error
-		if(!$this->hasview($po_page) && !empty($pa_viewdata))
+		if(!$this->hasview($po_page) && !empty($la_viewdata))
 			trigger_error('View not defined: ' . $ls_viewfolder . '/' . $ls_viewfile, E_USER_ERROR);
 
 		// Dont show anything if no view is defined
@@ -95,7 +95,12 @@ class View extends Core {
 
 			// Configure the template
 			$la_viewdata['gs_template'] = 'templates::admin';
-			$la_viewdata['ga_templatedata'] = ['gs_title' => 'Mercury PHP', 'gs_currentpage' => $this->getcurrenturl()];
+			$la_viewdata['ga_templatedata'] = [
+												'gs_title' => 'Mercury PHP',
+												'gs_currentpage' => $this->getcurrenturl(),
+												'gi_copyrightyear' => date('Y'),
+												'gs_version' => $this->getversion()
+											  ];
 
 		} else {
 

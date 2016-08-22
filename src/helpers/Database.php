@@ -11,13 +11,24 @@ class Database {
 
 	public function __construct($di) {
 
-		if(!isset($di['config']['database']))
-			trigger_error('Database configuration not defined');
+		// Get the configuration
+		$lo_config = isset($di['config']) ? $di['config'] : null;
 
-		$this->config = $di['config']['database'];
+		if(!isset($lo_config)) {
+			trigger_error('Configuration is messed up', E_USER_ERROR);
+			return false;
+		}
 
-		$this->dbconnect($this->config->host, $this->config->dbname, $this->config->dbuser, $this->config->dbpassword);
+		// Get the database config
+		$lo_db = $lo_config->getconfig('database');
 
+		if(!is_object($lo_db)) {
+			trigger_error('Database configuration not defined', E_USER_ERROR);
+			return false;
+		}
+
+		// Do the connection
+		$this->dbconnect($lo_db->host, $lo_db->dbname, $lo_db->dbuser, $lo_db->dbpassword);
 	}
 
 	protected function dbconnect($ps_dbhost = null, $ps_database = null, $ps_username = null, $ps_password = null) {
@@ -42,13 +53,18 @@ class Database {
 		if(empty($ps_table) || empty($pa_values))
 			trigger_error("Improper usage of function dbinsert()", E_USER_ERROR);
 
+		// Process the keys
 		$la_fields = array_keys($pa_values);
+		array_walk($la_fields, function(&$ls_item, $ls_key) {
+			$ls_item = "`$ls_item`";
+		});
 		$ls_fields = implode(', ', $la_fields);
 
+		// Process the value mapping
+		$la_fields = array_keys($pa_values);
 		array_walk($la_fields, function(&$ls_item, $ls_key) {
 			$ls_item = ':'.$ls_item;
 		});
-
 		$ls_mappvar = implode(', ', $la_fields);
 
 		try {
@@ -76,13 +92,18 @@ class Database {
 		if(empty($ps_table) || empty($pa_values))
 			trigger_error("Improper usage of function dbinsert()", E_USER_ERROR);
 
+		// Process the keys
 		$la_fields = array_keys($pa_values);
+		array_walk($la_fields, function(&$ls_item, $ls_key) {
+			$ls_item = "`$ls_item`";
+		});
 		$ls_fields = implode(', ', $la_fields);
 
+		// Process the value mapping
+		$la_fields = array_keys($pa_values);
 		array_walk($la_fields, function(&$ls_item, $ls_key) {
 			$ls_item = ':'.$ls_item;
 		});
-
 		$ls_mappvar = implode(', ', $la_fields);
 
 		try {
@@ -104,6 +125,7 @@ class Database {
 
 		return $this->db->lastInsertId();
 	}
+
 
 	public function dbupdate($ps_table, $ps_keyfield, $pm_keyvalue, $pa_values) {
 

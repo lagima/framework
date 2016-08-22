@@ -23,8 +23,8 @@ class VersionManager extends Core {
 	public function getcurrentbranch() {
 
 		$lm_output = $this->execute('git symbolic-ref HEAD');
-
 		$tmp = explode('/', $lm_output[0]);
+
 		return $lm_output;
 	}
 

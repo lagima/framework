@@ -6,6 +6,7 @@ use Mercury\Helper\Core;
 class Model extends Core {
 
 	private $di;
+	private $db;
 	private $table;
 
 
