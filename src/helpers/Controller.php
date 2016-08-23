@@ -6,6 +6,7 @@ use Mercury\Helper\Core;
 class Controller extends Core {
 
 	protected $di;
+	protected $configuration;
 	protected $currentpage;
 
 
@@ -21,7 +22,7 @@ class Controller extends Core {
 
 
 		// No point in continuing without database connection
-		if(is_null($this->db)) {
+		if(!is_object($this->db)) {
 			trigger_error("No database configured when controller is called", E_USER_ERROR);
 			return false;
 		}

@@ -5,8 +5,9 @@ use Mercury\Helper\Core;
 
 class Model extends Core {
 
-	private $di;
-	private $db;
+	protected $di;
+	protected $db;
+
 	private $table;
 
 
@@ -18,7 +19,7 @@ class Model extends Core {
 		$this->db = isset($di['database']) ? $di['database'] : null;
 
 		// No point in continuing without database connection
-		if(is_null($this->db)) {
+		if(!is_object($this->db)) {
 			trigger_error("No database configured when model is called", E_USER_ERROR);
 			return false;
 		}

@@ -15,7 +15,6 @@ class PagesController extends BaseController {
 		$this->routemodel = new RouteModel($this->di);
 		$this->modulemodel = new ModuleModel($this->di);
 		$this->blueprintmodel = new BlueprintModel($this->di);
-
 	}
 
 	public function controllersAction() {
