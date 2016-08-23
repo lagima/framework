@@ -9,7 +9,6 @@ class GithubController extends BaseController {
 
 	public function initcontroller() {
 
-
 	}
 
 	public function indexAction() {
@@ -30,10 +29,10 @@ class GithubController extends BaseController {
 	public function commitAction() {
 
 		// Make SQL dump
-		$lo_dbconfig = $this->di['config']['database'];
-		$ls_sqlpath = $this->getdocumentroot();
+		// $lo_dbconfig = $this->di['config']['database'];
+		// $ls_sqlpath = $this->getdocumentroot();
 
-		exec("mysqldump -u=$lo_dbconfig->dbuser -p=$lo_dbconfig->dbpassword $lo_dbconfig->dbname > $ls_sqlpath/install.sql");
+		// exec("mysqldump -u=$lo_dbconfig->dbuser -p=$lo_dbconfig->dbpassword $lo_dbconfig->dbname > $ls_sqlpath/install.sql");
 
 		$lo_git = new VersionManager($this->di);
 

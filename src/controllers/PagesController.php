@@ -6,8 +6,6 @@ use Mercury\Model\RouteModel;
 use Mercury\Model\ModuleModel;
 use Mercury\Model\BlueprintModel;
 
-use Mercury\Helper\Configuration;
-
 class PagesController extends BaseController {
 
 
@@ -17,7 +15,6 @@ class PagesController extends BaseController {
 		$this->routemodel = new RouteModel($this->di);
 		$this->modulemodel = new ModuleModel($this->di);
 		$this->blueprintmodel = new BlueprintModel($this->di);
-		$this->configuration = new Configuration($this->di);
 
 	}
 

@@ -6,18 +6,23 @@ use Mercury\Helper\Core;
 class VersionManager extends Core {
 
 	private $config;
-	private $git;
 	private $repositorypath;
+	private $remoterepository;
+	private $username;
+	private $password;
+	private $author;
 	private $error;
 
 	public function __construct($di) {
 
-		if(!isset($di['config']['git']))
-			trigger_error('GIT configuration not defined');
+		// Get the configuration helper
+		$this->configuration = isset($di['config']) ? $di['config'] : null;
 
-		$this->config = $di['config']['git'];
-
-		$this->repositorypath = realpath($this->config->localrepopath);
+		$this->repositorypath = $this->getdocumentroot();
+		$this->remoterepository = $this->configuration->getconfigvalue('GIT_REPO_PATH');
+		$this->username = $this->configuration->getconfigvalue('GIT_USERNAME');
+		$this->password = $this->configuration->getconfigvalue('GIT_PASSWORD');
+		$this->author = $this->configuration->getconfigvalue('GIT_AUTHOR');
 	}
 
 	public function getcurrentbranch() {
@@ -135,7 +140,7 @@ class VersionManager extends Core {
 		}
 
 		$ls_output = $this->execute(
-			'git commit -a --author="' . $this->config->author . '" -m "' . $ps_message . '"'
+			'git commit -a --author="' . $this->author . '" -m "' . $ps_message . '"'
 		);
 
 		return $ls_output;
@@ -145,7 +150,7 @@ class VersionManager extends Core {
 	public function push() {
 
 		$ls_output = $this->execute(
-			'git push https://' . $this->config->username . ':' . $this->config->password . '@' . $this->config->remoterepopath . ' --all --force'
+			'git push https://' . $this->username . ':' . $this->password . '@' . $this->remoterepository . ' --all --force'
 		);
 
 		return $ls_output;
@@ -180,7 +185,6 @@ class VersionManager extends Core {
 		}
 
 		return $lm_output;
-
 	}
 
 	private function setlasterror($ps_error) {

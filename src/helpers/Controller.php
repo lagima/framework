@@ -16,6 +16,10 @@ class Controller extends Core {
 		// Get the database connection
 		$this->db = isset($di['database']) ? $di['database'] : null;
 
+		// Get the configuration helper
+		$this->configuration = isset($di['config']) ? $di['config'] : null;
+
+
 		// No point in continuing without database connection
 		if(is_null($this->db)) {
 			trigger_error("No database configured when controller is called", E_USER_ERROR);
