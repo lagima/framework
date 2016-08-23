@@ -5,7 +5,8 @@ use Mercury\Model\PageModel;
 use Mercury\Model\RouteModel;
 use Mercury\Model\ModuleModel;
 use Mercury\Model\BlueprintModel;
-use Mercury\Model\ConfigModel;
+
+use Mercury\Helper\Configuration;
 
 class PagesController extends BaseController {
 
@@ -16,7 +17,8 @@ class PagesController extends BaseController {
 		$this->routemodel = new RouteModel($this->di);
 		$this->modulemodel = new ModuleModel($this->di);
 		$this->blueprintmodel = new BlueprintModel($this->di);
-		$this->configmodel = new ConfigModel($this->di);
+		$this->configuration = new Configuration($this->di);
+
 	}
 
 	public function controllersAction() {
@@ -1047,8 +1049,9 @@ class PagesController extends BaseController {
 
 	public function configvarsAction() {
 
+
 		// Get the config vars
-		$la_configvars = $this->configmodel->getrows();
+		$la_configvars = $this->configuration->getconfigs();
 
 		$this->buildresponse(['la_configvars' => $la_configvars]);
 
@@ -1063,7 +1066,7 @@ class PagesController extends BaseController {
 
 				if (isset($_POST) && !empty($_POST)) {
 
-					$this->configmodel->commitaddfrompost();
+					$this->configuration->addconfig($this->postvalue('__key'), $this->postvalue('__value'));
 
 					// Redirect
 					$this->redirect('/admin/configvars');
@@ -1076,16 +1079,17 @@ class PagesController extends BaseController {
 
 			case 'edit':
 
-				// Get the module
-				$lo_configvar = $this->configmodel->getrow(['configid' => $pi_id]);
+				// Get the config
+				$la_configvar = $this->configuration->getconfig($pi_id);
 
 				if (isset($_POST) && !empty($_POST)) {
 
-					// If the config type is admin remove the key frm POST coz we dont wanna save it
-					if($lo_configvar->admin)
-						unset($_POST['__key']);
+					// Build data
+					$la_data = [];
+					$la_data['key'] = $this->postvalue('__key', '');
+					$la_data['value'] = $this->postvalue('__value', '');
 
-					$this->configmodel->commitupdatefrompost('configid', $pi_id);
+					$this->configuration->updateconfig($pi_id, $la_data);
 
 					// Redirect
 					$this->redirect('/admin/configvars');
@@ -1093,14 +1097,14 @@ class PagesController extends BaseController {
 
 				$this->setview('configvar');
 
-				$this->buildresponse(['lo_configvar' => $lo_configvar]);
+				$this->buildresponse(['la_configvar' => $la_configvar]);
 
 			break;
 
 			case 'delete':
 
 				// Delete the record
-				$this->configmodel->delete(['configid' => $pi_id, 'admin' => 0]);
+				$this->configuration->deleteconfig($pi_id);
 
 				// Redirect
 				$this->redirect('/admin/configvars');

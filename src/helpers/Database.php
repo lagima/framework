@@ -20,15 +20,13 @@ class Database {
 		}
 
 		// Get the database config
-		$lo_db = $lo_config->getconfig('database');
-
-		if(!is_object($lo_db)) {
-			trigger_error('Database configuration not defined', E_USER_ERROR);
-			return false;
-		}
+		$ls_host = $lo_config->getconfigvalue('MYSQL_HOST');
+		$ls_dbname = $lo_config->getconfigvalue('MYSQL_DATABASE');
+		$ls_dbuser = $lo_config->getconfigvalue('MYSQL_USER');
+		$ls_dbpassword = $lo_config->getconfigvalue('MYSQL_PASSWORD');
 
 		// Do the connection
-		$this->dbconnect($lo_db->host, $lo_db->dbname, $lo_db->dbuser, $lo_db->dbpassword);
+		$this->dbconnect($ls_host, $ls_dbname, $ls_dbuser, $ls_dbpassword);
 	}
 
 	protected function dbconnect($ps_dbhost = null, $ps_database = null, $ps_username = null, $ps_password = null) {
@@ -40,7 +38,7 @@ class Database {
 
 		} catch(\PDOException $e) {
 
-			trigger_error($e->getMessage(), E_USER_ERROR);
+			trigger_error("Could not connect to database. Please check if database is configured in config.php on your root dir", E_USER_ERROR);
 
 		}
 

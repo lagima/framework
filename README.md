@@ -87,28 +87,6 @@ CREATE TABLE `m_route` (
   PRIMARY KEY (`routeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-DROP TABLE IF EXISTS `m_config`;
-
-CREATE TABLE `m_config` (
-  `configid` int(11) NOT NULL,
-  `key` varchar(50) NOT NULL,
-  `value` varchar(200) NOT NULL,
-  `admin` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `m_config`
-  ADD PRIMARY KEY (`configid`),
-  ADD KEY `key` (`key`);
-
-INSERT INTO `m_config` (`configid`, `key`, `value`, `admin`) VALUES
-(1, 'GIT_REPO_PATH', 'github.com/remote/repo.git', 1),
-(2, 'GIT_AUTHOR', 'gitauthorusername', 1),
-(3, 'GIT_USERNAME', 'username', 1),
-(4, 'GIT_PASSWORD', 'pass', 1),
-(5, 'GIT_MASTER_BRANCH', 'master', 1),
-(6, 'GIT_DEV_BRANCH', 'development', 1);
-
 ```
 
 # NGINX Config
@@ -148,19 +126,6 @@ $go_profiler = new Profiler();
 
 // Create the application
 $go_app = new Application();
-
-/**
- * Set the db config.
- * This is the only config you need to hardcode
- * Everything else is managed from admin
- */
-$lo_config = new \stdClass;
-$lo_config->host = 'localhost';
-$lo_config->dbuser = 'user';
-$lo_config->dbpassword = 'password';
-$lo_config->dbname = 'dbname';
-$go_app->setconfig('database', $lo_config);
-
 
 // Run the application
 $go_app->runapp();

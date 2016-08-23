@@ -142,17 +142,6 @@ class Application extends Core {
 	}
 
 
-	public function setdbconfig($po_config) {
-
-		if(!is_object($po_config)) {
-			trigger_error("Invalid DB configuration data", E_USER_ERROR);
-			return false;
-		}
-
-		$this->setconfig('database', $po_config);
-	}
-
-
 	public function runapp() {
 
 		// Get the url part and check if its admin or site

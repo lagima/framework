@@ -19,17 +19,17 @@
 					<h3 class="box-title">Edit Config Variable</h3>
 				</div><!-- /.box-header -->
 
-				<form role="form" method="POST" action="/admin/configvar/edit/<?= $lo_configvar->configid ?>">
+				<form role="form" method="POST" action="/admin/configvar/edit/<?= $la_configvar['configid'] ?>">
 					<div class="box-body">
 						<?
 
-						if($lo_configvar->admin)
-							echo $this->htmlinput('readonly', 'key', 'Key', $lo_configvar->key);
+						if($la_configvar['admin'])
+							echo $this->htmlinput('readonly', 'key', 'Key', $la_configvar['key']);
 
 						else
-							echo $this->htmlinput('text', 'key', 'Key', $lo_configvar->key);
+							echo $this->htmlinput('text', 'key', 'Key', $la_configvar['key']);
 
-						echo $this->htmlinput('text', 'value', 'Value', $lo_configvar->value);
+						echo $this->htmlinput('text', 'value', 'Value', $la_configvar['value']);
 
 						?>
 					</div><!-- /.box-body -->

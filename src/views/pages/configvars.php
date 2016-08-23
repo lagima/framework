@@ -38,14 +38,14 @@
 								<th>Value</th>
 								<th style="width:100px;">&nbsp;</th>
 							</tr>
-							<?php foreach($la_configvars as $lo_config): ?>
+							<?php foreach($la_configvars as $la_config): ?>
 								<tr>
-									<td><?= $lo_config->key ?></td>
-									<td><?= $lo_config->value ?></td>
+									<td><?= $la_config['key'] ?></td>
+									<td><?= $la_config['value'] ?></td>
 									<td>
-										<a href="/admin/configvar/edit/<?= $lo_config->configid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
-										<?php if(!$lo_config->admin): ?>
-											<a href="/admin/configvar/delete/<?= $lo_config->configid ?>" class="btn btn-danger btn-xs" onclick="return jsconfirm();"><i class="fa fa-trash"></i></a>
+										<a href="/admin/configvar/edit/<?= $la_config['configid'] ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+										<?php if(!$la_config['admin']): ?>
+											<a href="/admin/configvar/delete/<?= $la_config['configid'] ?>" class="btn btn-danger btn-xs" onclick="return jsconfirm();"><i class="fa fa-trash"></i></a>
 										<?php endif; ?>
 									</td>
 								</tr>
