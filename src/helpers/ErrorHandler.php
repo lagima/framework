@@ -7,7 +7,7 @@ use Mercury\Helper\Core;
 class ErrorHandler extends Core {
 
 	function __construct() {
-		set_error_handler([$this, "mercuryerrorhandler"], E_WARNING);
+		set_error_handler([$this, "mercuryerrorhandler"]);
 	}
 
 

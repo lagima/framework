@@ -53,14 +53,11 @@ class GithubController extends BaseController {
 			if($lb_status !== false)
 				$lb_status = $lo_git->commit($this->postvalue('__message'));
 
-			//Push it to remove repo
-			if($lb_status !== false)
-				$lb_status = $lo_git->push();
+			// Push it to remote repo
+			$lo_git->push();
 
 			// If it ever failed set the message
-			$ls_error = $lo_git->getlasterror();
-
-			if(!empty($ls_error))
+			if($lo_git->haserrors())
 				$this->setflashmessage($lo_git->getlasterror());
 			else
 				$this->setflashmessage("All done :)", 'SUCCESS');
@@ -69,6 +66,9 @@ class GithubController extends BaseController {
 
 		$la_changes = $lo_git->getchangedfiles();
 		$la_changes = !is_array($la_changes) ? [] : $la_changes;
+
+		if($lo_git->haserrors())
+				$this->setflashmessage($lo_git->getlasterror());
 
 		$this->buildresponse(['la_changes' => $la_changes]);
 	}

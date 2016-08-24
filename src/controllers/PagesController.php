@@ -448,8 +448,8 @@ class PagesController extends BaseController {
 
 					$this->pagemodel->commitupdatefrompost('pageid', $pi_id);
 
-					// Get the controller
-					$lo_module = $this->pagemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
+					// Get the module
+					$lo_module = $this->modulemodel->getrow(['moduleid' => $this->postvalue('__moduleid')]);
 
 					// Create the folder if not exists
 					$ls_folder = $this->getdocumentroot() . '/application/'  . strtolower($lo_module->name) . '/views/templates';

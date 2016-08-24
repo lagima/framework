@@ -41,6 +41,7 @@ class Configuration extends Core {
 				  array (
 				    'configid' => 1,
 				    'admin' => 1,
+				    'hidden' => 0,
 				    'key' => 'MYSQL_HOST',
 				    'value' => '',
 				  ),
@@ -48,6 +49,7 @@ class Configuration extends Core {
 				  array (
 				    'configid' => 2,
 				    'admin' => 1,
+				    'hidden' => 0,
 				    'key' => 'MYSQL_USER',
 				    'value' => '',
 				  ),
@@ -55,6 +57,7 @@ class Configuration extends Core {
 				  array (
 				    'configid' => 3,
 				    'admin' => 1,
+				    'hidden' => 0,
 				    'key' => 'MYSQL_PASSWORD',
 				    'value' => '',
 				  ),
@@ -62,27 +65,20 @@ class Configuration extends Core {
 				  array (
 				    'configid' => 4,
 				    'admin' => 1,
+				    'hidden' => 0,
 				    'key' => 'MYSQL_DATABASE',
+				    'value' => '',
+				  ),
+				  5 =>
+				  array (
+				    'configid' => 5,
+				    'admin' => 1,
+				    'hidden' => 1,
+				    'key' => 'GIT_INITIALISED',
 				    'value' => '',
 				  ),
 				);";
 
-	}
-
-	public function getgitconfig() {
-
-		// Get all config variables
-		$la_configvars = $this->configmodel->getconfigs();
-
-		$lo_config = new \stdClass;
-		$lo_config->localrepopath = $this->getdocumentroot();
-		$lo_config->remoterepopath = $la_configvars[self::GIT_REPO];
-		$lo_config->author = $la_configvars[self::GIT_AUTHOR];
-		$lo_config->username = $la_configvars[self::GIT_USERNAME];
-		$lo_config->password = $la_configvars[self::GIT_PASSWORD];
-		$lo_config->branch = $la_configvars[self::GIT_MASTER_BRANCH];
-
-		return $lo_config;
 	}
 
 
@@ -90,7 +86,7 @@ class Configuration extends Core {
 
 		// Get the config id
 		$la_config = $this->getconfig($ps_key);
-		$la_config = $this->config[$la_config['id']];
+		$la_config = $this->config[$la_config['configid']];
 
 		if(!is_array($la_config)) {
 			trigger_error("Trying to set undefined config '$ps_key'", E_USER_WARNING);
@@ -105,8 +101,32 @@ class Configuration extends Core {
 	}
 
 
-	public function getconfigs() {
-		return $this->config;
+	/**
+	 * Get all the visible config variables configured
+	 * If passed true it will return even the hidden ones
+	 *
+	 * @param boolean $pb_all
+	 * @return array
+	 */
+	public function getconfigs($pb_all = false) {
+
+		$la_configs = $this->config;
+
+		if($pb_all)
+			return $la_configs;
+
+		// Filter out hidden ones
+		$la_visible = [];
+
+		foreach ($la_configs as $li_index => $la_config) {
+
+			if($la_config['hidden'] == 1)
+				continue;
+
+			$la_visible[$li_index] = $la_config;
+		}
+
+		return $la_visible;
 	}
 
 
@@ -117,7 +137,7 @@ class Configuration extends Core {
 		$ls_key = strval($pm_value);
 
 		// Get all configs
-		$la_configs = $this->getconfigs();
+		$la_configs = $this->getconfigs(true);
 
 		foreach($la_configs as $la_config) {
 
@@ -151,6 +171,7 @@ class Configuration extends Core {
 		$la_config = [];
 		$la_config['configid'] = time();
 		$la_config['admin'] = 0;
+		$la_config['hidden'] = 0;
 		$la_config['key'] = $ps_key;
 		$la_config['value'] = $ps_value;
 

@@ -41,7 +41,7 @@
 							<?php foreach($la_configvars as $la_config): ?>
 								<tr>
 									<td><?= $la_config['key'] ?></td>
-									<td><?= $la_config['value'] ?></td>
+									<td><?= htmlentities($la_config['value']) ?></td>
 									<td>
 										<a href="/admin/configvar/edit/<?= $la_config['configid'] ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
 										<?php if(!$la_config['admin']): ?>

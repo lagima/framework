@@ -126,7 +126,7 @@ class View extends Core {
 
 			// Configure the template
 			$la_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . strtolower($lo_viewdetail->template) : 'defaults::blank';
-			$la_viewdata['ga_templatedata'] = array_merge($la_templatedata, ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl()]);
+			$la_viewdata['ga_templatedata'] = array_merge($la_templatedata, ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl() ,'gi_copyrightyear' => date('Y'), 'gs_version' => $this->getversion()]);
 		}
 
 		// Add folders used for the engine

@@ -135,14 +135,14 @@
 								<i class="fa fa-cogs"></i> <span>Config Vars</span>
 							</a>
 						</li>
-						<li class="treeview <?= $gs_currentpage == '/admin/gitcommit' ? active : ''?>">
+						<li class="treeview <?= in_array($gs_currentpage, ['/admin/gitcommit', '/admin/gitsearch']) ? active : ''?>">
 							<a href="#">
 								<i class="fa fa-github"></i> <span>Github</span>
 								<i class="fa fa-angle-left pull-right"></i>
 							</a>
 							<ul class="treeview-menu">
-								<li><a href="/admin/gitcommit"><i class="fa fa-circle-o"></i> Commit</a></li>
-								<li><a href="/admin/gitsearch"><i class="fa fa-circle-o"></i> Search</a></li>
+								<li class="<?= $gs_currentpage == '/admin/gitcommit' ? active : ''?>"><a href="/admin/gitcommit"><i class="fa fa-circle-o"></i> Commit</a></li>
+								<li class="<?= $gs_currentpage == '/admin/gitsearch' ? active : ''?>"><a href="/admin/gitsearch"><i class="fa fa-circle-o"></i> Search</a></li>
 							</ul>
 						</li>
 

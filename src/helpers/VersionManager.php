@@ -10,7 +10,8 @@ class VersionManager extends Core {
 	private $remoterepository;
 	private $username;
 	private $password;
-	private $author;
+	private $authorname;
+	private $authoremail;
 	private $error;
 
 	public function __construct($di) {
@@ -22,7 +23,39 @@ class VersionManager extends Core {
 		$this->remoterepository = $this->configuration->getconfigvalue('GIT_REPO_PATH');
 		$this->username = $this->configuration->getconfigvalue('GIT_USERNAME');
 		$this->password = $this->configuration->getconfigvalue('GIT_PASSWORD');
-		$this->author = $this->configuration->getconfigvalue('GIT_AUTHOR');
+		$this->authorname = $this->configuration->getconfigvalue('GIT_AUTHORNAME');
+		$this->authoremail = $this->configuration->getconfigvalue('GIT_AUTHOREMAIL');
+		$this->gitinitialised = $this->configuration->getconfigvalue('GIT_INITIALISED');
+
+		// Init the git
+		$this->initgit();
+	}
+
+	public function initgit() {
+
+		if($this->gitinitialised)
+			return true;
+
+		$this->execute(
+			'git init'
+		);
+		$this->execute(
+			'git config user.name ' . $this->authorname
+		);
+		$this->execute(
+			'git config user.email ' . $this->authoremail
+		);
+		$this->execute(
+			'git remote add mercury https://' . $this->username . ':' . $this->password . '@' . $this->remoterepository
+		);
+
+		// If all succeeded mark the git init as completed
+		if($this->haserrors())
+			return false;
+
+		$this->configuration->setconfig('GIT_INITIALISED', 1);
+
+		return true;
 	}
 
 	public function getcurrentbranch() {
@@ -140,7 +173,7 @@ class VersionManager extends Core {
 		}
 
 		$ls_output = $this->execute(
-			'git commit -a --author="' . $this->author . '" -m "' . $ps_message . '"'
+			'git commit -a --author="' . $this->authorname . ' <' . $this->authoremail . '>" -m "' . $ps_message . '"'
 		);
 
 		return $ls_output;
@@ -150,7 +183,7 @@ class VersionManager extends Core {
 	public function push() {
 
 		$ls_output = $this->execute(
-			'git push https://' . $this->username . ':' . $this->password . '@' . $this->remoterepository . ' --all --force'
+			'git push -u mercury master -f'
 		);
 
 		return $ls_output;
@@ -170,8 +203,8 @@ class VersionManager extends Core {
 		// Change to the repository path
 		chdir($this->repositorypath);
 
-		// Run the command
-		exec($ps_command, $lm_output, $lm_returnvalue);
+		// Run the command: append 2>&1 to get the error outputs too
+		exec($ps_command .' 2>&1', $lm_output, $lm_returnvalue);
 
 		// Change back to working directory
 		chdir($ls_cwd);
@@ -193,5 +226,9 @@ class VersionManager extends Core {
 
 	public function getlasterror() {
 		return $this->error;
+	}
+
+	public function haserrors() {
+		return !empty($this->error);
 	}
 }
