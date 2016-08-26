@@ -125,7 +125,10 @@ class Database {
 	}
 
 
+	/* Deprecated */
 	public function dbupdate($ps_table, $ps_keyfield, $pm_keyvalue, $pa_values) {
+
+		trigger_error("The method dbupdate() is deprecated. use dbupdaterows() instead", E_USER_DEPRECATED);
 
 		if(empty($ps_table) || empty($ps_keyfield) || empty($pm_keyvalue) || empty($pa_values))
 			trigger_error("Improper usage of function dbupdate()", E_USER_ERROR);
@@ -158,6 +161,56 @@ class Database {
 
 		return true;
 	}
+
+
+	public function dbupdaterows($ps_table, $pa_values, $pa_condition = []) {
+
+		if(empty($ps_table) || empty($pa_condition) || empty($pa_values))
+			trigger_error("Improper usage of function dbupdaterows()", E_USER_ERROR);
+
+		// Placeholders
+		$la_where = [];
+		$la_binds = $pa_values;
+
+		// Map the fields with value keys
+		$la_fields = array_keys($pa_values);
+		array_walk($la_fields, function(&$ls_item, $ls_key) {
+			$ls_item = "`$ls_item` = :$ls_item";
+		});
+		$ls_mappvar = implode(', ', $la_fields);
+
+		// Build the WHERE condition
+		foreach($pa_condition as $ls_field => $ls_value) {
+
+			// Construct the filed key to avoid conflict with the actual value being updated
+			$ls_key = "u_$ls_field";
+
+			// Start constructing the query
+			$la_where[] = " AND `$ls_field` = :$ls_key";
+			$la_binds[$ls_key] = $ls_value;
+		}
+
+
+		try {
+
+			// Some basic escaping
+			$ps_table = addslashes($ps_table);
+
+			// Build the query
+			$ls_sql = "UPDATE `$ps_table` SET $ls_mappvar WHERE TRUE " . implode(PHP_EOL, $la_where);
+
+			// Run it!
+			$this->query($ls_sql, $la_binds);
+
+		} catch(\PDOException $e) {
+
+			trigger_error($e->getMessage(), E_USER_ERROR);
+
+		}
+
+		return true;
+	}
+
 
 	public function dbinsertupdate($ps_table, $pa_values, $pa_updatefields) {
 
@@ -193,6 +246,7 @@ class Database {
 
 		return true;
 	}
+
 
 	public function dbdelete($ps_table, $pa_condition) {
 

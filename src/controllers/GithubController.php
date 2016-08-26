@@ -22,6 +22,7 @@ class GithubController extends BaseController {
 		$ps_query = $this->getvalue('q');
 
 		$la_result = $lo_git->search($ps_query);
+		$la_result = is_array($la_result) ? $la_result : [];
 
 		$this->buildresponse(['la_result' => $la_result]);
 	}

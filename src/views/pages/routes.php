@@ -37,7 +37,7 @@
 								<th>Request URI</th>
 								<th>Action</th>
 								<th>Method</th>
-								<th style="width:50px;">&nbsp;</th>
+								<th style="width:80px;">&nbsp;</th>
 							</tr>
 							<?php foreach($la_routes as $lo_row): ?>
 								<tr>
@@ -46,6 +46,7 @@
 									<td><?= $lo_row->method ?></td>
 									<td>
 										<a href="/admin/route/edit/<?= $lo_row->routeid ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+										<a href="<?= $lo_row->requesturi ?>" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
 									</td>
 								</tr>
 							<?php endforeach; ?>

@@ -211,7 +211,7 @@ class PagesController extends BaseController {
 					$this->createfolder($ls_folder);
 
 					// Create the file if not exists
-					$ls_file = $ls_folder . '/' . strtolower($lo_page->name) . 'Model.php';
+					$ls_file = $ls_folder . '/' . ucfirst(strtolower($lo_page->name)) . 'Model.php';
 					$lo_blueprint = $this->blueprintmodel->getrow(['type' => 'MODEL']); // Fill some starter content
 					$this->createfile($ls_file, $lo_blueprint->content);
 

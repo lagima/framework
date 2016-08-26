@@ -58,9 +58,10 @@ class Model extends Core {
 		return $lo_row;
 	}
 
-	public function getrows($pa_condition = []) {
+	public function getrows($pa_condition = [], $pi_limit = null) {
 
 		$la_where = [];
+		$ls_limit = '';
 		$la_binds = [];
 
 		foreach($pa_condition as $ls_field => $ls_value) {
@@ -69,7 +70,12 @@ class Model extends Core {
 			$la_binds[$ls_field] = $ls_value;
 		}
 
-		$la_rows = $this->db->getallobjects("SELECT * FROM `$this->table` WHERE TRUE " . implode(PHP_EOL, $la_where), $la_binds);
+		if(!is_null($pi_limit)) {
+			$ls_limit = 'LIMIT :limit';
+			$la_binds['limit'] = $pi_limit;
+		}
+
+		$la_rows = $this->db->getallobjects("SELECT * FROM `$this->table` WHERE TRUE " . implode(PHP_EOL, $la_where) . " $ls_limit", $la_binds);
 
 		return $la_rows;
 	}
@@ -216,6 +222,23 @@ class Model extends Core {
 		$li_id = $this->db->dbupdate($ps_table, $ps_keyfield, $ps_keyvalue, $la_values);
 
 		return $li_id;
+	}
+
+
+	public function updaterows($pa_values, $pa_condition) {
+
+		if(empty($ps_table))
+			$ps_table = $this->table;
+
+		if(empty($pa_values))
+			trigger_error("Data is empty", E_USER_ERROR);
+
+		if(empty($pa_condition))
+			trigger_error("Cannot update the table without condition.", E_USER_ERROR);
+
+		$lb_updated = $this->db->dbupdaterows($ps_table, $pa_values, $pa_condition);
+
+		return $lb_updated;
 	}
 
 }
