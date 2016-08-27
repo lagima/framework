@@ -38,10 +38,41 @@ class Model extends Core {
 
 
 	public function settable($ps_table) {
-
-		$this->table = $ps_table;
+		$this->table = addslashes($ps_table);
 	}
 
+
+	public function starttransaction() {
+		$this->db->starttransaction();
+	}
+
+
+	public function committransaction() {
+		$this->db->committransaction();
+	}
+
+
+	public function rollbacktransaction() {
+		$this->db->rollbacktransaction();
+	}
+
+
+	/* Update this to move query to database class */
+	public function gettablefields($ps_table) {
+
+		$ps_table = addslashes($ps_table);
+		$la_fields = $this->db->getallobjects("SHOW COLUMNS FROM `$ps_table`");
+		$la_result = [];
+
+		foreach($la_fields as $lo_field) {
+			$la_result[] = $lo_field->Field;
+		}
+
+		return $la_result;
+	}
+
+
+	/* Update this to move query to database class */
 	public function getrow($pa_condition) {
 
 		$la_where = [];
@@ -58,6 +89,8 @@ class Model extends Core {
 		return $lo_row;
 	}
 
+
+	/* Update this to move query to database class */
 	public function getrows($pa_condition = [], $pi_limit = null) {
 
 		$la_where = [];
@@ -80,8 +113,8 @@ class Model extends Core {
 		return $la_rows;
 	}
 
-	public function delete($pa_condition = []) {
 
+	public function delete($pa_condition = []) {
 		$this->db->dbdelete($this->table, $pa_condition);
 	}
 
@@ -100,7 +133,7 @@ class Model extends Core {
 
     }
 
-
+    /* Update this to move query to database class */
     /**
 	 * Will check if the value already exists in database
 	 * @param  string $ps_key          Key field in the database to check the duplicate for
@@ -195,6 +228,7 @@ class Model extends Core {
 
 		return $li_id;
 	}
+
 
 	public function update($ps_keyfield, $ps_keyvalue, $pa_values, $ps_table = ''){
 

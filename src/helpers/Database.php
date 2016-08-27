@@ -46,6 +46,21 @@ class Database {
 		return $this->db;
 	}
 
+
+	public function starttransaction() {
+		$this->query("START TRANSACTION");
+	}
+
+
+	public function committransaction() {
+		$this->query("COMMIT");
+	}
+
+
+	public function rollbacktransaction() {
+		$this->query("ROLLBACK");
+	}
+
 	public function dbinsert($ps_table, $pa_values) {
 
 		if(empty($ps_table) || empty($pa_values))
@@ -240,7 +255,7 @@ class Database {
 
 		} catch(\PDOException $e) {
 
-			trigger_error($e->getMessage(), E_USER_ERROR);
+			trigger_error($e->getMessage() . print_r($pa_values,1), E_USER_ERROR);
 
 		}
 
