@@ -222,7 +222,6 @@ class View extends Core {
 		if(!is_object($po_page))
 			trigger_error('Page is invalid', E_USER_ERROR);
 
-
 		return  $this->getdocumentroot();
 	}
 

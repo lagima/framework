@@ -20,7 +20,6 @@ class Controller extends Core {
 		// Get the configuration helper
 		$this->configuration = isset($di['config']) ? $di['config'] : null;
 
-
 		// No point in continuing without database connection
 		if(!is_object($this->db)) {
 			trigger_error("No database configured when controller is called", E_USER_ERROR);
@@ -44,8 +43,10 @@ class Controller extends Core {
 		// Get view object from DI
 		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-		if(!is_object($lo_view))
-			trigger_error("View is not initialised");
+		if(!is_object($lo_view)) {
+			trigger_error("View is not initialised", E_USER_ERROR);
+			return false;
+		}
 
 		$lo_view->setview($ps_view);
 	}
@@ -56,8 +57,10 @@ class Controller extends Core {
 		// Get view object from DI
 		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-		if(!is_object($lo_view))
-			trigger_error("View is not initialised");
+		if(!is_object($lo_view)) {
+			trigger_error("View is not initialised", E_USER_ERROR);
+			return false;
+		}
 
 		$lo_view->buildresponse($pa_data);
 	}
@@ -68,8 +71,10 @@ class Controller extends Core {
 		// Get view object from DI
 		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-		if(!is_object($lo_view))
-			trigger_error("View is not initialised");
+		if(!is_object($lo_view)) {
+			trigger_error("View is not initialised", E_USER_ERROR);
+			return false;
+		}
 
 		$lo_view->buildtemplatedata($pa_data);
 	}
@@ -79,8 +84,10 @@ class Controller extends Core {
 		// Get view object from DI
 		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-		if(!is_object($lo_view))
-			trigger_error("View is not initialised");
+		if(!is_object($lo_view)) {
+			trigger_error("View is not initialised", E_USER_ERROR);
+			return false;
+		}
 
 		$lo_view->addscript($ps_file);
 	}
@@ -91,10 +98,48 @@ class Controller extends Core {
 		// Get view object from DI
 		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
 
-		if(!is_object($lo_view))
-			trigger_error("View is not initialised");
+		if(!is_object($lo_view)) {
+			trigger_error("View is not initialised", E_USER_ERROR);
+			return false;
+		}
 
 		$lo_view->addstylesheet($ps_file);
+	}
+
+
+	public function setformerror($ps_error, $ps_field) {
+
+		// Get view object from DI
+		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
+
+		if(!is_object($lo_view)) {
+			trigger_error("View is not initialised", E_USER_ERROR);
+			return false;
+		}
+
+		$lo_view->setformerror($ps_error, $ps_field);
+	}
+
+
+	/**
+	 * Method used in internal routing.
+	 * This wont actually redirect the page but will route the request to another route gracefully
+	 *
+	 * @param string $ps_route  the route as defined in Routes module
+	 * @return none
+	 */
+	public function routeto($ps_route) {
+
+		// Get the current running app
+		$lo_app = isset($this->di['app']) ? $this->di['app'] : null;
+
+		if(!is_object($lo_app)) {
+			trigger_error("App is not initialised", E_USER_ERROR);
+			return false;
+		}
+
+		// Execute the route
+		$lo_app->runsite($ps_route, false);
 	}
 
 }

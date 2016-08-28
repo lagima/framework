@@ -35,6 +35,9 @@ class Application extends Core {
 			return [];
 		};
 
+		// Set the current instance of app to di
+		$this->di['app'] = $this;
+
 		$this->initconfig();
 		$this->initdb();
 		$this->initroute();
@@ -188,16 +191,17 @@ class Application extends Core {
 		$this->executeadminpage($po_page, $la_params);
 	}
 
-	public function runsite() {
+	public function runsite($ps_route = null, $pb_setroutes = true) {
 
 		// Get the route object from DI container
 		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
 
-		// Set the admin routes
-		$lo_router->setsiteroutes();
+		// Set the site routes
+		if($pb_setroutes)
+			$lo_router->setsiteroutes();
 
 		// Execute the route
-		$la_params = $lo_router->executeroute();
+		$la_params = $lo_router->executeroute($ps_route);
 
 		if ($la_params === false) {
 
@@ -256,7 +260,7 @@ class Application extends Core {
 			trigger_error("Trying to call $ps_class::$ps_action with no luck", E_USER_NOTICE);
 
 			// Show the error page
-			// $this->showerrorpage(404);
+			// $this->showerrorpage(500);
 		}
 	}
 
@@ -265,7 +269,6 @@ class Application extends Core {
 
 		if(!is_object($po_page))
 			trigger_error("Invalid page", E_USER_NOTICE);
-
 
 		$ps_controller = $po_page->controller;
 		$ps_action = $po_page->action;

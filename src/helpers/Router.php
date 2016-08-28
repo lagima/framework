@@ -51,9 +51,12 @@ class Router extends Core {
 	}
 
 
-	public function executeroute() {
+	public function executeroute($ps_requesturl = null, $ps_requestmethod = null) {
 
-		$pa_match = $this->router->match();
+		if(!is_null($ps_requesturl) && is_null($ps_requestmethod))
+			$ps_requestmethod = 'GET';
+
+		$pa_match = $this->router->match($ps_requesturl, $ps_requestmethod);
 
 		if ($pa_match === false)
 			return false;
@@ -64,6 +67,7 @@ class Router extends Core {
 
 		return $pa_match['params'];
 	}
+
 
 	public function getpage() {
 

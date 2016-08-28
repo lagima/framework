@@ -23,6 +23,10 @@ class HtmlExtension extends Core implements ExtensionInterface {
 		$po_engine->registerFunction('getvalue', [$this, 'getvalue']);
 		$po_engine->registerFunction('debug', [$this, 'debug']);
 		$po_engine->registerFunction('getflashmessage', [$this, 'getflashmessage']);
+
+		$po_engine->registerFunction('setformerror', [$this, 'setformerror']);
+		$po_engine->registerFunction('validatefield', [$this, 'validatefield']);
+		$po_engine->registerFunction('getfielderror', [$this, 'getfielderror']);
 	}
 
 	public function styleselector($ps_current, $ps_actual, $ps_style = 'active') {
@@ -154,28 +158,77 @@ class HtmlExtension extends Core implements ExtensionInterface {
 	}
 
 
-	public function setformerror($ps_message) {
+	/**
+	 * Add the error log to error array and formerror
+	 * Used to show validation errors
+	 * @param  string $ps_error Error string
+	 * @return boolean
+	 */
+	public function setformerror($ps_error, $ps_field){
 
-		if(!empty($ps_message))
-			$this->formerrors[] = $ps_message;
-	}
-
-	public function getformerror() {
-
-		if(!$this->hasformerror())
+		if(empty($ps_error))
 			return false;
 
-		$ls_content = '<p class="alert alert-danger" role="alert">'. implode("<br/>", $this->formerrors) .'</p>';
+		if(empty($ps_field))
+			return false;
 
-		return $ls_content;
+		// $this->seterrorlog($ps_error);
+
+		$this->formerrors[$ps_field] = $ps_error;
+
+		return true;
+	}
+
+
+	/**
+	 * Returns the accumulated formerrors
+	 * @return array
+	 */
+	public function getformerrors(){
+		return $this->formerrors;
 	}
 
 
 	public function hasformerror() {
-
 		return !empty($this->formerrors);
-
 	}
+
+
+	/**
+	 * Validate the field for any errors we set using setformerror()
+	 * If we find the field entry in the error array we will return the class name
+	 * which can be used on the field class
+	 * @param  string $ps_field
+	 * @param  string $ps_class
+	 * @return string
+	 */
+	public function validatefield($ps_field, $ps_class = 'j-show') {
+
+		$la_formerrors = $this->getformerrors();
+
+		if(isset($la_formerrors[$ps_field]))
+			return $ps_class;
+
+		return;
+	}
+
+
+	/**
+	 * Get the field error we set using setformerror()
+	 * @param  string $ps_field
+	 * @param  string $ps_class
+	 * @return string
+	 */
+	public function getfielderror($ps_field) {
+
+		$la_formerrors = $this->getformerrors();
+
+		if(isset($la_formerrors[$ps_field]))
+			return $la_formerrors[$ps_field];
+
+		return;
+	}
+
 
 	public function geticon($ps_icon, $pb_inverse = false) {
 
