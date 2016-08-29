@@ -8,6 +8,7 @@ use League\Plates\Extension\ExtensionInterface;
 class HtmlExtension extends Core implements ExtensionInterface {
 
 	public $engine;
+	private $formerrors;
 
 	// function __construct() {
 	// 	// This doesnt have to do all the shit the core class does
@@ -24,7 +25,8 @@ class HtmlExtension extends Core implements ExtensionInterface {
 		$po_engine->registerFunction('debug', [$this, 'debug']);
 		$po_engine->registerFunction('getflashmessage', [$this, 'getflashmessage']);
 
-		$po_engine->registerFunction('setformerror', [$this, 'setformerror']);
+		$po_engine->registerFunction('setformerrors', [$this, 'setformerrors']);
+		$po_engine->registerFunction('hasformerrors', [$this, 'hasformerrors']);
 		$po_engine->registerFunction('validatefield', [$this, 'validatefield']);
 		$po_engine->registerFunction('getfielderror', [$this, 'getfielderror']);
 	}
@@ -161,22 +163,11 @@ class HtmlExtension extends Core implements ExtensionInterface {
 	/**
 	 * Add the error log to error array and formerror
 	 * Used to show validation errors
-	 * @param  string $ps_error Error string
-	 * @return boolean
+	 * @param  string $pa_errors Error array from the view
+	 * @return none
 	 */
-	public function setformerror($ps_error, $ps_field){
-
-		if(empty($ps_error))
-			return false;
-
-		if(empty($ps_field))
-			return false;
-
-		// $this->seterrorlog($ps_error);
-
-		$this->formerrors[$ps_field] = $ps_error;
-
-		return true;
+	public function setformerrors($pa_errors){
+		$this->formerrors = $pa_errors;
 	}
 
 
@@ -184,27 +175,27 @@ class HtmlExtension extends Core implements ExtensionInterface {
 	 * Returns the accumulated formerrors
 	 * @return array
 	 */
-	public function getformerrors(){
-		return $this->formerrors;
+	public function getformerrors($ps_form = 'GLOBAL'){
+		return $this->formerrors[$ps_form] ?? [];
 	}
 
 
-	public function hasformerror() {
-		return !empty($this->formerrors);
+	public function hasformerrors($ps_form = 'GLOBAL') {
+		return isset($this->formerrors[$ps_form]) && !empty($this->formerrors[$ps_form]);
 	}
 
 
 	/**
-	 * Validate the field for any errors we set using setformerror()
+	 * Validate the field for any errors we set using setformerrors()
 	 * If we find the field entry in the error array we will return the class name
 	 * which can be used on the field class
 	 * @param  string $ps_field
 	 * @param  string $ps_class
 	 * @return string
 	 */
-	public function validatefield($ps_field, $ps_class = 'j-show') {
+	public function validatefield($ps_field, $ps_class = 'j-show', $ps_form = 'GLOBAL') {
 
-		$la_formerrors = $this->getformerrors();
+		$la_formerrors = $this->getformerrors($ps_form);
 
 		if(isset($la_formerrors[$ps_field]))
 			return $ps_class;
@@ -219,9 +210,9 @@ class HtmlExtension extends Core implements ExtensionInterface {
 	 * @param  string $ps_class
 	 * @return string
 	 */
-	public function getfielderror($ps_field) {
+	public function getfielderror($ps_field, $ps_form = 'GLOBAL') {
 
-		$la_formerrors = $this->getformerrors();
+		$la_formerrors = $this->getformerrors($ps_form);
 
 		if(isset($la_formerrors[$ps_field]))
 			return $la_formerrors[$ps_field];

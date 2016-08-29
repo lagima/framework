@@ -191,13 +191,13 @@ class Application extends Core {
 		$this->executeadminpage($po_page, $la_params);
 	}
 
-	public function runsite($ps_route = null, $pb_setroutes = true) {
+	public function runsite($ps_route = null, $pb_internalrouting = false) {
 
 		// Get the route object from DI container
 		$lo_router = isset($this->di['router']) ? $this->di['router'] : null;
 
 		// Set the site routes
-		if($pb_setroutes)
+		if(!$pb_internalrouting)
 			$lo_router->setsiteroutes();
 
 		// Execute the route
@@ -215,10 +215,11 @@ class Application extends Core {
 		$po_page = $lo_router->getpage();
 
 		// Set this page in DI so we can use this other places
-		$this->setcurrentpage($po_page);
+		if(!$pb_internalrouting)
+			$this->setcurrentpage($po_page);
 
 		// Execute the page
-		$this->executepage($po_page, $la_params);
+		$this->executesitepage($po_page, $la_params, $pb_internalrouting);
 	}
 
 
@@ -228,7 +229,7 @@ class Application extends Core {
 
 	}
 
-	private function executeadminpage($po_page, $pa_params = []) {
+	private function executeadminpage($po_page, $pa_params) {
 
 		if(!is_object($po_page))
 			trigger_error("Invalid page", E_USER_NOTICE);
@@ -265,7 +266,7 @@ class Application extends Core {
 	}
 
 
-	private function executepage($po_page, $pa_params = []) {
+	private function executesitepage($po_page, $pa_params, $pb_internalrouting = false) {
 
 		if(!is_object($po_page))
 			trigger_error("Invalid page", E_USER_NOTICE);
@@ -285,6 +286,10 @@ class Application extends Core {
 
 			// Call the action
 			call_user_func_array(array($lo_controller, $ps_method), $pa_params);
+
+			// Stop here if its internal routing else the page will be rendered 2wise
+			if($pb_internalrouting)
+				return true;
 
 			// Get view object from DI
 			$lo_view = isset($this->di['view']) ? $this->di['view'] : null;

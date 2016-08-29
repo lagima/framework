@@ -13,6 +13,7 @@ class View extends Core {
 	private $view;
 	private $viewdata;
 	private $templatedata;
+	private $formerrors;
 
 	protected $replacement;
 
@@ -73,13 +74,17 @@ class View extends Core {
 		$la_viewdata = $this->getviewdata();
 		$la_templatedata = $this->gettemplatedata();
 
+		// Has view ?
+		$lb_hasview = $this->hasview($po_page);
+
 		// If no view is defined and view data is set throw error
-		if(!$this->hasview($po_page) && !empty($la_viewdata))
+		if(!$lb_hasview && !empty($la_viewdata))
 			trigger_error('View not defined: ' . $ls_viewfolder . '/' . $ls_viewfile, E_USER_ERROR);
 
 		// Dont show anything if no view is defined
-		if(!$this->hasview($po_page))
+		if(!$lb_hasview) {
 			return false;
+		}
 
 		// Create new Plates instance
 		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
@@ -87,8 +92,14 @@ class View extends Core {
 		// Load asset extension
 		$lo_templates->loadExtension(new AssetExtension($ls_assetsfolder, true));
 
-		// Load html helpers
-		$lo_templates->loadExtension(new HtmlExtension());
+		// Prepate the HTML extension for the template engine
+		$lo_htmlextension = new HtmlExtension();
+		// Inject any validation errors that we accumulated
+		$lo_htmlextension->setformerrors($this->getformerrors());
+
+		// Load html extension
+		$lo_templates->loadExtension($lo_htmlextension);
+
 
 		// Get the view details from db if non admin
 		if(strcasecmp($po_page->module, 'admin') === 0 ) {
@@ -108,8 +119,8 @@ class View extends Core {
 			$la_extensions = $this->pagemodel->getpages('VIEWEXTENSION');
 			foreach($la_extensions as $lo_extension) {
 
+				// Prepare the class
 				$ls_extension = "\\Mercury\\App\Extensions\\$lo_extension->name";
-				// $this->debugx($ls_extension);
 
 				if(class_exists($ls_extension)){
 					$lo_templates->loadExtension(new $ls_extension());
@@ -223,6 +234,42 @@ class View extends Core {
 			trigger_error('Page is invalid', E_USER_ERROR);
 
 		return  $this->getdocumentroot();
+	}
+
+
+	/**
+	 * Add the error log to error array and formerror
+	 * Used to show validation errors
+	 * @param  string $ps_error Error string
+	 * @param  string $ps_field Field string
+	 * @param  string $ps_form 	Form name, just a reference
+	 * @return boolean
+	 */
+	public function setformerror($ps_error, $ps_field, $ps_form = 'GLOBAL'){
+
+		if(empty($ps_error))
+			return false;
+
+		if(empty($ps_field))
+			return false;
+
+		$this->formerrors[$ps_form][$ps_field] = $ps_error;
+
+		return true;
+	}
+
+
+	/**
+	 * Returns the accumulated formerrors
+	 * @return array
+	 */
+	public function getformerrors(){
+		return $this->formerrors;
+	}
+
+
+	public function hasformerrors($ps_form = 'GLOBAL') {
+		return isset($this->formerrors[$ps_form]) && !empty($this->formerrors[$ps_form]);
 	}
 
 }

@@ -323,7 +323,7 @@ class Core {
 		if(empty($ps_key))
 			return false;
 
-		$ls_value = isset($_POST[$ps_key]) ? filter_var($_POST[$ps_key]) : $pm_default;
+		$ls_value = isset($_POST[$ps_key]) ? $_POST[$ps_key] : $pm_default;
 
 		return $ls_value;
 	}

@@ -224,42 +224,13 @@ class Model extends Core {
 		// Now put it in the table
 		$ps_table = addslashes($ps_table);
 
-		$li_id = $this->db->dbupdate($ps_table, $ps_keyfield, $ps_keyvalue, $la_values);
+		$lb_result = $this->db->dbupdate($ps_table, $la_values, [$ps_keyfield => $ps_keyvalue]);
 
-		return $li_id;
+		return $lb_result;
 	}
 
 
-	public function update($ps_keyfield, $ps_keyvalue, $pa_values, $ps_table = ''){
-
-		if(empty($ps_table))
-			$ps_table = $this->table;
-
-		if(empty($pa_values))
-			trigger_error("Data is empty", E_USER_ERROR);
-
-		// Get values from POST with __ prefix in an useable array
-		$la_values = array();
-
-		foreach($pa_values as $ls_key => $lm_value) {
-
-			if(strpos($ls_key, '__') !== false)
-				$la_values[substr($ls_key, 2)] = $lm_value;
-		}
-
-		if(empty($la_values))
-			trigger_error("Useable data is empty", E_USER_ERROR);
-
-		// Now put it in the table
-		$ps_table = addslashes($ps_table);
-
-		$li_id = $this->db->dbupdate($ps_table, $ps_keyfield, $ps_keyvalue, $la_values);
-
-		return $li_id;
-	}
-
-
-	public function updaterows($pa_values, $pa_condition) {
+	public function update($pa_values, $pa_condition) {
 
 		if(empty($ps_table))
 			$ps_table = $this->table;
@@ -270,7 +241,7 @@ class Model extends Core {
 		if(empty($pa_condition))
 			trigger_error("Cannot update the table without condition.", E_USER_ERROR);
 
-		$lb_updated = $this->db->dbupdaterows($ps_table, $pa_values, $pa_condition);
+		$lb_updated = $this->db->dbupdate($ps_table, $pa_values, $pa_condition);
 
 		return $lb_updated;
 	}

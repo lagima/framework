@@ -24,12 +24,6 @@ class AssetExtension extends Asset implements ExtensionInterface {
 		if(empty($ps_file))
 			return false;
 
-		// // Check if the page exists
-		// $ls_file = $this->getdocumentroot() . $ps_file;
-
-		// if(!is_file($ls_file))
-		// 	trigger_error("Invalid resource file or file not found!", E_USER_ERROR);
-
 		return $ps_file;
 	}
 

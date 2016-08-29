@@ -79,7 +79,8 @@ class Controller extends Core {
 		$lo_view->buildtemplatedata($pa_data);
 	}
 
-	public function addscript($ps_file) {
+
+	public function setformerror($ps_error, $ps_field, $ps_form = 'GLOBAL') {
 
 		// Get view object from DI
 		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
@@ -89,11 +90,11 @@ class Controller extends Core {
 			return false;
 		}
 
-		$lo_view->addscript($ps_file);
+		$lo_view->setformerror($ps_error, $ps_field, $ps_form);
 	}
 
 
-	public function addstylesheet($ps_file) {
+	public function hasformerrors($ps_form = 'GLOBAL') {
 
 		// Get view object from DI
 		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
@@ -103,21 +104,7 @@ class Controller extends Core {
 			return false;
 		}
 
-		$lo_view->addstylesheet($ps_file);
-	}
-
-
-	public function setformerror($ps_error, $ps_field) {
-
-		// Get view object from DI
-		$lo_view = isset($this->di['view']) ? $this->di['view'] : null;
-
-		if(!is_object($lo_view)) {
-			trigger_error("View is not initialised", E_USER_ERROR);
-			return false;
-		}
-
-		$lo_view->setformerror($ps_error, $ps_field);
+		return $lo_view->hasformerrors($ps_form);
 	}
 
 
@@ -139,7 +126,7 @@ class Controller extends Core {
 		}
 
 		// Execute the route
-		$lo_app->runsite($ps_route, false);
+		$lo_app->runsite($ps_route, true);
 	}
 
 }

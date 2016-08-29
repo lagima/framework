@@ -140,48 +140,10 @@ class Database {
 	}
 
 
-	/* Deprecated */
-	public function dbupdate($ps_table, $ps_keyfield, $pm_keyvalue, $pa_values) {
-
-		trigger_error("The method dbupdate() is deprecated. use dbupdaterows() instead", E_USER_DEPRECATED);
-
-		if(empty($ps_table) || empty($ps_keyfield) || empty($pm_keyvalue) || empty($pa_values))
-			trigger_error("Improper usage of function dbupdate()", E_USER_ERROR);
-
-		$la_fields = array_keys($pa_values);
-
-		array_walk($la_fields, function(&$ls_item, $ls_key) {
-			$ls_item = "`$ls_item` = :$ls_item";
-		});
-
-		$ls_mappvar = implode(', ', $la_fields);
-
-		try {
-
-			// Some basic escaping
-			$ps_table = addslashes($ps_table);
-			$ps_keyfield = addslashes($ps_keyfield);
-
-			$pm_keyvalue = $this->escapesql($pm_keyvalue);
-
-			$ls_sql = "UPDATE `$ps_table` SET $ls_mappvar WHERE `$ps_keyfield` = $pm_keyvalue";
-
-			$this->query($ls_sql, $pa_values);
-
-		} catch(\PDOException $e) {
-
-			trigger_error($e->getMessage(), E_USER_ERROR);
-
-		}
-
-		return true;
-	}
-
-
-	public function dbupdaterows($ps_table, $pa_values, $pa_condition = []) {
+	public function dbupdate($ps_table, $pa_values, $pa_condition = []) {
 
 		if(empty($ps_table) || empty($pa_condition) || empty($pa_values))
-			trigger_error("Improper usage of function dbupdaterows()", E_USER_ERROR);
+			trigger_error("Improper usage of function dbupdate()", E_USER_ERROR);
 
 		// Placeholders
 		$la_where = [];
@@ -195,14 +157,20 @@ class Database {
 		$ls_mappvar = implode(', ', $la_fields);
 
 		// Build the WHERE condition
-		foreach($pa_condition as $ls_field => $ls_value) {
+		foreach($pa_condition as $ls_field => $lm_value) {
 
 			// Construct the filed key to avoid conflict with the actual value being updated
 			$ls_key = "u_$ls_field";
 
 			// Start constructing the query
-			$la_where[] = " AND `$ls_field` = :$ls_key";
-			$la_binds[$ls_key] = $ls_value;
+			if(is_array($lm_value)) {
+				$la_where[] = " AND FIND_IN_SET (`$ls_field`, :$ls_key)";
+				$la_binds[$ls_key] = implode(",", $lm_value);
+			}
+			else {
+				$la_where[] = " AND `$ls_field` = :$ls_key";
+				$la_binds[$ls_key] = $lm_value;
+			}
 		}
 
 
@@ -219,7 +187,7 @@ class Database {
 
 		} catch(\PDOException $e) {
 
-			trigger_error($e->getMessage(), E_USER_ERROR);
+			trigger_error($e->getMessage() . $ls_sql, E_USER_ERROR);
 
 		}
 

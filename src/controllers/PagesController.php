@@ -29,7 +29,6 @@ class PagesController extends BaseController {
 		$this->buildresponse(['ls_addurl' => '/admin/controller/add']);
 		$this->buildresponse(['ls_editurl' => '/admin/controller/edit']);
 		$this->buildresponse(['ls_deleteurl' => '/admin/model/delete']);
-
 	}
 
 	public function controllerAction($ps_action, $pi_id = null) {
