@@ -50,7 +50,14 @@ class AssetExtension extends Asset implements ExtensionInterface {
 		if(!isset($this->replacement['script']))
 			return false;
 
-		$lf_filter = function($ls_file) { return '<script type="text/javascript" src="' . $this->cachedAssetUrl($ls_file) . '"></script>' . PHP_EOL; };
+		$lf_filter = function($ls_file) {
+
+			if (filter_var($ls_file, FILTER_VALIDATE_URL) === false) {
+			    return '<script type="text/javascript" src="' . $this->cachedAssetUrl($ls_file) . '"></script>' . PHP_EOL;
+			} else {
+			    return '<script type="text/javascript" src="' . $ls_file . '"></script>' . PHP_EOL;
+			}
+		};
 
 		$la_files = array_map($lf_filter, $this->replacement['script']);
 

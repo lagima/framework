@@ -19,6 +19,11 @@ class Core {
 	}
 
 
+	public function getpathinfo() {
+		return $_SERVER['PATH_INFO'] ?? '/';
+	}
+
+
 	/**
 	 * Track the visitor/ each page requests into a log file
 	 * It records IP address time and the URL visited
@@ -326,18 +331,6 @@ class Core {
 		$ls_value = isset($_POST[$ps_key]) ? $_POST[$ps_key] : $pm_default;
 
 		return $ls_value;
-	}
-
-
-	public function styleselector($ps_current, $ps_actual, $ps_style = 'active') {
-
-		if(empty($ps_current) && empty($ps_actual))
-			return false;
-
-		if(strcasecmp($ps_actual, $ps_current) == 0)
-			return $ps_style;
-
-		return false;
 	}
 
 	/**

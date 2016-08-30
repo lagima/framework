@@ -89,6 +89,9 @@ class View extends Core {
 		// Create new Plates instance
 		$lo_templates = new \League\Plates\Engine($ls_viewfolder);
 
+		// Load URI extension
+		$lo_templates->loadExtension(new \League\Plates\Extension\URI($this->getcurrenturl()));
+
 		// Load asset extension
 		$lo_templates->loadExtension(new AssetExtension($ls_assetsfolder, true));
 
@@ -135,9 +138,17 @@ class View extends Core {
 			$lo_search->moduleid = $po_page->moduleid;
 			$lo_viewdetail = $this->pagemodel->getviewdetails($lo_search);
 
+			//Standard values
+			$la_standardvals = ['gs_title' => $po_page->pagetitle,
+								'gs_currentpage' => $this->getcurrenturl(),
+								'gs_viewname' => $lo_viewdetail->name,
+								'gi_copyrightyear' => date('Y'),
+								'gs_version' => $this->getversion()
+								];
+
 			// Configure the template
 			$la_viewdata['gs_template'] = is_object($lo_viewdetail) && !empty($lo_viewdetail->template) ? 'templates::' . strtolower($lo_viewdetail->template) : 'defaults::blank';
-			$la_viewdata['ga_templatedata'] = array_merge($la_templatedata, ['gs_title' => $po_page->pagetitle, 'gs_currentpage' => $this->getcurrenturl() ,'gi_copyrightyear' => date('Y'), 'gs_version' => $this->getversion()]);
+			$la_viewdata['ga_templatedata'] = array_merge($la_templatedata, $la_standardvals);
 		}
 
 		// Add folders used for the engine
